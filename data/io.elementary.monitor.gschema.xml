@@ -1,0 +1,35 @@
+<schemalist>
+    <schema id="io.elementary.monitor" path="/io/elementary/monitor/">
+
+        <key name="indicator" type="b">
+            <default>false</default>
+            <summary>Use indicator</summary>
+            <description>Mark to use app indicator and minimized to system tray.</description>
+        </key>
+
+        <key name="indicator-titles" type="b">
+            <default>true</default>
+            <summary>Show titles</summary>
+            <description>Show titles to system tray.</description>
+        </key>
+
+        <key name="indicator-cpu" type="b">
+            <default>true</default>
+            <summary>Show cpu</summary>
+            <description>Show cpu state to system tray.</description>
+        </key>
+
+        <key name="indicator-ram" type="b">
+            <default>true</default>
+            <summary>Show RAM</summary>
+            <description>Show memory state to system tray.</description>
+        </key>
+
+        <key name="interval" type="i">
+            <default>1</default>
+            <summary>Update interval</summary>
+            <description>Time in seconds to update state.</description>
+        </key>
+
+    </schema>
+</schemalist>
