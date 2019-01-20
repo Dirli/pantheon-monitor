@@ -29,8 +29,7 @@ namespace Monitor {
             orientation = Gtk.Orientation.HORIZONTAL;
             hexpand = true;
             row_spacing = 10;
-            margin_start = margin_end = 10;
-            margin_bottom = margin_top = 15;
+            margin_top = 10;
 
             Gtk.Label freq_label = new Gtk.Label (_("Frequency"));
             freq_label.halign = Gtk.Align.START;
