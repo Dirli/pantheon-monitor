@@ -80,11 +80,9 @@ namespace Monitor {
 
         protected void on_indicator_change () {
             if (settings.get_boolean ("indicator")) {
-                warning ("changed indicator: show");
                 visible = true;
                 start_watcher ();
             } else {
-                warning ("changed indicator: hide");
                 visible = false;
                 stop_watcher ();
             }
@@ -92,12 +90,16 @@ namespace Monitor {
 
         public override Gtk.Widget get_display_widget () {
             if (panel_wid == null) {
-                panel_wid = new Widgets.Panel (true, true);
+                panel_wid = new Widgets.Panel ();
                 if (visible) {
-                    on_update_ui ();
                     start_watcher ();
+                    Timeout.add_seconds (1, () => {
+                        on_update_ui ();
+                        return false;
+                    });
                 }
             }
+
             return panel_wid;
         }
 

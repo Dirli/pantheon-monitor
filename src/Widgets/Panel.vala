@@ -23,20 +23,18 @@ namespace Monitor {
         private Gtk.Label? cpu_label = null;
         private Gtk.Label? cpu_value = null;
 
-        public Panel (bool cpu_watch, bool mem_watch) {
+        public Panel () {
             Object (orientation: Gtk.Orientation.HORIZONTAL);
-            if (cpu_watch) {
-                cpu_label = new Gtk.Label ("cpu");
-                cpu_value = new Gtk.Label ("-");
-                pack_start (cpu_label, false, false, 0);
-                pack_start (cpu_value, false, false, 0);
-            }
-            if (mem_watch) {
-                mem_label = new Gtk.Label ("mem");
-                mem_value = new Gtk.Label ("-");
-                pack_start (mem_label, false, false, 0);
-                pack_start (mem_value, false, false, 0);
-            }
+
+            cpu_label = new Gtk.Label ("cpu");
+            cpu_value = new Gtk.Label ("-");
+            pack_start (cpu_label, false, false, 0);
+            pack_start (cpu_value, false, false, 0);
+
+            mem_label = new Gtk.Label ("mem");
+            mem_value = new Gtk.Label ("-");
+            pack_start (mem_label, false, false, 0);
+            pack_start (mem_value, false, false, 0);
         }
 
         public void update_cpu (string new_val) {
