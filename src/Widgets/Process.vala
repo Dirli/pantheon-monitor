@@ -43,7 +43,6 @@ namespace Monitor {
 
             // name_column.add_attribute (icon_cell, "icon_name", Column.ICON);
             name_column.set_cell_data_func (icon_cell, icon_cell_layout);
-
             var name_cell = new Gtk.CellRendererText ();
             name_cell.ellipsize = Pango.EllipsizeMode.END;
             name_cell.set_fixed_height_from_font (1);
@@ -81,7 +80,10 @@ namespace Monitor {
             pid_column.expand = false;
             pid_column.alignment = 0.5f;
             pid_column.set_sort_column_id (Column.PID);
-            pid_column.pack_start (pid_cell, false);
+
+            //Gtk-WARNING **: 13:50:29.054: Refusing to add the same cell renderer to a GtkCellAreaBox twice
+            /* pid_column.pack_start (pid_cell, false); */
+
             pid_column.add_attribute (pid_cell, "text", Column.PID);
             insert_column (pid_column, -1);
 
@@ -143,10 +145,11 @@ namespace Monitor {
             }
 
             // format the double into a string
-            if (memory_usage == 0)
+            if (memory_usage == 0) {
                 (cell as Gtk.CellRendererText).text = NO_DATA;
-            else
+            } else {
                 (cell as Gtk.CellRendererText).text = "%.1f %s".printf (memory_usage_double, units);
+            }
         }
 
         private void pid_cell_layout (Gtk.CellLayout cell_layout, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter) {

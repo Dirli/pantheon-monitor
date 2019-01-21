@@ -1,0 +1,151 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the io.elementary.files package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: io.elementary.monitor\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-01-21 01:44+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2\n"
+"X-Poedit-Basepath: ../src\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: Indicator.vala:35
+msgid "Monitor Indicator"
+msgstr ""
+
+#: Indicator.vala:36
+msgid "Monitors and displays the temperature on the Wingpanel"
+msgstr ""
+
+#: MainWindow.vala:90
+msgid "End process"
+msgstr ""
+
+#: Widgets/About.vala:30
+msgid "System monitor for ElementaryOS"
+msgstr ""
+
+#: Widgets/About.vala:35
+msgid "website"
+msgstr ""
+
+#: Widgets/Headerbar.vala:36
+msgid "Process"
+msgstr ""
+
+#: Widgets/Headerbar.vala:42
+msgid "Monitor"
+msgstr ""
+
+#: Widgets/Headerbar.vala:56
+msgid "Preferences"
+msgstr ""
+
+#: Widgets/Headerbar.vala:57
+msgid "About"
+msgstr ""
+
+#: Widgets/Headerbar.vala:71
+msgid "Options"
+msgstr ""
+
+#: Widgets/Monitoring.vala:44 Widgets/Process.vala:69
+msgid "Memory"
+msgstr ""
+
+#: Widgets/Monitoring.vala:45
+msgid "Download"
+msgstr ""
+
+#: Widgets/Monitoring.vala:46
+msgid "Upload"
+msgstr ""
+
+#: Widgets/Monitoring.vala:57
+msgid "Common"
+msgstr ""
+
+#: Widgets/Monitoring.vala:60
+msgid "Network"
+msgstr ""
+
+#: Widgets/Monitoring.vala:65 Widgets/Popover.vala:55
+msgid "Uptime"
+msgstr ""
+
+#: Widgets/Monitoring.vala:68 Widgets/Popover.vala:48
+msgid "Swap"
+msgstr ""
+
+#: Widgets/Popover.vala:34
+msgid "Frequency"
+msgstr ""
+
+#: Widgets/Popover.vala:41
+msgid "Ram"
+msgstr ""
+
+#: Widgets/Popover.vala:80
+msgid "Hide indicator"
+msgstr ""
+
+#: Widgets/Popover.vala:86
+msgid "Start monitor"
+msgstr ""
+
+#: Widgets/Preferences.vala:54
+msgid "Indicator"
+msgstr ""
+
+#: Widgets/Preferences.vala:58
+msgid "Use System Tray Indicator:"
+msgstr ""
+
+#: Widgets/Preferences.vala:63
+msgid "Show titles:"
+msgstr ""
+
+#: Widgets/Preferences.vala:68
+msgid "Show CPU:"
+msgstr ""
+
+#: Widgets/Preferences.vala:73
+msgid "Show RAM:"
+msgstr ""
+
+#: Widgets/Preferences.vala:105
+msgid "Close"
+msgstr ""
+
+#: Widgets/Process.vala:36
+msgid "Process Name"
+msgstr ""
+
+#: Widgets/Process.vala:58
+msgid "CPU"
+msgstr ""
+
+#: Widgets/Process.vala:79
+msgid "PID"
+msgstr ""
+
+#: Widgets/Search.vala:27
+msgid "Search Process"
+msgstr ""
+
+#: Widgets/Search.vala:28
+msgid "Type Process Name or PID"
+msgstr ""

@@ -26,14 +26,14 @@ You'll need the following dependencies to build:
 * libwnck-3-dev
 * libgtop2-dev
 * libcairo2-dev
-- libwingpanel-2.0-dev
+* libwingpanel-2.0-dev
 * meson
 
 ## How To Build
 
-    meson build --prefix=/usr
-    cd build
-    sudo ninja install
+    meson build --prefix /usr --buildtype=plain
+    ninja -C build
+    sudo ninja -C build install
 
 I just connected:
 https://github.com/stsdc/monitor

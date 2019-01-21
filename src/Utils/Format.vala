@@ -63,9 +63,9 @@ namespace Monitor.Utils {
     }
     public static string format_frequency (double val) {
         const string[] units = {
-            N_ ("{} kHz"),
-            N_ ("{} MHz"),
-            N_ ("{} GHz")
+            " kHz",
+            " MHz",
+            " GHz"
         };
         int index = -1;
 
@@ -74,16 +74,12 @@ namespace Monitor.Utils {
             ++index;
         }
 
-        if (index < 0) {return ngettext (
-            "%u Hz", "%u Hz", (ulong)val).printf ((uint)val);
+        if (index < 0) {return "0";}
+
+        if (val < 9.95) {
+            return "%.1f %s".printf (val, units[index]);
+        } else {
+            return "%.0f %s".printf (val, units[index]);
         }
-
-        // 4 significant digits
-        var pattern = _ (units[index]).replace ("{}",
-        val <   9.95 ? "%.1f" :
-        val <  99.5  ? "%.0f" :
-        val < 999.5  ? "%.0f" : "%.0f");
-
-        return pattern.printf (val);
     }
 }

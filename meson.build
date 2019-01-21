@@ -1,5 +1,7 @@
 project('io.elementary.monitor', ['vala', 'c'], version: '0.3.6')
 
+i18n = import('i18n')
+
 gio_dep = dependency('gio-2.0')
 gobject_dep = dependency('gobject-2.0')
 glib_dep = dependency('glib-2.0')
@@ -10,6 +12,7 @@ bamf_dep = dependency('libbamf3')
 gtop_dep = dependency('libgtop-2.0')
 wnck_dep = dependency('libwnck-3.0')
 cairo_dep = dependency('cairo')
+
 
 # Make gettext work
 add_project_arguments(
@@ -33,6 +36,6 @@ endif
 
 subdir('data')
 subdir('src')
-# subdir('po')
+subdir('po')
 
 meson.add_install_script('meson/post_install.py')
