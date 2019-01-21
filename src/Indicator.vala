@@ -94,6 +94,7 @@ namespace Monitor {
             if (panel_wid == null) {
                 panel_wid = new Widgets.Panel (true, true);
                 if (visible) {
+                    on_update_ui ();
                     start_watcher ();
                 }
             }
