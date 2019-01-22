@@ -13,7 +13,6 @@ gtop_dep = dependency('libgtop-2.0')
 wnck_dep = dependency('libwnck-3.0')
 cairo_dep = dependency('cairo')
 
-
 # Make gettext work
 add_project_arguments(
     '-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name()),
