@@ -36,6 +36,8 @@ namespace Monitor {
             description: _("Monitors and displays the temperature on the Wingpanel"));
             extended = false;
 
+            Gtk.IconTheme.get_default().add_resource_path("/io/elementary/monitor/icons");
+
             settings = Services.SettingsManager.get_default ();
             visible = settings.get_boolean ("indicator");
 
@@ -69,10 +71,10 @@ namespace Monitor {
                 }
             } else {
                 if (settings.get_boolean ("indicator-cpu")) {
-                    panel_wid.update_cpu ("%d%%".printf (cpu_serv.percentage_used));
+                    panel_wid.update_cpu ("%.2d%%".printf (cpu_serv.percentage_used));
                 }
                 if (settings.get_boolean ("indicator-ram")) {
-                    panel_wid.update_mem ("%d%%".printf (memory_serv.percentage_used));
+                    panel_wid.update_mem ("%.2d%%".printf (memory_serv.percentage_used));
                 }
             }
             return true;

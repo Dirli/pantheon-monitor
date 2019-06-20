@@ -6,7 +6,7 @@ Manage processes and monitor system resources.
 ![Screenshot](data/screenshot1.png)
 
 ### Indicator
-![Screenshot](data/screenshot3.png)
+![Screenshot](data/screenshot2.png)
 
 ### Resource monitoring
 ![Screenshot](data/screenshot4.png)

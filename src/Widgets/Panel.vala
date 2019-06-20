@@ -18,22 +18,22 @@
 
 namespace Monitor {
     public class Widgets.Panel : Gtk.Box {
-        private Gtk.Label? mem_label = null;
-        private Gtk.Label? mem_value = null;
-        private Gtk.Label? cpu_label = null;
-        private Gtk.Label? cpu_value = null;
+        private Gtk.Image mem_image;
+        private Gtk.Label mem_value;
+        private Gtk.Image cpu_image;
+        private Gtk.Label cpu_value;
 
         public Panel () {
             Object (orientation: Gtk.Orientation.HORIZONTAL);
 
-            cpu_label = new Gtk.Label ("cpu");
+            cpu_image = new Gtk.Image.from_icon_name ("proc-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
             cpu_value = new Gtk.Label ("-");
-            pack_start (cpu_label, false, false, 0);
+            pack_start (cpu_image, false, false, 0);
             pack_start (cpu_value, false, false, 0);
 
-            mem_label = new Gtk.Label ("mem");
+            mem_image = new Gtk.Image.from_icon_name ("memory-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
             mem_value = new Gtk.Label ("-");
-            pack_start (mem_label, false, false, 0);
+            pack_start (mem_image, false, false, 0);
             pack_start (mem_value, false, false, 0);
         }
 
@@ -50,15 +50,15 @@ namespace Monitor {
             cpu_value.set_visible(cpu_flag);
             mem_value.set_visible(ram_flag);
             if (ram_flag) {
-                mem_label.set_visible(titles_flag);
+                mem_image.set_visible(titles_flag);
             } else {
-                mem_label.set_visible(false);
+                mem_image.set_visible(false);
             }
 
             if (cpu_flag) {
-                cpu_label.set_visible(titles_flag);
+                cpu_image.set_visible(titles_flag);
             } else {
-                cpu_label.set_visible(false);
+                cpu_image.set_visible(false);
             }
         }
     }

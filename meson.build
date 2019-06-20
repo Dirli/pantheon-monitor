@@ -1,5 +1,6 @@
 project('io.elementary.monitor', ['vala', 'c'], version: '0.3.6')
 
+gnome = import('gnome')
 i18n = import('i18n')
 
 gio_dep = dependency('gio-2.0')

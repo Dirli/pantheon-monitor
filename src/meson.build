@@ -56,6 +56,7 @@ if get_option('indicator')
         'Services/Swap.vala',
         'Services/Uptime.vala',
         'Utils/Format.vala',
+        icons_gresource,
         dependencies: [
             gio_dep,
             gobject_dep,
