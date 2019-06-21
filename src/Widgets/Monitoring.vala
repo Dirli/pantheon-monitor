@@ -30,20 +30,17 @@ namespace Monitor {
         private Gtk.Label uptime_val;
         private Gtk.Label swap_val;
 
-        public Monitoring (Granite.Widgets.ModeButton mode_box) {
-            widget_cpu.cores = cpu_serv.quantity_cores;
-            update (mode_box);
-        }
-
-        construct {
+        public Monitoring (Granite.Widgets.ModeButton mode_box, Gdk.RGBA current_color) {
             cpu_serv = new Services.CPU ();
             memory_serv = new Services.Memory ();
             swap_serv = new Services.Swap ();
             net_serv = new Services.Net ();
-            widget_cpu = new Widgets.Cpu ();
-            widget_memory = new Widgets.Memory (_("Memory"));
-            widget_down = new Widgets.Network (_("Download"));
-            widget_up = new Widgets.Network (_("Upload"));
+
+            widget_cpu = new Widgets.Cpu ("CPU", current_color);
+            widget_cpu.cores = cpu_serv.quantity_cores;
+            widget_memory = new Widgets.Memory (_("Memory"), current_color);
+            widget_down = new Widgets.Network (_("Download"), current_color);
+            widget_up = new Widgets.Network (_("Upload"), current_color);
 
             row_spacing = 10;
             margin = 15;
@@ -86,6 +83,7 @@ namespace Monitor {
 
             border_width = 0;
             show_all ();
+            update (mode_box);
         }
 
         private void update (Granite.Widgets.ModeButton mode_box) {

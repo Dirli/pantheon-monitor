@@ -16,16 +16,15 @@
  *
  */
 
-using Math;
-
 namespace Monitor {
     public class Widgets.Memory : Services.Circle {
         public float used { get; set; default = 0;}
         public float total { get; set; default = 0;}
 
-        public Memory (string circle_name) {
+        public Memory (string circle_name, Gdk.RGBA current_color) {
             layout_name = create_pango_layout (circle_name);
             layout_name.set_font_description (description_name);
+            t_color = current_color;
         }
 
         public override string get_signature () {

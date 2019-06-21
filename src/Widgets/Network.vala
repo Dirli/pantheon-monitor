@@ -16,16 +16,15 @@
  *
  */
 
-using Math;
-
 namespace Monitor {
     public class Widgets.Network : Services.Circle {
         public int net_speed { get; set; default = 0;}
 
-        public Network (string net_name) {
+        public Network (string net_name, Gdk.RGBA current_color) {
             _net_speed = 0;
             layout_name = create_pango_layout (net_name);
             layout_name.set_font_description (description_name);
+            t_color = current_color;
         }
 
         public override string get_signature () {

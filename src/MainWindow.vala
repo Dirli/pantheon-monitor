@@ -68,7 +68,7 @@ namespace Monitor {
                     exist_widget.destroy ();
                 }
                 if (headerbar.view_box.selected == 1) {
-                    widget = new Widgets.Monitoring (headerbar.view_box);
+                    widget = new Widgets.Monitoring (headerbar.view_box, current_color ());
                     statusbar.set_sensitive (false);
                 /* } else if (headerbar.view_box.selected == 2) {
                     statusbar.set_sensitive (false); */
@@ -84,6 +84,10 @@ namespace Monitor {
 
             view.attach (get_porcesses (), 0, 0, 1, 1);
             init_statusbar (statusbar);
+        }
+
+        private Gdk.RGBA current_color () {
+            return get_style_context ().get_color (Gtk.StateFlags.NORMAL);
         }
 
         private void init_statusbar (Widgets.Statusbar statusbar) {

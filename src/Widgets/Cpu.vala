@@ -16,15 +16,14 @@
  *
  */
 
-using Math;
-
 namespace Monitor {
     public class Widgets.Cpu : Services.Circle {
-        public int cores { get; set; default = 0;}
+        public int cores = 0;
 
-        construct {
-            layout_name = create_pango_layout ("CPU");
+        public Cpu (string circle_name, Gdk.RGBA current_color) {
+            layout_name = create_pango_layout (circle_name);
             layout_name.set_font_description (description_name);
+            t_color = current_color;
         }
 
         public override string get_signature () {
