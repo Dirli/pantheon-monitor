@@ -20,7 +20,7 @@ using Math;
 
 namespace Monitor {
     public class Services.Circle : Gtk.Bin {
-        private int line_width = 6;
+        protected int line_width = 6;
         private int radius_pad = 64;
 
         private Pango.Layout layout_porcentage;
@@ -30,7 +30,9 @@ namespace Monitor {
 
         public Gdk.RGBA? t_color = null;
 
-        private Utils.Circle util;
+        protected Utils.Circle util;
+
+        public int max_numbers = 100;
 
         private  int _progress = 0;
         public int progress {
@@ -126,7 +128,6 @@ namespace Monitor {
             cr.arc (center_x, center_y, radius - line_width / 2, util.get_radians (135), util.get_radians (45));
             cr.stroke ();
 
-
             cr.restore ();
         }
 
@@ -167,17 +168,18 @@ namespace Monitor {
             cr.restore ();
         }
 
-        private void draw_numbers (Cairo.Context cr, double center_x, double center_y, float radius){
+        protected virtual void draw_numbers (Cairo.Context cr, double center_x, double center_y, float radius){
             cr.save ();
             cr.set_line_width (line_width / 2);
             cr.set_line_cap (Cairo.LineCap.ROUND);
             cr.set_line_join (Cairo.LineJoin.ROUND);
 
             float x, y;
+            int numbers_iter = max_numbers / 10;
 
             for (int i = 0; i <= 10; i++) {
-                var position = 10 * i;
-                var porcentage = (float) position / 100;
+                var position = numbers_iter * i;
+                var porcentage = (float) position / max_numbers;
                 var preprogress = 225 - 270 * porcentage;
                 var arc_progress = 0f;
                 if (preprogress < 0) {
@@ -199,7 +201,7 @@ namespace Monitor {
                 description.set_size ((int)(7 * Pango.SCALE));
                 description.set_weight (Pango.Weight.NORMAL);
 
-                var layout = create_pango_layout ("%d".printf(position));
+                var layout = create_pango_layout ("%d".printf (position));
                 layout.set_font_description (description);
 
                 int fontw, fonth;

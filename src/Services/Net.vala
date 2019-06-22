@@ -18,9 +18,21 @@
 
 namespace Monitor {
     public class Services.Net  : GLib.Object {
+        public signal void new_max_value (int max_val);
         private int _bytes_in_old;
         private int _bytes_out_old;
         private bool first_get;
+
+        private int _max_speed;
+        private int max_speed {
+            get {
+                return _max_speed;
+            }
+            set {
+                _max_speed = value;
+                new_max_value (_max_speed);
+            }
+        }
 
         private int[] _percentage_used;
         public int percentage_up {
@@ -47,14 +59,15 @@ namespace Monitor {
         }
 
         public Net () {
+            _max_speed = 0;
             first_get = true;
             _bytes_in_old = 0;
             _bytes_out_old = 0;
             _percentage_used = {0, 0};
-            update_bytes ();
+            update_bytes (true);
         }
 
-        public int[] update_bytes () {
+        public int[] update_bytes (bool first_step) {
             if (first_get) {
                 first_get = false;
                 return {0, 0};
@@ -72,18 +85,28 @@ namespace Monitor {
                     n_bytes_in += (int) netload.bytes_in;
                 }
             }
+
             int _bytes_out = (n_bytes_out - _bytes_out_old) / 1;
             int _bytes_in = (n_bytes_in - _bytes_in_old) / 1;
             update_percentage_used (_bytes_out, _bytes_in);
             _bytes_out_old = n_bytes_out;
             _bytes_in_old = n_bytes_in;
 
+            if (!first_step) {
+                var tmp_val = int.max (_bytes_out, _bytes_in);
+                tmp_val = (int) Math.round ((double) tmp_val / 1048576 + 0.5);
+                if (tmp_val > max_speed) {
+                    max_speed = tmp_val;
+                }
+            }
+
             return {_bytes_out, _bytes_in};
         }
 
         private void update_percentage_used (int bytes_out, int bytes_in) {
-            _percentage_used[0] = (int) Math.round((bytes_out / 5242880.0) * 100);
-            _percentage_used[1] = (int) Math.round((bytes_in / 5242880.0) * 100);
+            double bytes_speed = max_speed == 0 ? 5 * 1048576.0 : max_speed * 1048576.0;
+            _percentage_used[0] = (int) Math.round((bytes_out / bytes_speed) * 100);
+            _percentage_used[1] = (int) Math.round((bytes_in / bytes_speed) * 100);
         }
     }
 }

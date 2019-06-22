@@ -30,7 +30,10 @@ namespace Monitor {
         private Gtk.Label uptime_val;
         private Gtk.Label swap_val;
 
+        private bool first_step;
+
         public Monitoring (Granite.Widgets.ModeButton mode_box, Gdk.RGBA current_color) {
+            first_step = true;
             cpu_serv = new Services.CPU ();
             memory_serv = new Services.Memory ();
             swap_serv = new Services.Swap ();
@@ -41,6 +44,11 @@ namespace Monitor {
             widget_memory = new Widgets.Memory (_("Memory"), current_color);
             widget_down = new Widgets.Network (_("Download"), current_color);
             widget_up = new Widgets.Network (_("Upload"), current_color);
+
+            net_serv.new_max_value.connect ((max_val) => {
+                widget_down.max_numbers = max_val;
+                widget_up.max_numbers = max_val;
+            });
 
             row_spacing = 10;
             margin = 15;
@@ -98,7 +106,7 @@ namespace Monitor {
                     widget_memory.progress = memory_serv.percentage_used;
                     swap_val.label = "%.1f GiB / %.1f GiB".printf(swap_serv.used, swap_serv.total);
 
-                    int[] net_speed_val = net_serv.update_bytes ();
+                    int[] net_speed_val = net_serv.update_bytes (first_step);
                     widget_down.net_speed = net_speed_val[1];
                     widget_up.net_speed = net_speed_val[0];
                     widget_down.progress = net_serv.percentage_down;
@@ -107,6 +115,8 @@ namespace Monitor {
                     /* string net_total_up = Utils.format_net_size (net_serv.bytes_in_up);
                     string net_total_down = Utils.format_net_size (net_serv.bytes_in_down);
                     total_net_val.label = @"$net_total_down / $net_total_up"; */
+
+                    first_step = false;
 
                     return true;
                 } else {
