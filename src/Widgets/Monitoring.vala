@@ -22,72 +22,93 @@ namespace Monitor {
         private Widgets.Memory widget_memory;
         private Widgets.Network widget_down;
         private Widgets.Network widget_up;
+
         private Services.CPU cpu_serv;
         private Services.Memory memory_serv;
         private Services.Swap swap_serv;
         private Services.Net net_serv;
-        /* private Gtk.Label total_net_val; */
+
+        private Gtk.Label total_down_val;
+        private Gtk.Label total_up_val;
         private Gtk.Label uptime_val;
         private Gtk.Label swap_val;
 
         private bool first_step;
 
         public Monitoring (Granite.Widgets.ModeButton mode_box, Gdk.RGBA current_color) {
+            row_spacing = 20;
+            margin = 15;
+            expand = true;
+
             first_step = true;
+
             cpu_serv = new Services.CPU ();
             memory_serv = new Services.Memory ();
             swap_serv = new Services.Swap ();
             net_serv = new Services.Net ();
 
             widget_cpu = new Widgets.Cpu ("CPU", current_color);
+            widget_cpu.hexpand = true;
+            widget_cpu.halign = Gtk.Align.CENTER;
             widget_cpu.cores = cpu_serv.quantity_cores;
-            widget_memory = new Widgets.Memory (_("Memory"), current_color);
-            widget_down = new Widgets.Network (_("Download"), current_color);
-            widget_up = new Widgets.Network (_("Upload"), current_color);
+
+            widget_memory = new Widgets.Memory ("RAM", current_color);
+            widget_memory.hexpand = true;
+            widget_memory.halign = Gtk.Align.CENTER;
+            widget_down = new Widgets.Network ("▼ (MB)", current_color);
+            widget_down.tooltip_text = _("Download");
+            widget_up = new Widgets.Network ("▲ (MB)", current_color);
+            widget_up.tooltip_text = _("Upload");
 
             net_serv.new_max_value.connect ((max_val) => {
                 widget_down.max_numbers = max_val;
                 widget_up.max_numbers = max_val;
             });
 
-            row_spacing = 10;
-            margin = 15;
-            expand = true;
-            widget_cpu.halign = Gtk.Align.CENTER;
-            widget_cpu.hexpand = true;
-
-            widget_memory.halign = Gtk.Align.CENTER;
-            widget_memory.hexpand = true;
-
             Gtk.Label common_label = new Gtk.Label (_("Common"));
-            common_label.margin_bottom = 15;
             common_label.get_style_context ().add_class ("section");
             Gtk.Label net_label = new Gtk.Label (_("Network"));
             net_label.get_style_context ().add_class ("section");
 
             Gtk.Grid common_grid = new Gtk.Grid ();
+            common_grid.margin_start = common_grid.margin_end = 10;
+            common_grid.row_spacing = 10;
+            common_grid.halign = Gtk.Align.START;
 
-            Gtk.Label uptime_label = new Gtk.Label (_("Uptime") + ": ");
-            uptime_val = new Gtk.Label ("-");
+            Gtk.Label total_down_label = new Gtk.Label (_("Total download") + ": ");
+            total_down_val = new Gtk.Label ("-");
+
+            Gtk.Label total_up_label = new Gtk.Label (_("Total upload") + ": ");
+            total_up_val = new Gtk.Label ("-");
 
             Gtk.Label swap_label = new Gtk.Label (_("Swap") + ": ");
             swap_val = new Gtk.Label ("-");
 
+            Gtk.Label uptime_label = new Gtk.Label (_("Uptime") + ": ");
+            uptime_val = new Gtk.Label ("-");
+
+            total_down_label.halign = total_up_label.halign = Gtk.Align.START;
+            total_down_val.halign = total_up_val.halign = Gtk.Align.END;
+
             uptime_label.halign = swap_label.halign = Gtk.Align.START;
-            uptime_val.halign = swap_val.halign = Gtk.Align.START;
+            uptime_val.halign = swap_val.halign = Gtk.Align.END;
 
-            common_grid.attach (swap_label, 0, 0, 1, 1);
-            common_grid.attach (swap_val, 1, 0, 1, 1);
-            common_grid.attach (uptime_label, 0, 1, 1, 1);
-            common_grid.attach (uptime_val, 1, 1, 1, 1);
+            common_grid.attach (total_down_label, 0, 0, 1, 1);
+            common_grid.attach (total_down_val,   1, 0, 1, 1);
+            common_grid.attach (total_up_label,   0, 1, 1, 1);
+            common_grid.attach (total_up_val,     1, 1, 1, 1);
+            common_grid.attach (swap_label,       0, 2, 1, 1);
+            common_grid.attach (swap_val,         1, 2, 1, 1);
+            common_grid.attach (uptime_label,     0, 3, 1, 1);
+            common_grid.attach (uptime_val,       1, 3, 1, 1);
 
-            attach (widget_cpu, 0, 0, 1, 1);
+            attach (widget_cpu,    0, 0, 1, 1);
             attach (widget_memory, 1, 0, 1, 1);
-            attach (net_label, 0, 1, 2, 1);
-            attach (widget_down, 0, 2, 1, 1);
-            attach (widget_up, 1, 2, 1, 1);
-            attach (common_label, 0, 3, 2, 1);
-            attach (common_grid, 0, 4, 2, 1);
+            attach (net_label,     0, 1, 2, 1);
+            attach (widget_down,   0, 2, 1, 1);
+            attach (widget_up,     1, 2, 1, 1);
+            attach (common_label,  0, 3, 2, 1);
+            attach (common_grid,   0, 4, 2, 1);
 
             border_width = 0;
             show_all ();
@@ -106,17 +127,16 @@ namespace Monitor {
                     widget_memory.progress = memory_serv.percentage_used;
                     swap_val.label = "%.1f GiB / %.1f GiB".printf(swap_serv.used, swap_serv.total);
 
-                    int[] net_speed_val = net_serv.update_bytes (first_step);
-                    widget_down.net_speed = net_speed_val[1];
-                    widget_up.net_speed = net_speed_val[0];
+                    NetLoadData net_data = net_serv.update_bytes (first_step);
+                    widget_down.net_speed = net_data.bytes_in;
+                    widget_up.net_speed = net_data.bytes_out;
                     widget_down.progress = net_serv.percentage_down;
                     widget_up.progress = net_serv.percentage_up;
 
-                    /* string net_total_up = Utils.format_net_size (net_serv.bytes_in_up);
-                    string net_total_down = Utils.format_net_size (net_serv.bytes_in_down);
-                    total_net_val.label = @"$net_total_down / $net_total_up"; */
+                    total_down_val.label = Utils.format_net_speed (net_data.total_in);
+                    total_up_val.label = Utils.format_net_speed (net_data.total_out);
 
-                    first_step = false;
+                    if (first_step) {first_step = false;}
 
                     return true;
                 } else {

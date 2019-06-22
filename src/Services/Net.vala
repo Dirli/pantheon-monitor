@@ -17,10 +17,17 @@
  */
 
 namespace Monitor {
+    public struct NetLoadData {
+        public int bytes_in;
+        public int bytes_out;
+        public uint64 total_in;
+        public uint64 total_out;
+    }
+
     public class Services.Net  : GLib.Object {
         public signal void new_max_value (int max_val);
-        private int _bytes_in_old;
-        private int _bytes_out_old;
+        private uint64 _bytes_in_old;
+        private uint64 _bytes_out_old;
         private bool first_get;
 
         private int _max_speed;
@@ -41,17 +48,6 @@ namespace Monitor {
             }
         }
 
-        /* public int bytes_in_down {
-            get {
-                return (int) Math.fabs( _bytes_in_old);
-            }
-        } */
-        /* public int bytes_in_up {
-            get {
-                return _bytes_out_old;
-            }
-        } */
-
         public int percentage_down {
             get {
                 return _percentage_used[1];
@@ -67,7 +63,7 @@ namespace Monitor {
             update_bytes (true);
         }
 
-        public int[] update_bytes (bool first_step) {
+        public NetLoadData update_bytes (bool first_step) {
             if (first_get) {
                 first_get = false;
                 return {0, 0};
@@ -75,19 +71,29 @@ namespace Monitor {
             GTop.NetList netlist;
             GTop.NetLoad netload;
             var devices = GTop.get_netlist (out netlist);
-            var n_bytes_out = 0;
-            var n_bytes_in = 0;
+            uint64 n_bytes_out = 0;
+            uint64 n_bytes_in = 0;
+            uint64 total_in = 0;
+            uint64 total_out = 0;
+
+            NetLoadData net_data = {};
+
             for (uint j = 0; j < netlist.number; ++j) {
                 var device = devices[j];
                 if (device != "lo" && device.substring (0, 3) != "tun") {
                     GTop.get_netload (out netload, device);
-                    n_bytes_out += (int) netload.bytes_out;
-                    n_bytes_in += (int) netload.bytes_in;
+                    total_in += netload.bytes_in;
+                    total_out += netload.bytes_out;
+                    n_bytes_out += netload.bytes_out;
+                    n_bytes_in += netload.bytes_in;
                 }
             }
 
-            int _bytes_out = (n_bytes_out - _bytes_out_old) / 1;
-            int _bytes_in = (n_bytes_in - _bytes_in_old) / 1;
+            net_data.total_in = total_in;
+            net_data.total_out = total_out;
+
+            int _bytes_out = (int) (n_bytes_out - _bytes_out_old) / 1;
+            int _bytes_in = (int) (n_bytes_in - _bytes_in_old) / 1;
             update_percentage_used (_bytes_out, _bytes_in);
             _bytes_out_old = n_bytes_out;
             _bytes_in_old = n_bytes_in;
@@ -100,7 +106,10 @@ namespace Monitor {
                 }
             }
 
-            return {_bytes_out, _bytes_in};
+            net_data.bytes_in = _bytes_in;
+            net_data.bytes_out = _bytes_out;
+
+            return net_data;
         }
 
         private void update_percentage_used (int bytes_out, int bytes_in) {

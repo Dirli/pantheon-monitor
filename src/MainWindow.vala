@@ -39,7 +39,7 @@ namespace Monitor {
         public MainWindow (MonitorApp app) {
             set_application (app);
             set_default_size (600, 600);
-            set_size_request (600, 600);
+            resizable = false;
             window_position = Gtk.WindowPosition.CENTER;
 
             try {
@@ -112,6 +112,8 @@ namespace Monitor {
             process_window.add (process_view);
 
             process_window.expand = true;
+            process_window.margin_start = process_window.margin_end = 15;
+            process_window.margin_top = process_window.margin_botton = 10;
             process_window.show_all ();
 
             return process_window;

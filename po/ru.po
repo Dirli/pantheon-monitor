@@ -1,24 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the io.elementary.files package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# Translators:
+# Dirli <litandrej85@gmail.com>, 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.monitor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-21 01:44+0300\n"
-"PO-Revision-Date: 2019-01-21 02:30+0300\n"
+"POT-Creation-Date: 2019-06-22 23:46+0300\n"
+"PO-Revision-Date: 2019-06-22 23:48+0300\n"
 "Last-Translator: Dirli <litandrej85@gmail.com>\n"
 "Language-Team: \n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.2.1\n"
 "X-Poedit-Basepath: ../src\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"Last-Translator: \n"
-"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: Indicator.vala:35
@@ -29,7 +30,7 @@ msgstr "Monitor Indicator"
 msgid "Monitors and displays the temperature on the Wingpanel"
 msgstr "Мониторит и отображает температуру на панели"
 
-#: MainWindow.vala:90
+#: MainWindow.vala:94
 msgid "End process"
 msgstr "Завершить процесс"
 
@@ -61,33 +62,37 @@ msgstr "О Monitor"
 msgid "Options"
 msgstr "Опции"
 
-#: Widgets/Monitoring.vala:44 Widgets/Process.vala:69
-msgid "Memory"
-msgstr "Память"
-
-#: Widgets/Monitoring.vala:45
+#: Widgets/Monitoring.vala:59
 msgid "Download"
 msgstr "Загрузка"
 
-#: Widgets/Monitoring.vala:46
+#: Widgets/Monitoring.vala:61
 msgid "Upload"
 msgstr "Отдача"
 
-#: Widgets/Monitoring.vala:57
+#: Widgets/Monitoring.vala:68
 msgid "Common"
 msgstr "Общие"
 
-#: Widgets/Monitoring.vala:60
+#: Widgets/Monitoring.vala:70
 msgid "Network"
 msgstr "Сеть"
 
-#: Widgets/Monitoring.vala:65 Widgets/Popover.vala:55
-msgid "Uptime"
-msgstr "Включен"
+#: Widgets/Monitoring.vala:77
+msgid "Total download"
+msgstr "Всего загружено"
 
-#: Widgets/Monitoring.vala:68 Widgets/Popover.vala:48
+#: Widgets/Monitoring.vala:80
+msgid "Total upload"
+msgstr "Всего отдано"
+
+#: Widgets/Monitoring.vala:83 Widgets/Popover.vala:48
 msgid "Swap"
 msgstr "Подкачка"
+
+#: Widgets/Monitoring.vala:86 Widgets/Popover.vala:55
+msgid "Uptime"
+msgstr "Включен"
 
 #: Widgets/Popover.vala:34
 msgid "Frequency"
@@ -133,11 +138,15 @@ msgstr "Закрыть"
 msgid "Process Name"
 msgstr "Имя процесса"
 
-#: Widgets/Process.vala:58
+#: Widgets/Process.vala:57
 msgid "CPU"
 msgstr ""
 
-#: Widgets/Process.vala:79
+#: Widgets/Process.vala:68
+msgid "Memory"
+msgstr "Память"
+
+#: Widgets/Process.vala:78
 msgid "PID"
 msgstr ""
 

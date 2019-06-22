@@ -17,7 +17,7 @@
  */
 
 namespace Monitor.Utils {
-    public static string format_net_speed (int bytes, bool round = false) {
+    public static string format_net_speed (uint64 bytes, bool round = false) {
         string[] sizes = { " B/s", "KB/s", "MB/s", "GB/s", "TB/s" };
         double len = (double) bytes;
         int order = 0;

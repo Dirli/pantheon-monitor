@@ -28,7 +28,7 @@ namespace Monitor {
         }
 
         public override string get_signature () {
-            return Utils.format_net_speed (net_speed);
+            return Utils.format_net_speed ((uint64) net_speed);
         }
 
         protected override void draw_numbers (Cairo.Context cr, double center_x, double center_y, float radius){
