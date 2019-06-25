@@ -113,7 +113,7 @@ namespace Monitor {
 
             process_window.expand = true;
             process_window.margin_start = process_window.margin_end = 15;
-            process_window.margin_top = process_window.margin_botton = 10;
+            process_window.margin_top = process_window.margin_bottom = 10;
             process_window.show_all ();
 
             return process_window;
