@@ -133,8 +133,8 @@ namespace Monitor {
                     widget_down.progress = net_serv.percentage_down;
                     widget_up.progress = net_serv.percentage_up;
 
-                    total_down_val.label = Utils.format_net_speed (net_data.total_in);
-                    total_up_val.label = Utils.format_net_speed (net_data.total_out);
+                    total_down_val.label = Utils.format_net_speed (net_data.total_in, true);
+                    total_up_val.label = Utils.format_net_speed (net_data.total_out, true);
 
                     if (first_step) {first_step = false;}
 

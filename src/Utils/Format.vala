@@ -34,7 +34,7 @@ namespace Monitor.Utils {
         }
 
         if (round == true) {
-            speed = "%3.0f %s".printf(len, sizes[order]);
+            speed = "%3.1f %s".printf(len, sizes[order].split ("/")[0]);
         } else {
             speed = "%3.2f %s".printf(len, sizes[order]);
         }
