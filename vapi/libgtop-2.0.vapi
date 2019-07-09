@@ -1316,4 +1316,6 @@ namespace GTop {
     public static long internet_addr (string host);
     [CCode (cheader_filename = "glibtop.h", cname = "glibtop_make_connection")]
     public static int make_connection (string hostarg, int portarg, int s);
+    [CCode(array_length = false, cheader_filename = "glibtop.h", cname = "glibtop_get_mountlist")]
+    public static GTop.MountEntry[] get_mountlist(out GTop.MountList mount_list, bool all_fs);
 }

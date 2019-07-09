@@ -29,6 +29,20 @@ namespace Monitor {
             font-size: 110%;
             font-weight: 600;
         }
+        .block {
+            border: 0.5px solid;
+            border-radius: 0.5em;
+            padding: 0.5em;
+            font-weight: bold;
+        }
+        .volumes {
+            border-radius: 0.3em;
+            opacity: 0.9;
+            font-weight: bold;
+            background-color: Khaki;
+            padding-bottom: 5px;
+            padding-top: 5px;
+        }
     """;
 
     public class MainWindow : Gtk.Window {
@@ -62,27 +76,33 @@ namespace Monitor {
 
             add (view);
             headerbar.view_box.mode_changed.connect (() => {
-                var exist_widget = view.get_child_at (0,0);
                 Gtk.Widget? widget = null;
-                if (exist_widget != null) {
-                    exist_widget.destroy ();
-                }
+
                 if (headerbar.view_box.selected == 1) {
                     widget = new Widgets.Monitoring (headerbar.view_box, current_color ());
                     statusbar.set_sensitive (false);
-                /* } else if (headerbar.view_box.selected == 2) {
-                    statusbar.set_sensitive (false); */
+                } else if (headerbar.view_box.selected == 2) {
+                    widget = get_scrolled_window (new Widgets.Disks ());
+                    statusbar.set_sensitive (false);
                 } else {
-                    widget = get_porcesses ();
+                    generic_model = new Models.GenericModel ();
+                    process_view = new Widgets.Process (generic_model);
+                    widget = get_scrolled_window (process_view);
                     statusbar.set_sensitive (true);
                     statusbar.set_sensitive (true);
                 }
                 if (widget != null) {
+                    var exist_widget = view.get_child_at (0,0);
+
+                    if (exist_widget != null) {
+                        exist_widget.destroy ();
+                    }
+
                     view.attach (widget, 0, 0, 1, 1);
                 }
             });
 
-            view.attach (get_porcesses (), 0, 0, 1, 1);
+            headerbar.view_box.selected = 0;
             init_statusbar (statusbar);
         }
 
@@ -104,19 +124,16 @@ namespace Monitor {
             statusbar.pack_end (search);
         }
 
-        private Gtk.ScrolledWindow get_porcesses () {
-            Gtk.ScrolledWindow process_window = new Gtk.ScrolledWindow (null, null);
-            generic_model = new Models.GenericModel ();
-            process_view = new Widgets.Process (generic_model);
+        private Gtk.ScrolledWindow get_scrolled_window (Gtk.Widget widget) {
+            Gtk.ScrolledWindow scr_window = new Gtk.ScrolledWindow (null, null);
 
-            process_window.add (process_view);
+            scr_window.add (widget);
+            scr_window.expand = true;
+            scr_window.margin_start = scr_window.margin_end = 15;
+            scr_window.margin_top = scr_window.margin_bottom = 10;
+            scr_window.show_all ();
 
-            process_window.expand = true;
-            process_window.margin_start = process_window.margin_end = 15;
-            process_window.margin_top = process_window.margin_bottom = 10;
-            process_window.show_all ();
-
-            return process_window;
+            return scr_window;
         }
     }
 }

@@ -9,6 +9,7 @@ executable(
     'Models/ModelHelper.vala',
     'Services/Circle.vala',
     'Services/CPU.vala',
+    'Services/Disks.vala',
     'Services/Memory.vala',
     'Services/Net.vala',
     'Services/Settings.vala',
@@ -18,6 +19,7 @@ executable(
     'Utils/Format.vala',
     'Widgets/About.vala',
     'Widgets/Cpu.vala',
+    'Widgets/Disks.vala',
     'Widgets/Headerbar.vala',
     'Widgets/Memory.vala',
     'Widgets/Monitoring.vala',
@@ -26,6 +28,8 @@ executable(
     'Widgets/Process.vala',
     'Widgets/Search.vala',
     'Widgets/Statusbar.vala',
+    'Widgets/VolumeIter.vala',
+    'Widgets/VolumesBox.vala',
     c_args: c_args,
     vala_args: vala_args,
     dependencies: [
@@ -38,6 +42,7 @@ executable(
         gtop_dep,
         wnck_dep,
         cairo_dep,
+        udisks2_dep,
         meson.get_compiler('c').find_library('m', required : false),
         meson.get_compiler('vala').find_library('posix')
     ],

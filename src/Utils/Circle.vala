@@ -21,7 +21,7 @@ using Math;
 namespace Monitor {
     public class Utils.Circle : GLib.Object {
         public float get_rgb_gtk (int color) {
-            return (float) color / 225;
+            return (float) color / 255;
         }
 
         public double get_radians (double grades) {

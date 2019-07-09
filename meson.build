@@ -13,6 +13,7 @@ bamf_dep = dependency('libbamf3')
 gtop_dep = dependency('libgtop-2.0')
 wnck_dep = dependency('libwnck-3.0')
 cairo_dep = dependency('cairo')
+udisks2_dep = dependency('udisks2')
 
 # Make gettext work
 add_project_arguments(

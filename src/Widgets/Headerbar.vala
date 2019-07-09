@@ -44,13 +44,11 @@ namespace Monitor {
             mon_button.margin_start = mon_button.margin_end = 5;
             view_box.append (mon_button);
 
-            /* Gtk.Image disk_button = new Gtk.Image.from_icon_name ("drive-harddisk-symbolic", Gtk.IconSize.BUTTON);
+            Gtk.Image disk_button = new Gtk.Image.from_icon_name ("drive-harddisk-symbolic", Gtk.IconSize.BUTTON);
             disk_button.tooltip_text = _("Disks");
             disk_button.get_style_context ().add_class ("mode_button_split");
             disk_button.margin_start = disk_button.margin_end = 5;
-            view_box.append (disk_button); */
-
-            view_box.selected = 0;
+            view_box.append (disk_button);
 
             Gtk.Menu menu = new Gtk.Menu ();
             var pref_item = new Gtk.MenuItem.with_label (_("Preferences"));

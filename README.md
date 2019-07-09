@@ -1,5 +1,5 @@
 # Pantheon-monitor
-Manage processes and monitor system resources.
+Manage processes, monitor of system resources and drives.
 
 ----
 
@@ -8,8 +8,11 @@ Manage processes and monitor system resources.
 ### Indicator
 ![Screenshot](data/screenshot2.png)
 
-### Resource monitoring
+### Resource monitor
 ![Screenshot](data/screenshot4.png)
+
+### Disks monitor
+![Screenshot](data/screenshot3.png)
 
 ### Prefrences
 ![Screenshot](data/screenshot5.png)
@@ -27,18 +30,11 @@ You'll need the following dependencies to build:
 * libgtop2-dev
 * libcairo2-dev
 * libwingpanel-2.0-dev
+* libudisks2-dev
 * meson
 
 ## How To Build
 
-    meson build --prefix /usr --buildtype=plain
+    meson build --prefix=/usr
     ninja -C build
     sudo ninja -C build install
-
-I just connected:
-https://github.com/stsdc/monitor
-and
-https://github.com/kmal-kenneth/monilet
-
-From themselves added indicator.
-It would be good to add icons to the indicator instead of a caption.
