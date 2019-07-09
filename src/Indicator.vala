@@ -26,6 +26,7 @@ namespace Monitor {
         private Services.CPU? cpu_serv;
         private Services.Memory? memory_serv;
         private Services.Swap? swap_serv;
+        /* private Services.Disks disks_serv; */
 
         private bool extended;
         private uint timeout_id;
@@ -132,6 +133,31 @@ namespace Monitor {
 
         public override void opened () {
             extended = true;
+            if (popover_wid != null) {
+                popover_wid.clear_volumes_box ();
+
+                var disks_serv = new Services.Disks ();
+
+                disks_serv.get_mounted_volumes ().foreach ((volume) => {
+                    var vol_label = new Gtk.Label (volume.label != ""
+                                                   ? "%s (%s)".printf (volume.label, volume.device)
+                                                   : volume.device);
+                    vol_label.halign = Gtk.Align.START;
+
+                    var progress_bar = new Gtk.ProgressBar ();
+                    progress_bar.tooltip_text = "free / total: %s / %s".printf (disks_serv.size_to_display (volume.free),
+                                                                                disks_serv.size_to_display (volume.size));
+
+                    var used_percent = 1 - (double) volume.free / volume.size;
+
+                    progress_bar.set_fraction (used_percent);
+                    popover_wid.add_volume (vol_label, progress_bar);
+
+                    return true;
+                });
+
+                popover_wid.show_all ();
+            }
         }
 
         public override void closed () {

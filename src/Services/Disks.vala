@@ -6,7 +6,8 @@ namespace Monitor {
         public Disks () {
             try {
                 udisks_client = new UDisks.Client.sync ();
-                obj_proxies = udisks_client.get_object_manager ().get_objects ();
+                var dbus_obj_manager = udisks_client.get_object_manager ();
+                obj_proxies = dbus_obj_manager.get_objects ();
             } catch (Error e) {
                 warning (e.message);
                 udisks_client = null;
@@ -82,6 +83,36 @@ namespace Monitor {
             }
 
             return GLib.strcmp (vol1.device, vol2.device);
+        }
+
+        public Gee.ArrayList<MonitorVolume?> get_mounted_volumes () {
+            Gee.ArrayList<MonitorVolume?> volumes_list = new Gee.ArrayList<MonitorVolume?> ();
+
+            if (udisks_client != null) {
+                obj_proxies.foreach ((iter) => {
+                    var udisks_obj = udisks_client.peek_object (iter.get_object_path ());
+
+                    var block_dev = udisks_obj.get_block ();
+                    var block_fs = udisks_obj.get_filesystem ();
+                    if (block_dev != null && block_dev.drive != "/" && block_fs != null && block_fs.mount_points[0] != null) {
+                        MonitorVolume current_volume = {};
+
+                        current_volume.device = block_dev.device;
+                        current_volume.label = block_dev.id_label;
+                        current_volume.size = block_dev.size;
+
+                        Posix.statvfs buf;
+                        Posix.statvfs_exec (block_fs.mount_points[0], out buf);
+                        current_volume.free = (uint64) buf.f_bfree * (uint64) buf.f_bsize;
+
+                        volumes_list.add (current_volume);
+                    }
+                });
+
+                volumes_list.sort (compare_volumes);
+            }
+
+            return volumes_list;
         }
 
         public Gee.ArrayList<MonitorVolume?> get_drive_volumes (string dev_name) {

@@ -56,6 +56,7 @@ if get_option('indicator')
         'Widgets/Panel.vala',
         'Widgets/Popover.vala',
         'Services/CPU.vala',
+        'Services/Disks.vala',
         'Services/Memory.vala',
         'Services/Settings.vala',
         'Services/Swap.vala',
@@ -70,7 +71,9 @@ if get_option('indicator')
             gtk_dep,
             gee_dep,
             gtop_dep,
-            wingpanel_dep
+            udisks2_dep,
+            wingpanel_dep,
+            meson.get_compiler('vala').find_library('posix')
         ],
         vala_args: vala_args,
         link_args: ['-lm'],

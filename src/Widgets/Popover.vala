@@ -22,6 +22,7 @@ namespace Monitor {
         private Gtk.Label swap_value;
         private Gtk.Label freq_value;
         private Gtk.Label uptime_value;
+        private Gtk.Box volumes_box;
 
         public signal void close_popover ();
 
@@ -62,17 +63,40 @@ namespace Monitor {
             var separator = new Wingpanel.Widgets.Separator ();
             separator.hexpand = true;
 
-            attach (freq_label,   0, 0, 1, 1);
-            attach (freq_value,   1, 0, 1, 1);
-            attach (ram_label,    0, 1, 1, 1);
-            attach (ram_value,    1, 1, 1, 1);
-            attach (swap_label,   0, 2, 1, 1);
-            attach (swap_value,   1, 2, 1, 1);
-            attach (uptime_label, 0, 3, 1, 1);
-            attach (uptime_value, 1, 3, 1, 1);
-            attach (separator,    0, 4, 2, 1);
+            attach (freq_label,   0, 0);
+            attach (freq_value,   1, 0);
+            attach (ram_label,    0, 1);
+            attach (ram_value,    1, 1);
+            attach (swap_label,   0, 2);
+            attach (swap_value,   1, 2);
+            attach (uptime_label, 0, 3);
+            attach (uptime_value, 1, 3);
+            attach (separator,   0, 4, 2, 1);
 
             init_footer ();
+        }
+
+        public void clear_volumes_box () {
+            var exist_widget = get_child_at (0, 5);
+            if (exist_widget != null) {
+                exist_widget.destroy ();
+            }
+
+            volumes_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 8);
+            volumes_box.margin_start = volumes_box.margin_end = 15;
+
+            attach (volumes_box, 0, 5, 2, 1);
+
+            if (get_child_at (0, 6) == null) {
+                var separator = new Wingpanel.Widgets.Separator ();
+                separator.hexpand = true;
+                attach (separator, 0, 6, 2, 1);
+            }
+        }
+
+        public void add_volume (Gtk.Label vol_label, Gtk.ProgressBar vol_bar) {
+            volumes_box.add (vol_label);
+            volumes_box.add (vol_bar);
         }
 
         public void init_footer () {
@@ -97,8 +121,8 @@ namespace Monitor {
                 }
             });
 
-            attach (hide_button,  0, 5, 2, 1);
-            attach (app_button,   0, 6, 2, 1);
+            attach (hide_button,  0, 7, 2, 1);
+            attach (app_button,   0, 8, 2, 1);
         }
 
         public void update_state (string freq,
