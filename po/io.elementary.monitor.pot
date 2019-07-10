@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.monitor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-22 23:46+0300\n"
+"POT-Creation-Date: 2019-07-10 23:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,15 +21,19 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: Indicator.vala:35
+#: Indicator.vala:36
 msgid "Monitor Indicator"
 msgstr ""
 
-#: Indicator.vala:36
-msgid "Monitors and displays the temperature on the Wingpanel"
+#: Indicator.vala:37
+msgid "Displays processes, consumed resources and drives on a Wingpanel"
 msgstr ""
 
-#: MainWindow.vala:94
+#: Indicator.vala:148
+msgid "free / total"
+msgstr ""
+
+#: MainWindow.vala:114
 msgid "End process"
 msgstr ""
 
@@ -41,23 +45,63 @@ msgstr ""
 msgid "website"
 msgstr ""
 
+#: Widgets/Disks.vala:31
+msgid "Partitioning:"
+msgstr ""
+
+#: Widgets/Disks.vala:38 Widgets/Disks.vala:138 Widgets/Disks.vala:154
+msgid "Size:"
+msgstr ""
+
+#: Widgets/Disks.vala:119 Widgets/Disks.vala:153
+msgid "Device:"
+msgstr ""
+
+#: Widgets/Disks.vala:122
+msgid "Label:"
+msgstr ""
+
+#: Widgets/Disks.vala:126
+msgid "Filesystem:"
+msgstr ""
+
+#: Widgets/Disks.vala:130
+msgid "Mount point:"
+msgstr ""
+
+#: Widgets/Disks.vala:138
+msgid "Size (free / total):"
+msgstr ""
+
+#: Widgets/Disks.vala:155
+msgid "Contents:"
+msgstr ""
+
+#: Widgets/Disks.vala:155
+msgid "Unallocated Space"
+msgstr ""
+
 #: Widgets/Headerbar.vala:36
-msgid "Process"
+msgid "Processes"
 msgstr ""
 
 #: Widgets/Headerbar.vala:42
 msgid "Monitor"
 msgstr ""
 
-#: Widgets/Headerbar.vala:56
+#: Widgets/Headerbar.vala:48
+msgid "Disks"
+msgstr ""
+
+#: Widgets/Headerbar.vala:54
 msgid "Preferences"
 msgstr ""
 
-#: Widgets/Headerbar.vala:57
+#: Widgets/Headerbar.vala:55
 msgid "About"
 msgstr ""
 
-#: Widgets/Headerbar.vala:71
+#: Widgets/Headerbar.vala:69
 msgid "Options"
 msgstr ""
 
@@ -77,59 +121,59 @@ msgstr ""
 msgid "Network"
 msgstr ""
 
-#: Widgets/Monitoring.vala:77
+#: Widgets/Monitoring.vala:78
 msgid "Total download"
 msgstr ""
 
-#: Widgets/Monitoring.vala:80
+#: Widgets/Monitoring.vala:81
 msgid "Total upload"
 msgstr ""
 
-#: Widgets/Monitoring.vala:83 Widgets/Popover.vala:48
+#: Widgets/Monitoring.vala:84 Widgets/Popover.vala:49
 msgid "Swap"
 msgstr ""
 
-#: Widgets/Monitoring.vala:86 Widgets/Popover.vala:55
+#: Widgets/Monitoring.vala:87 Widgets/Popover.vala:56
 msgid "Uptime"
 msgstr ""
 
-#: Widgets/Popover.vala:34
+#: Widgets/Popover.vala:35
 msgid "Frequency"
 msgstr ""
 
-#: Widgets/Popover.vala:41
+#: Widgets/Popover.vala:42
 msgid "Ram"
 msgstr ""
 
-#: Widgets/Popover.vala:80
+#: Widgets/Popover.vala:104
 msgid "Hide indicator"
 msgstr ""
 
-#: Widgets/Popover.vala:86
+#: Widgets/Popover.vala:110
 msgid "Start monitor"
 msgstr ""
 
-#: Widgets/Preferences.vala:54
+#: Widgets/Preferences.vala:53
 msgid "Indicator"
 msgstr ""
 
-#: Widgets/Preferences.vala:58
+#: Widgets/Preferences.vala:59
 msgid "Use System Tray Indicator:"
 msgstr ""
 
-#: Widgets/Preferences.vala:63
+#: Widgets/Preferences.vala:62
 msgid "Show titles:"
 msgstr ""
 
-#: Widgets/Preferences.vala:68
+#: Widgets/Preferences.vala:65
 msgid "Show CPU:"
 msgstr ""
 
-#: Widgets/Preferences.vala:73
+#: Widgets/Preferences.vala:68
 msgid "Show RAM:"
 msgstr ""
 
-#: Widgets/Preferences.vala:105
+#: Widgets/Preferences.vala:83
 msgid "Close"
 msgstr ""
 

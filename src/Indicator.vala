@@ -34,7 +34,7 @@ namespace Monitor {
         public Indicator () {
             Object (code_name : "monitor-indicator",
             display_name : _("Monitor Indicator"),
-            description: _("Monitors and displays the temperature on the Wingpanel"));
+            description: _("Displays processes, consumed resources and drives on a Wingpanel"));
             extended = false;
 
             Gtk.IconTheme.get_default().add_resource_path("/io/elementary/monitor/icons");
@@ -145,7 +145,7 @@ namespace Monitor {
                     vol_label.halign = Gtk.Align.START;
 
                     var progress_bar = new Gtk.ProgressBar ();
-                    progress_bar.tooltip_text = "free / total: %s / %s".printf (disks_serv.size_to_display (volume.free),
+                    progress_bar.tooltip_text = _("free / total") + ": %s / %s".printf (disks_serv.size_to_display (volume.free),
                                                                                 disks_serv.size_to_display (volume.size));
 
                     var used_percent = 1 - (double) volume.free / volume.size;

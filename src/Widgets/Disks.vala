@@ -28,14 +28,14 @@ namespace Monitor {
                 drive_model_val.set_ellipsize (Pango.EllipsizeMode.END);
                 drive_grid.attach (drive_model_val, 1, top++, 2, 1);
 
-                add_new_str (ref drive_grid, "Partition:", drive.partition, top++, 1);
+                add_new_str (ref drive_grid, _("Partitioning:"), drive.partition, top++, 1);
                 add_new_str (ref drive_grid, "ID:", drive.id, top++, 1);
 
                 Gtk.Label drive_device_val = new Gtk.Label (drive.device);
                 drive_device_val.halign = Gtk.Align.CENTER;
                 drive_grid.attach (drive_device_val, 0, 3);
 
-                add_new_str (ref drive_grid, "Size:", disks_service.size_to_display (drive.size), top++, 1);
+                add_new_str (ref drive_grid, _("Size:"), disks_service.size_to_display (drive.size), top++, 1);
 
                 drive_box.add (drive_grid);
 
@@ -116,18 +116,18 @@ namespace Monitor {
             vol_grid.column_spacing = 10;
             vol_grid.get_style_context ().add_class ("block");
 
-            add_new_str (ref vol_grid, "Device:", relative_volume.device, top++);
+            add_new_str (ref vol_grid, _("Device:"), relative_volume.device, top++);
 
             if (relative_volume.label != "") {
-                add_new_str (ref vol_grid, "Label:", relative_volume.label, top++);
+                add_new_str (ref vol_grid, _("Label:"), relative_volume.label, top++);
             }
 
             add_new_str (ref vol_grid, "UUID:", relative_volume.uuid, top++);
-            add_new_str (ref vol_grid, "Filesystem:", relative_volume.type, top++);
+            add_new_str (ref vol_grid, _("Filesystem:"), relative_volume.type, top++);
 
             var cust_size = "";
             if (relative_volume.mount_point != null) {
-                add_new_str (ref vol_grid, "Mount point:", relative_volume.mount_point, top++);
+                add_new_str (ref vol_grid, _("Mount point:"), relative_volume.mount_point, top++);
 
                 cust_size += disks_service.size_to_display (relative_volume.free);
                 cust_size += " / ";
@@ -135,7 +135,7 @@ namespace Monitor {
             cust_size += disks_service.size_to_display (relative_volume.size);
 
             add_new_str (ref vol_grid,
-                         relative_volume.mount_point != null ? "Size (free / total):" : "Size:",
+                         relative_volume.mount_point != null ? _("Size (free / total):") : _("Size:"),
                          cust_size,
                          top++);
 
@@ -150,9 +150,9 @@ namespace Monitor {
             free_grid.column_spacing = 10;
             free_grid.get_style_context ().add_class ("block");
 
-            add_new_str (ref free_grid, "Device:", relative_device, top++);
-            add_new_str (ref free_grid, "Size:", disks_service.size_to_display (free_size), top++);
-            add_new_str (ref free_grid, "Contents:", "Unallocated Space", top++);
+            add_new_str (ref free_grid, _("Device:"), relative_device, top++);
+            add_new_str (ref free_grid, _("Size:"), disks_service.size_to_display (free_size), top++);
+            add_new_str (ref free_grid, _("Contents:"), _("Unallocated Space"), top++);
 
             return free_grid;
         }

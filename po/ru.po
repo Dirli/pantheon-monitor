@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the io.elementary.files package.
 #
 # Translators:
-# Dirli <litandrej85@gmail.com>, 2019
+# Dirli <andrejl85@gmail.com>, 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.monitor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-22 23:46+0300\n"
-"PO-Revision-Date: 2019-06-22 23:48+0300\n"
-"Last-Translator: Dirli <litandrej85@gmail.com>\n"
+"POT-Creation-Date: 2019-07-10 23:59+0300\n"
+"PO-Revision-Date: 2019-07-11 00:02+0300\n"
+"Last-Translator: Dirli <andrejl85@gmail.com>\n"
 "Language-Team: \n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -22,15 +22,19 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: Indicator.vala:35
-msgid "Monitor Indicator"
-msgstr "Monitor Indicator"
-
 #: Indicator.vala:36
-msgid "Monitors and displays the temperature on the Wingpanel"
-msgstr "Мониторит и отображает температуру на панели"
+msgid "Monitor Indicator"
+msgstr "Индикатор монитора"
 
-#: MainWindow.vala:94
+#: Indicator.vala:37
+msgid "Displays processes, consumed resources and drives on a Wingpanel"
+msgstr "Отображает процессы, потребляемые ресурсы и диски на Wingpanel"
+
+#: Indicator.vala:148
+msgid "free / total"
+msgstr "доступно / всего"
+
+#: MainWindow.vala:114
 msgid "End process"
 msgstr "Завершить процесс"
 
@@ -42,23 +46,63 @@ msgstr "Системный монитор для ElementaryOS"
 msgid "website"
 msgstr "Веб-сайт"
 
+#: Widgets/Disks.vala:31
+msgid "Partitioning:"
+msgstr "Разметка:"
+
+#: Widgets/Disks.vala:38 Widgets/Disks.vala:138 Widgets/Disks.vala:154
+msgid "Size:"
+msgstr "Размер:"
+
+#: Widgets/Disks.vala:119 Widgets/Disks.vala:153
+msgid "Device:"
+msgstr "Устройство"
+
+#: Widgets/Disks.vala:122
+msgid "Label:"
+msgstr "Метка:"
+
+#: Widgets/Disks.vala:126
+msgid "Filesystem:"
+msgstr "Тип ФС:"
+
+#: Widgets/Disks.vala:130
+msgid "Mount point:"
+msgstr "Точка монтирования:"
+
+#: Widgets/Disks.vala:138
+msgid "Size (free / total):"
+msgstr "Размер (доступно / всего):"
+
+#: Widgets/Disks.vala:155
+msgid "Contents:"
+msgstr "Содержимое:"
+
+#: Widgets/Disks.vala:155
+msgid "Unallocated Space"
+msgstr "Незанятое пространство"
+
 #: Widgets/Headerbar.vala:36
-msgid "Process"
-msgstr "Процесс"
+msgid "Processes"
+msgstr "Процессы"
 
 #: Widgets/Headerbar.vala:42
 msgid "Monitor"
-msgstr "Monitor"
+msgstr "Монитор"
 
-#: Widgets/Headerbar.vala:56
+#: Widgets/Headerbar.vala:48
+msgid "Disks"
+msgstr "Диски"
+
+#: Widgets/Headerbar.vala:54
 msgid "Preferences"
-msgstr "Настройки"
+msgstr "Свойства"
 
-#: Widgets/Headerbar.vala:57
+#: Widgets/Headerbar.vala:55
 msgid "About"
-msgstr "О Monitor"
+msgstr ""
 
-#: Widgets/Headerbar.vala:71
+#: Widgets/Headerbar.vala:69
 msgid "Options"
 msgstr "Опции"
 
@@ -78,59 +122,59 @@ msgstr "Общие"
 msgid "Network"
 msgstr "Сеть"
 
-#: Widgets/Monitoring.vala:77
+#: Widgets/Monitoring.vala:78
 msgid "Total download"
 msgstr "Всего загружено"
 
-#: Widgets/Monitoring.vala:80
+#: Widgets/Monitoring.vala:81
 msgid "Total upload"
 msgstr "Всего отдано"
 
-#: Widgets/Monitoring.vala:83 Widgets/Popover.vala:48
+#: Widgets/Monitoring.vala:84 Widgets/Popover.vala:49
 msgid "Swap"
 msgstr "Подкачка"
 
-#: Widgets/Monitoring.vala:86 Widgets/Popover.vala:55
+#: Widgets/Monitoring.vala:87 Widgets/Popover.vala:56
 msgid "Uptime"
 msgstr "Включен"
 
-#: Widgets/Popover.vala:34
+#: Widgets/Popover.vala:35
 msgid "Frequency"
 msgstr "Частота"
 
-#: Widgets/Popover.vala:41
+#: Widgets/Popover.vala:42
 msgid "Ram"
 msgstr "Память"
 
-#: Widgets/Popover.vala:80
+#: Widgets/Popover.vala:104
 msgid "Hide indicator"
 msgstr "Скрыть индикатор"
 
-#: Widgets/Popover.vala:86
+#: Widgets/Popover.vala:110
 msgid "Start monitor"
-msgstr "Запустить Monitor"
+msgstr "Запустить Монитор"
 
-#: Widgets/Preferences.vala:54
+#: Widgets/Preferences.vala:53
 msgid "Indicator"
 msgstr "Индикатор"
 
-#: Widgets/Preferences.vala:58
+#: Widgets/Preferences.vala:59
 msgid "Use System Tray Indicator:"
 msgstr "Использовать индикатор:"
 
-#: Widgets/Preferences.vala:63
+#: Widgets/Preferences.vala:62
 msgid "Show titles:"
 msgstr "Показывать заголовки:"
 
-#: Widgets/Preferences.vala:68
+#: Widgets/Preferences.vala:65
 msgid "Show CPU:"
-msgstr "Следить за CPU:"
+msgstr "Показывать CPU"
 
-#: Widgets/Preferences.vala:73
+#: Widgets/Preferences.vala:68
 msgid "Show RAM:"
-msgstr "Следить за памятью:"
+msgstr "Показывать память"
 
-#: Widgets/Preferences.vala:105
+#: Widgets/Preferences.vala:83
 msgid "Close"
 msgstr "Закрыть"
 

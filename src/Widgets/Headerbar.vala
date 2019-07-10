@@ -33,20 +33,17 @@ namespace Monitor {
             pack_start (view_box);
 
             Gtk.Image proc_button = new Gtk.Image.from_icon_name ("view-list-symbolic", Gtk.IconSize.BUTTON);
-            proc_button.tooltip_text = _("Process");
-            proc_button.get_style_context ().add_class ("mode_button_split");
+            proc_button.tooltip_text = _("Processes");
             proc_button.margin_start = proc_button.margin_end = 5;
             view_box.append (proc_button);
 
             Gtk.Image mon_button = new Gtk.Image.from_icon_name ("utilities-system-monitor-symbolic", Gtk.IconSize.BUTTON);
             mon_button.tooltip_text = _("Monitor");
-            mon_button.get_style_context ().add_class ("mode_button_split");
             mon_button.margin_start = mon_button.margin_end = 5;
             view_box.append (mon_button);
 
             Gtk.Image disk_button = new Gtk.Image.from_icon_name ("drive-harddisk-symbolic", Gtk.IconSize.BUTTON);
             disk_button.tooltip_text = _("Disks");
-            disk_button.get_style_context ().add_class ("mode_button_split");
             disk_button.margin_start = disk_button.margin_end = 5;
             view_box.append (disk_button);
 

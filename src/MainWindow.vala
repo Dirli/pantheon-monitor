@@ -22,9 +22,6 @@ namespace Monitor {
         .section {
             font-size: 130%;
         }
-        .mode_button_split {
-            border-left-width: 1px;
-        }
         .preferences {
             font-size: 110%;
             font-weight: 600;
