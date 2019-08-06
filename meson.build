@@ -14,6 +14,7 @@ gtop_dep = dependency('libgtop-2.0')
 wnck_dep = dependency('libwnck-3.0')
 cairo_dep = dependency('cairo')
 udisks2_dep = dependency('udisks2')
+gee_dep = dependency('gee-0.8')
 
 # Make gettext work
 add_project_arguments(
@@ -30,7 +31,6 @@ vala_args = ['--vapidir=' + meson.source_root() + '/vapi/']
 
 if get_option('indicator')
     wingpanel_dep = dependency('wingpanel-2.0')
-    gee_dep = dependency('gee-0.8')
     vala_args += ['--define=INDICATOR_EXIST']
 endif
 

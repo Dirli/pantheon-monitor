@@ -27,6 +27,7 @@ You'll need the following dependencies to build:
 * libgranite-dev
 * libbamf3-dev
 * libwnck-3-dev
+* libgee-0.8-dev
 * libgtop2-dev
 * libcairo2-dev
 * libwingpanel-2.0-dev
