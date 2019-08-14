@@ -1,4 +1,4 @@
-project('io.elementary.monitor', ['vala', 'c'], version: '0.3.6')
+project('io.elementary.monitor', ['vala', 'c'], version: '0.5.0')
 
 gnome = import('gnome')
 i18n = import('i18n')
@@ -26,14 +26,12 @@ c_args = [
     '-DWNCK_I_KNOW_THIS_IS_UNSTABLE'
 ]
 
-
 vala_args = ['--vapidir=' + meson.source_root() + '/vapi/']
 
 if get_option('indicator')
     wingpanel_dep = dependency('wingpanel-2.0')
     vala_args += ['--define=INDICATOR_EXIST']
 endif
-
 
 subdir('data')
 subdir('src')
