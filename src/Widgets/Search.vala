@@ -18,14 +18,15 @@
 
 namespace Monitor {
 
-    public class Widgets.Search :  Gtk.SearchEntry {
+    public class Widgets.Search : Gtk.SearchEntry {
+        public signal void find_result (bool state);
         public Gtk.TreeModelFilter filter_model { get; private set; }
         private Widgets.Process process_view;
 
         public Search (Widgets.Process process_view, Gtk.TreeModel model) {
             this.process_view = process_view;
-            this.placeholder_text = _("Search Process");
-            this.set_tooltip_text (_("Type Process Name or PID"));
+            placeholder_text = _("Search Process");
+            set_tooltip_text (_("Type Process Name or PID"));
             filter_model = new Gtk.TreeModelFilter (model, null);
             connect_signal ();
             filter_model.set_visible_func(filter_func);
@@ -36,15 +37,23 @@ namespace Monitor {
         }
 
         private void connect_signal () {
-            this.search_changed.connect (() => {
+            search_changed.connect (() => {
                 // collapse tree only when search is focused and changed
-                if (this.is_focus) {
+                if (is_focus) {
                     process_view.collapse_all ();
                 }
+
                 filter_model.refilter ();
-                // if only one parent row, focus on child row
-                if (filter_model.iter_n_children (null) == 1) {
-                    process_view.focus_on_child_row ();
+
+                // if there's no search result, make kill_process_button insensitive to avoid the app crashes
+                find_result (filter_model.iter_n_children (null) != 0);
+
+                // focus on child row to avoid the app crashes by clicking "Kill/End Process" buttons in headerbar
+                process_view.focus_on_child_row ();
+                grab_focus ();
+
+                if (text != "") {
+                    insert_at_cursor ("");
                 }
             });
         }
@@ -87,9 +96,10 @@ namespace Monitor {
 
         // reset filter, grab focus and insert the character
         public void activate_entry (string search_text = "") {
-            this.text = "";
-            this.grab_focus ();
-            this.insert_at_cursor (search_text);
+            text = "";
+            // this.grab_focus ();
+            search_changed ();
+            insert_at_cursor (search_text);
         }
     }
 }

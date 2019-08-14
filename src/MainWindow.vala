@@ -108,15 +108,26 @@ namespace Monitor {
         }
 
         private void init_statusbar (Widgets.Statusbar statusbar) {
-            var kill_process_button = new Gtk.Button.with_label (_("End process"));
+            var end_process_button = new Gtk.Button.with_label (_("End Process"));
+            end_process_button.valign = Gtk.Align.CENTER;
+            end_process_button.margin = 10;
+            end_process_button.clicked.connect (process_view.end_process);
+            // end_process_button.tooltip_text = (_("Ctrl+E"));
+
+            var kill_process_button = new Gtk.Button.with_label (_("Kill process"));
             kill_process_button.valign = Gtk.Align.CENTER;
             kill_process_button.margin = 10;
             kill_process_button.clicked.connect (process_view.kill_process);
-            /* kill_process_button.tooltip_text = ("Ctrl+E"); */
+            // kill_process_button.tooltip_text = ("Ctrl+E");
 
+            statusbar.pack_start (end_process_button);
             statusbar.pack_start (kill_process_button);
 
             Widgets.Search search = new Widgets.Search (process_view, generic_model);
+            search.find_result.connect ((state) => {
+                end_process_button.set_sensitive (state);
+                kill_process_button.set_sensitive (state);
+            });
             search.valign = Gtk.Align.CENTER;
             statusbar.pack_end (search);
         }

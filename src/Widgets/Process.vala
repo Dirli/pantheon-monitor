@@ -98,7 +98,7 @@ namespace Monitor {
             model.get_value (iter, Column.ICON, out icon_name);
             if (regex.match ((string) icon_name)) {
                 try {
-                    string path = Filename.to_uri (((string) icon_name));
+                    string path = ((string) icon_name);
                     Gdk.Pixbuf icon = new Gdk.Pixbuf.from_file_at_size (path, 16, -1);
                     (icon_cell as Gtk.CellRendererPixbuf).pixbuf = icon;
                 } catch (Error e) {
@@ -203,5 +203,9 @@ namespace Monitor {
             model.kill_process (pid);
         }
 
+        public void end_process () {
+            int pid = get_pid_of_selected ();
+            model.end_process (pid);
+        }
     }
 }

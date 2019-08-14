@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the io.elementary.files package.
 #
 # Translators:
-# Dirli <andrejl85@gmail.com>, 2019
+# Dirli <litandrej85@gmail.com>, 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.monitor\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-10 23:59+0300\n"
 "PO-Revision-Date: 2019-07-11 00:02+0300\n"
-"Last-Translator: Dirli <andrejl85@gmail.com>\n"
+"Last-Translator: Dirli <litandrej85@gmail.com>\n"
 "Language-Team: \n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"

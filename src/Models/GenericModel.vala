@@ -52,11 +52,11 @@ namespace Monitor {
 
             Idle.add (() => { add_running_apps (); return false; } );
             Idle.add (() => { add_running_processes (); return false; } );
-        }
 
-        public GenericModel () {
             add_background_apps_row ();
         }
+
+        public GenericModel () {}
 
         private void add_running_apps () {
             debug ("add_running_applications");
@@ -297,7 +297,14 @@ namespace Monitor {
                 process.kill ();
                 info ("Kill:%d",process.pid);
             }
-}
-    }
+        }
 
+        public void end_process (int pid) {
+            if (pid > 0) {
+                var process = process_manager.get_process (pid);
+                process.end ();
+                info ("End:%d",process.pid);
+            }
+        }
+    }
 }
