@@ -25,7 +25,6 @@ namespace Monitor {
         public MainWindow (MonitorApp app) {
             set_application (app);
             set_default_size (600, 600);
-            resizable = false;
             window_position = Gtk.WindowPosition.CENTER;
 
             var provider = new Gtk.CssProvider ();
@@ -57,8 +56,8 @@ namespace Monitor {
                     process_view = new Widgets.Process (generic_model);
                     widget = get_scrolled_window (process_view);
                     statusbar.set_sensitive (true);
-                    statusbar.set_sensitive (true);
                 }
+
                 if (widget != null) {
                     var exist_widget = view.get_child_at (0,0);
 
@@ -70,7 +69,18 @@ namespace Monitor {
                 }
             });
 
+            headerbar.search_process.connect ((proc_pattern) => {
+                unowned Gtk.Widget exist_widget = view.get_child_at (0, 0);
+                if (exist_widget != null) {
+                    unowned Gtk.Widget w = (exist_widget as Gtk.Container).get_children ().nth_data (0);
+                    if (w is Widgets.Process) {
+                        (w as Widgets.Process).filter_text = proc_pattern;
+                    }
+                }
+            });
+
             headerbar.view_box.selected = 0;
+
             init_statusbar (statusbar);
         }
 
@@ -93,14 +103,6 @@ namespace Monitor {
 
             statusbar.pack_start (end_process_button);
             statusbar.pack_start (kill_process_button);
-
-            Widgets.Search search = new Widgets.Search (process_view, generic_model);
-            search.find_result.connect ((state) => {
-                end_process_button.set_sensitive (state);
-                kill_process_button.set_sensitive (state);
-            });
-            search.valign = Gtk.Align.CENTER;
-            statusbar.pack_end (search);
         }
 
         private Gtk.ScrolledWindow get_scrolled_window (Gtk.Widget widget) {

@@ -18,13 +18,15 @@
 
 namespace Monitor {
     public class Widgets.Headerbar : Gtk.HeaderBar {
+        public signal void search_process (string process_pattern);
+
+        public Granite.Widgets.ModeButton view_box;
+
         construct {
             show_close_button = true;
             has_subtitle = false;
             title = "Monitor";
         }
-
-        public Granite.Widgets.ModeButton view_box;
 
         public Headerbar (MainWindow window) {
             view_box = new Granite.Widgets.ModeButton ();
@@ -61,12 +63,38 @@ namespace Monitor {
                 about.show ();
             });
 
+            var search_entry = new Gtk.SearchEntry ();
+            search_entry.valign = Gtk.Align.CENTER;
+            search_entry.placeholder_text = _("Search Process");
+            search_entry.set_tooltip_text (_("Type Process Name or PID"));
+            search_entry.search_changed.connect (() => {
+                if (view_box.selected == 0) {
+                    if (search_entry.text_length == 1) {
+                        return;
+                    }
+
+                    search_process (search_entry.text);
+                }
+            });
+
+            view_box.mode_changed.connect (() => {
+                if (view_box.selected == 0) {
+                    search_entry.show ();
+                } else {
+                    search_entry.hide ();
+                    search_entry.text = "";
+                }
+            });
+
             var app_button = new Gtk.MenuButton ();
             app_button.popup = menu;
             app_button.tooltip_text = _("Options");
             app_button.image = new Gtk.Image.from_icon_name ("open-menu-symbolic", Gtk.IconSize.BUTTON);
+
             menu.show_all ();
+
             pack_end (app_button);
+            pack_end (search_entry);
         }
     }
 }

@@ -26,7 +26,6 @@ executable(
     'Widgets/Network.vala',
     'Widgets/Preferences.vala',
     'Widgets/Process.vala',
-    'Widgets/Search.vala',
     'Widgets/Statusbar.vala',
     'Widgets/VolumeIter.vala',
     'Widgets/VolumesBox.vala',

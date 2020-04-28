@@ -25,11 +25,24 @@ namespace Monitor {
         private Gtk.TreeViewColumn pid_column;
         private Regex? regex;
 
+        private string _filter_text = "";
+        public string filter_text {
+            set {
+                _filter_text = value;
+                proc_filter.refilter ();
+            }
+        }
+
+        private Gtk.TreeModelFilter proc_filter;
+
         const string NO_DATA = "\u2014";
 
         public Process (Models.GenericModel model) {
             this.model = model;
             regex = /(?i:^.*\.(xpm|png)$)/;
+
+            proc_filter = new Gtk.TreeModelFilter (model, null);
+            proc_filter.set_visible_func (row_visible);
 
             // setup name column
             name_column = new Gtk.TreeViewColumn ();
@@ -90,7 +103,37 @@ namespace Monitor {
             // resize all of the columns
             columns_autosize ();
 
-            set_model (model);
+            set_model (proc_filter);
+        }
+
+        private bool row_visible (Gtk.TreeModel model, Gtk.TreeIter iter) {
+            string proc_name;
+            int proc_pid;
+            bool found = false;
+            if ( _filter_text.length == 0 ) {
+                return true;
+            }
+
+            model.get( iter, Column.NAME, out proc_name, Column.PID, out proc_pid, -1);
+
+            if (proc_name != null) {
+                found = (proc_name.casefold ().index_of (_filter_text) >= 0) || (proc_pid.to_string () == _filter_text);
+            }
+
+            Gtk.TreeIter child_iter;
+            bool child_found = false;
+
+            if (model.iter_children (out child_iter, iter)) {
+                do {
+                    child_found = row_visible (model, child_iter);
+                } while (model.iter_next (ref child_iter) && !child_found);
+            }
+
+            if (child_found && _filter_text.length > 0) {
+                expand_all ();
+            }
+
+            return found || child_found;
         }
 
         public void icon_cell_layout (Gtk.CellLayout cell_layout, Gtk.CellRenderer icon_cell, Gtk.TreeModel model, Gtk.TreeIter iter) {
