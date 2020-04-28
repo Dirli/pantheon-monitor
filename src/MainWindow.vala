@@ -17,31 +17,6 @@
  */
 
 namespace Monitor {
-
-    private const string SECTION_SIZE = """
-        .section {
-            font-size: 130%;
-        }
-        .preferences {
-            font-size: 110%;
-            font-weight: 600;
-        }
-        .block {
-            border: 0.5px solid;
-            border-radius: 0.5em;
-            padding: 0.5em;
-            font-weight: bold;
-        }
-        .volumes {
-            border-radius: 0.3em;
-            opacity: 0.9;
-            font-weight: bold;
-            background-color: Khaki;
-            padding-bottom: 5px;
-            padding-top: 5px;
-        }
-    """;
-
     public class MainWindow : Gtk.Window {
         private Gtk.Grid view;
         private Widgets.Process process_view;
@@ -53,13 +28,9 @@ namespace Monitor {
             resizable = false;
             window_position = Gtk.WindowPosition.CENTER;
 
-            try {
-                var provider = new Gtk.CssProvider ();
-                provider.load_from_data (SECTION_SIZE);
-                Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-            } catch (Error e) {
-                warning (e.message);
-            }
+            var provider = new Gtk.CssProvider ();
+            provider.load_from_resource ("/io/elementary/monitor/style/application.css");
+            Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             Widgets.Headerbar headerbar = new Widgets.Headerbar (this);
             set_titlebar (headerbar);

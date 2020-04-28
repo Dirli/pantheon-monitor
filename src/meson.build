@@ -30,6 +30,7 @@ executable(
     'Widgets/Statusbar.vala',
     'Widgets/VolumeIter.vala',
     'Widgets/VolumesBox.vala',
+    gresource,
     c_args: c_args,
     vala_args: vala_args,
     dependencies: [
@@ -62,7 +63,7 @@ if get_option('indicator')
         'Services/Swap.vala',
         'Services/Uptime.vala',
         'Utils/Format.vala',
-        icons_gresource,
+        gresource,
         dependencies: [
             gio_dep,
             gobject_dep,

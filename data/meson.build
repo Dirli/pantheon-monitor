@@ -6,7 +6,7 @@ install_data('io.elementary.monitor.gschema.xml',
     install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas')
 )
 
-icons_gresource = gnome.compile_resources(
+gresource = gnome.compile_resources(
     'as-resources',
     join_paths(meson.project_name() + '.gresource.xml'),
     source_dir: 'data',
