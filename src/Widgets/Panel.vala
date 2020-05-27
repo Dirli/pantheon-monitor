@@ -26,12 +26,12 @@ namespace Monitor {
         public Panel () {
             Object (orientation: Gtk.Orientation.HORIZONTAL);
 
-            cpu_image = new Gtk.Image.from_icon_name ("proc-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+            cpu_image = new Gtk.Image.from_icon_name ("proc-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             cpu_value = new Gtk.Label ("-");
             pack_start (cpu_image, false, false, 0);
             pack_start (cpu_value, false, false, 0);
 
-            mem_image = new Gtk.Image.from_icon_name ("memory-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+            mem_image = new Gtk.Image.from_icon_name ("memory-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             mem_value = new Gtk.Label ("-");
             pack_start (mem_image, false, false, 0);
             pack_start (mem_value, false, false, 0);
