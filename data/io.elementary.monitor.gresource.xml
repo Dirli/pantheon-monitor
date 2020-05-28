@@ -5,6 +5,10 @@
     </gresource>
     <gresource prefix="/io/elementary/monitor/icons">
         <file compressed="true" preprocess="xml-stripblanks">proc-symbolic.svg</file>
+        <file compressed="true" preprocess="xml-stripblanks">netspeed-active-symbolic.svg</file>
+        <file compressed="true" preprocess="xml-stripblanks">netspeed-nonactive-symbolic.svg</file>
+        <file compressed="true" preprocess="xml-stripblanks">netspeed-download-symbolic.svg</file>
+        <file compressed="true" preprocess="xml-stripblanks">netspeed-upload-symbolic.svg</file>
         <file compressed="true" preprocess="xml-stripblanks">memory-symbolic.svg</file>
     </gresource>
 </gresources>

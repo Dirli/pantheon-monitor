@@ -25,6 +25,18 @@
             <description>Show memory state to system tray.</description>
         </key>
 
+        <key name="indicator-net" type="b">
+            <default>true</default>
+            <summary>Show Network</summary>
+            <description>Show network state to system tray.</description>
+        </key>
+
+        <key name="compact-net" type="b">
+            <default>true</default>
+            <summary>Show compact network data</summary>
+            <description>Show compact network data to system tray.</description>
+        </key>
+
         <key name="interval" type="i">
             <default>1</default>
             <summary>Update interval</summary>

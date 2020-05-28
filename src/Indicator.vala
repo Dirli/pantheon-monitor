@@ -20,12 +20,66 @@ namespace Monitor {
     public class Indicator : Wingpanel.Indicator {
         private GLib.Settings settings;
 
+        private bool? _indicator_ram = null;
+        public bool indicator_ram {
+            get {
+                return _indicator_ram;
+            }
+            set {
+                bool update_ui_flag = _indicator_ram != null;
+                _indicator_ram = value;
+                if (update_ui_flag) {
+                    update_ui ();
+                }
+            }
+        }
+        private bool? _indicator_cpu = null;
+        public bool indicator_cpu {
+            get {
+                return _indicator_cpu;
+            }
+            set {
+                bool update_ui_flag = _indicator_cpu != null;
+                _indicator_cpu = value;
+                if (update_ui_flag) {
+                    update_ui ();
+                }
+            }
+        }
+        private bool? _indicator_net = null;
+        public bool indicator_net {
+            get {
+                return _indicator_net;
+            }
+            set {
+                bool update_ui_flag = _indicator_net != null;
+                _indicator_net = value;
+                if (update_ui_flag) {
+                    update_ui ();
+                }
+            }
+        }
+        private bool? _indicator_titles = null;
+        public bool indicator_titles {
+            get {
+                return _indicator_titles;
+            }
+            set {
+                bool update_ui_flag = _indicator_titles != null;
+                _indicator_titles = value;
+                if (update_ui_flag) {
+                    update_ui ();
+                }
+            }
+        }
+
         private Widgets.Popover popover_wid = null;
         private Widgets.Panel panel_wid;
 
         private Services.CPU? cpu_serv;
         private Services.Memory? memory_serv;
         private Services.Swap? swap_serv;
+        private Services.Net? net_serv;
         /* private Services.Disks disks_serv; */
 
         private bool extended;
@@ -39,24 +93,32 @@ namespace Monitor {
 
             Gtk.IconTheme.get_default().add_resource_path("/io/elementary/monitor/icons");
 
+            var provider = new Gtk.CssProvider ();
+            provider.load_from_resource ("/io/elementary/monitor/style/application.css");
+            Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+
             settings = Services.SettingsManager.get_default ();
             visible = settings.get_boolean ("indicator");
 
             cpu_serv = new Services.CPU ();
             memory_serv = new Services.Memory ();
             swap_serv = new Services.Swap ();
+            net_serv = new Services.Net ();
+
+            settings.bind ("indicator-ram", this, "indicator-ram", SettingsBindFlags.DEFAULT);
+            settings.bind ("indicator-net", this, "indicator-net", SettingsBindFlags.DEFAULT);
+            settings.bind ("indicator-titles", this, "indicator-titles", SettingsBindFlags.DEFAULT);
+            settings.bind ("indicator-cpu", this, "indicator-cpu", SettingsBindFlags.DEFAULT);
 
             settings.changed["indicator"].connect (on_indicator_change);
-            settings.changed["indicator-titles"].connect (on_update_ui);
-            settings.changed["indicator-ram"].connect (on_update_ui);
-            settings.changed["indicator-cpu"].connect (on_update_ui);
         }
 
-        protected void on_update_ui () {
+        protected void update_ui () {
             panel_wid.update_ui (
-                settings.get_boolean ("indicator-cpu"),
-                settings.get_boolean ("indicator-ram"),
-                settings.get_boolean ("indicator-titles")
+                indicator_cpu,
+                indicator_ram,
+                indicator_net,
+                indicator_titles
             );
         }
 
@@ -71,11 +133,18 @@ namespace Monitor {
                     );
                 }
             } else {
-                if (settings.get_boolean ("indicator-cpu")) {
+                if (indicator_cpu) {
                     panel_wid.update_cpu ("%.2d%%".printf (cpu_serv.percentage_used));
                 }
-                if (settings.get_boolean ("indicator-ram")) {
+                if (indicator_ram) {
                     panel_wid.update_mem ("%.2d%%".printf (memory_serv.percentage_used));
+                }
+                if (indicator_net) {
+                    Enums.NetLoadData net_data = net_serv.update_bytes (true);
+                    string down_val = net_data.bytes_in > 0 ? Utils.format_net_speed ((uint64) net_data.bytes_in) : "";
+                    string up_val = net_data.bytes_out > 0 ? Utils.format_net_speed ((uint64) net_data.bytes_out) : "";
+
+                    panel_wid.update_net (down_val, up_val);
                 }
             }
             return true;
@@ -94,10 +163,11 @@ namespace Monitor {
         public override Gtk.Widget get_display_widget () {
             if (panel_wid == null) {
                 panel_wid = new Widgets.Panel ();
+                settings.bind ("compact-net", panel_wid, "compact-net", SettingsBindFlags.DEFAULT);
                 if (visible) {
                     start_watcher ();
                     Timeout.add_seconds (1, () => {
-                        on_update_ui ();
+                        update_ui ();
                         return false;
                     });
                 }
@@ -134,6 +204,10 @@ namespace Monitor {
         public override void opened () {
             extended = true;
             if (popover_wid != null) {
+                Enums.NetLoadData net_data = net_serv.update_bytes (true);
+                popover_wid.update_total_network (Utils.format_net_speed (net_data.total_in, true),
+                                                  Utils.format_net_speed (net_data.total_out, true));
+
                 popover_wid.clear_volumes_box ();
 
                 var disks_serv = new Services.Disks ();

@@ -24,19 +24,19 @@ namespace Monitor {
         private Gee.Map<string, ApplicationProcessRow> app_rows;
         private Gee.Map<int, ApplicationProcessRow> process_rows;
         private Gtk.TreeIter background_apps_iter;
-        public Gtk.TreeStore model { get; private set; }
-        private Type[] types;
+
         construct {
             app_rows = new Gee.HashMap<string, ApplicationProcessRow> ();
             process_rows = new Gee.HashMap<int, ApplicationProcessRow> ();
 
-            types = new Type[] {
+            GLib.Type[] types = new GLib.Type[] {
                 typeof (string),
                 typeof (string),
                 typeof (double),
                 typeof (int64),
                 typeof (int),
             };
+
             set_column_types(types);
 
             helper = new ModelHelper(this);

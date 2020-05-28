@@ -17,13 +17,6 @@
  */
 
 namespace Monitor {
-    public struct NetLoadData {
-        public int bytes_in;
-        public int bytes_out;
-        public uint64 total_in;
-        public uint64 total_out;
-    }
-
     public class Services.Net  : GLib.Object {
         public signal void new_max_value (int max_val);
         private uint64 _bytes_in_old;
@@ -63,7 +56,7 @@ namespace Monitor {
             update_bytes (true);
         }
 
-        public NetLoadData update_bytes (bool first_step) {
+        public Enums.NetLoadData update_bytes (bool first_step) {
             if (first_get) {
                 first_get = false;
                 return {0, 0};
@@ -76,7 +69,7 @@ namespace Monitor {
             uint64 total_in = 0;
             uint64 total_out = 0;
 
-            NetLoadData net_data = {};
+            Enums.NetLoadData net_data = {};
 
             for (uint j = 0; j < netlist.number; ++j) {
                 var device = devices[j];

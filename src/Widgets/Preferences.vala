@@ -67,10 +67,18 @@ namespace Monitor {
             Gtk.Switch ind_ram_show = new Gtk.Switch ();
             add_new_str (ref layout, _("Show RAM:"), ind_ram_show, top++);
 
+            Gtk.Switch ind_net_show = new Gtk.Switch ();
+            add_new_str (ref layout, _("Show Network:"), ind_net_show, top++);
+
+            Gtk.Switch ind_compact_show = new Gtk.Switch ();
+            add_new_str (ref layout, _("Show compact Network:"), ind_compact_show, top++);
+
             settings.bind("indicator", ind_show, "active", GLib.SettingsBindFlags.DEFAULT);
             settings.bind("indicator-titles", ind_title_show, "active", GLib.SettingsBindFlags.DEFAULT);
             settings.bind("indicator-cpu", ind_cpu_show, "active", GLib.SettingsBindFlags.DEFAULT);
             settings.bind("indicator-ram", ind_ram_show, "active", GLib.SettingsBindFlags.DEFAULT);
+            settings.bind("indicator-net", ind_net_show, "active", GLib.SettingsBindFlags.DEFAULT);
+            settings.bind("compact-net", ind_compact_show, "active", GLib.SettingsBindFlags.DEFAULT);
 
 #endif
 

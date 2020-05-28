@@ -2,6 +2,7 @@ executable(
     meson.project_name(),
     'MainWindow.vala',
     'Monitor.vala',
+    'Enums.vala',
     'Managers/AppManager.vala',
     'Managers/Process.vala',
     'Managers/ProcessManager.vala',
@@ -52,12 +53,14 @@ executable(
 if get_option('indicator')
     shared_library(
         'monitor',
+        'Enums.vala',
         'Indicator.vala',
         'Widgets/Panel.vala',
         'Widgets/Popover.vala',
         'Services/CPU.vala',
         'Services/Disks.vala',
         'Services/Memory.vala',
+        'Services/Net.vala',
         'Services/Settings.vala',
         'Services/Swap.vala',
         'Services/Uptime.vala',
