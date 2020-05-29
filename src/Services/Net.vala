@@ -17,7 +17,7 @@
  */
 
 namespace Monitor {
-    public class Services.Net  : GLib.Object {
+    public class Services.Net : GLib.Object {
         public signal void new_max_value (int max_val);
         private uint64 _bytes_in_old;
         private uint64 _bytes_out_old;

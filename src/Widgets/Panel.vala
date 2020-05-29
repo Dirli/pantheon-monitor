@@ -27,8 +27,10 @@ namespace Monitor {
                 net_value.label = "";
 
                 if (value) {
+                    net_value.set_width_chars (9);
                     net_value.get_style_context ().add_class ("small-label");
                 } else {
+                    net_value.set_width_chars (-1);
                     net_value.get_style_context ().remove_class ("small-label");
                 }
 
@@ -61,6 +63,7 @@ namespace Monitor {
             net_image.valign = Gtk.Align.CENTER;
 
             net_value = new Gtk.Label ("");
+            net_value.justify = Gtk.Justification.LEFT;
             net_value.valign = Gtk.Align.CENTER;
             net_value.margin = 0;
 
