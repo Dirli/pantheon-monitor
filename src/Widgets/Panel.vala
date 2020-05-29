@@ -27,7 +27,7 @@ namespace Monitor {
                 net_value.label = "";
 
                 if (value) {
-                    net_value.set_width_chars (9);
+                    net_value.set_width_chars (8);
                     net_value.get_style_context ().add_class ("small-label");
                 } else {
                     net_value.set_width_chars (-1);
