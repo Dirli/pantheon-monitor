@@ -127,7 +127,7 @@ namespace Monitor {
                     widget_memory.progress = memory_serv.percentage_used;
                     swap_val.label = "%.1f GiB / %.1f GiB".printf(swap_serv.used, swap_serv.total);
 
-                    Enums.NetLoadData net_data = net_serv.update_bytes (first_step);
+                    Structs.NetLoadData net_data = net_serv.update_bytes (first_step);
                     widget_down.net_speed = net_data.bytes_in;
                     widget_up.net_speed = net_data.bytes_out;
                     widget_down.progress = net_serv.percentage_down;

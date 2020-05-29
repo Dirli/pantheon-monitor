@@ -108,7 +108,7 @@ namespace Monitor {
             vol_widget.attach (iter_value, str_left, str_top);
         }
 
-        private Gtk.Widget create_popover_vol (MonitorVolume relative_volume) {
+        private Gtk.Widget create_popover_vol (Structs.MonitorVolume relative_volume) {
             var top = 0;
             Gtk.Grid vol_grid = new Gtk.Grid ();
             vol_grid.margin = 10;

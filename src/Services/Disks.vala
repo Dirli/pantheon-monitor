@@ -32,8 +32,8 @@ namespace Monitor {
             }
         }
 
-        public Gee.ArrayList<MonitorDrive?> get_drive_arr () {
-            Gee.ArrayList<MonitorDrive?> drives_arr = new Gee.ArrayList<MonitorDrive?> ();
+        public Gee.ArrayList<Structs.MonitorDrive?> get_drive_arr () {
+            Gee.ArrayList<Structs.MonitorDrive?> drives_arr = new Gee.ArrayList<Structs.MonitorDrive?> ();
             if (udisks_client != null) {
                 obj_proxies.foreach ((iter) => {
                     var udisks_obj = udisks_client.peek_object (iter.get_object_path ());
@@ -48,7 +48,7 @@ namespace Monitor {
 
                             var drive_dev = udisks_client.get_drive_for_block (block_dev);
                             if (drive_dev != null) {
-                                MonitorDrive current_drive = {};
+                                Structs.MonitorDrive current_drive = {};
 
                                 current_drive.model = drive_dev.model;
                                 current_drive.size = drive_dev.size;
@@ -79,7 +79,7 @@ namespace Monitor {
             return udisks_client.get_size_for_display (size_to_fmt, false, false);
         }
 
-        private int compare_drives (MonitorDrive? drive1, MonitorDrive? drive2) {
+        private int compare_drives (Structs.MonitorDrive? drive1, Structs.MonitorDrive? drive2) {
             if (drive1 == null) {
                 return (drive2 == null) ? 0 : -1;
             }
@@ -91,7 +91,7 @@ namespace Monitor {
             return GLib.strcmp (drive1.device, drive2.device);
         }
 
-        private int compare_volumes (MonitorVolume? vol1, MonitorVolume? vol2) {
+        private int compare_volumes (Structs.MonitorVolume? vol1, Structs.MonitorVolume? vol2) {
             if (vol1 == null) {
                 return (vol2 == null) ? 0 : -1;
             }
@@ -103,8 +103,8 @@ namespace Monitor {
             return GLib.strcmp (vol1.device, vol2.device);
         }
 
-        public Gee.ArrayList<MonitorVolume?> get_mounted_volumes () {
-            Gee.ArrayList<MonitorVolume?> volumes_list = new Gee.ArrayList<MonitorVolume?> ();
+        public Gee.ArrayList<Structs.MonitorVolume?> get_mounted_volumes () {
+            Gee.ArrayList<Structs.MonitorVolume?> volumes_list = new Gee.ArrayList<Structs.MonitorVolume?> ();
 
             if (udisks_client != null) {
                 obj_proxies.foreach ((iter) => {
@@ -113,7 +113,7 @@ namespace Monitor {
                     var block_dev = udisks_obj.get_block ();
                     var block_fs = udisks_obj.get_filesystem ();
                     if (block_dev != null && block_dev.drive != "/" && block_fs != null && block_fs.mount_points[0] != null) {
-                        MonitorVolume current_volume = {};
+                        Structs.MonitorVolume current_volume = {};
 
                         current_volume.device = block_dev.device;
                         current_volume.label = block_dev.id_label;
@@ -133,8 +133,8 @@ namespace Monitor {
             return volumes_list;
         }
 
-        public Gee.ArrayList<MonitorVolume?> get_drive_volumes (string dev_name) {
-            Gee.ArrayList<MonitorVolume?> volumes_list = new Gee.ArrayList<MonitorVolume?> ();
+        public Gee.ArrayList<Structs.MonitorVolume?> get_drive_volumes (string dev_name) {
+            Gee.ArrayList<Structs.MonitorVolume?> volumes_list = new Gee.ArrayList<Structs.MonitorVolume?> ();
 
             if (udisks_client != null) {
                 obj_proxies.foreach ((iter) => {
@@ -145,7 +145,7 @@ namespace Monitor {
 
                         var block_dev = udisks_obj.get_block ();
                         if (block_dev != null && block_dev.drive != "/" && block_dev.device.contains (dev_name)) {
-                            MonitorVolume current_volume = {};
+                            Structs.MonitorVolume current_volume = {};
 
                             var part_obj = udisks_obj.get_partition ();
 
@@ -173,26 +173,5 @@ namespace Monitor {
 
             return volumes_list;
         }
-    }
-
-    public struct MonitorVolume {
-        public string device;
-        public string label;
-        public string type;
-        public string uuid;
-        public string mount_point;
-        public uint64 size;
-        public uint64 free;
-        public uint64 offset;
-    }
-
-    public struct MonitorDrive {
-        public string model;
-        public uint64 size;
-        public string revision;
-        public string id;
-        public string device;
-        public string partition;
-        public GLib.Icon drive_icon;
     }
 }

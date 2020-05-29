@@ -140,7 +140,7 @@ namespace Monitor {
                     panel_wid.update_mem ("%.2d%%".printf (memory_serv.percentage_used));
                 }
                 if (indicator_net) {
-                    Enums.NetLoadData net_data = net_serv.update_bytes (true);
+                    Structs.NetLoadData net_data = net_serv.update_bytes (true);
                     string down_val = net_data.bytes_in > 0 ? Utils.format_net_speed ((uint64) net_data.bytes_in) : "";
                     string up_val = net_data.bytes_out > 0 ? Utils.format_net_speed ((uint64) net_data.bytes_out) : "";
 
@@ -204,7 +204,7 @@ namespace Monitor {
         public override void opened () {
             extended = true;
             if (popover_wid != null) {
-                Enums.NetLoadData net_data = net_serv.update_bytes (true);
+                Structs.NetLoadData net_data = net_serv.update_bytes (true);
                 popover_wid.update_total_network (Utils.format_net_speed (net_data.total_in, true),
                                                   Utils.format_net_speed (net_data.total_out, true));
 

@@ -56,7 +56,7 @@ namespace Monitor {
             update_bytes (true);
         }
 
-        public Enums.NetLoadData update_bytes (bool first_step) {
+        public Structs.NetLoadData update_bytes (bool first_step) {
             if (first_get) {
                 first_get = false;
                 return {0, 0};
@@ -69,7 +69,7 @@ namespace Monitor {
             uint64 total_in = 0;
             uint64 total_out = 0;
 
-            Enums.NetLoadData net_data = {};
+            Structs.NetLoadData net_data = {};
 
             for (uint j = 0; j < netlist.number; ++j) {
                 var device = devices[j];
