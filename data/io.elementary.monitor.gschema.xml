@@ -37,6 +37,12 @@
             <description>Show compact network data to system tray.</description>
         </key>
 
+        <key name="compact-size" type="i">
+            <default>1</default>
+            <summary>Network data font size to compact mode</summary>
+            <description>Network data font size to compact mode.</description>
+        </key>
+
         <key name="interval" type="i">
             <default>1</default>
             <summary>Update interval</summary>

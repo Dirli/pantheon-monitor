@@ -67,11 +67,35 @@ namespace Monitor {
             Gtk.Switch ind_ram_show = new Gtk.Switch ();
             add_new_str (ref layout, _("Show RAM:"), ind_ram_show, top++);
 
+            var separator1 = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
+            separator1.hexpand = true;
+
+            layout.attach (separator1, 0, top++, 2, 1);
+
+            Gtk.Label network_sec = new Gtk.Label (_("Network indicator"));
+            network_sec.get_style_context ().add_class ("preferences");
+            network_sec.halign = Gtk.Align.START;
+            layout.attach (network_sec, 0, top++, 1, 1);
+
             Gtk.Switch ind_net_show = new Gtk.Switch ();
             add_new_str (ref layout, _("Show Network:"), ind_net_show, top++);
 
             Gtk.Switch ind_compact_show = new Gtk.Switch ();
             add_new_str (ref layout, _("Show compact Network:"), ind_compact_show, top++);
+
+            var mod_button = new Granite.Widgets.ModeButton ();
+            mod_button.hexpand = true;
+            mod_button.append (new Gtk.Label ("8px"));
+            mod_button.append (new Gtk.Label ("9px"));
+            mod_button.append (new Gtk.Label ("10px"));
+            mod_button.selected = settings.get_int ("compact-size");
+
+            layout.attach (mod_button, 0, top++, 2, 1);
+
+            var separator2 = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
+            separator2.hexpand = true;
+
+            layout.attach (separator2, 0, top++, 2, 1);
 
             settings.bind("indicator", ind_show, "active", GLib.SettingsBindFlags.DEFAULT);
             settings.bind("indicator-titles", ind_title_show, "active", GLib.SettingsBindFlags.DEFAULT);
@@ -80,6 +104,9 @@ namespace Monitor {
             settings.bind("indicator-net", ind_net_show, "active", GLib.SettingsBindFlags.DEFAULT);
             settings.bind("compact-net", ind_compact_show, "active", GLib.SettingsBindFlags.DEFAULT);
 
+            mod_button.mode_changed.connect (() => {
+                settings.set_int ("compact-size", mod_button.selected);
+            });
 #endif
 
             Gtk.Box content = this.get_content_area () as Gtk.Box;

@@ -163,6 +163,7 @@ namespace Monitor {
         public override Gtk.Widget get_display_widget () {
             if (panel_wid == null) {
                 panel_wid = new Widgets.Panel ();
+                settings.bind ("compact-size", panel_wid, "compact-size", SettingsBindFlags.DEFAULT);
                 settings.bind ("compact-net", panel_wid, "compact-net", SettingsBindFlags.DEFAULT);
                 if (visible) {
                     start_watcher ();

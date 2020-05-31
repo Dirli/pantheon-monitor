@@ -28,13 +28,29 @@ namespace Monitor {
 
                 if (value) {
                     net_value.set_width_chars (8);
-                    net_value.get_style_context ().add_class ("small-label");
+                    net_value.get_style_context ().add_class ("small-%d".printf (_compact_size));
                 } else {
                     net_value.set_width_chars (-1);
-                    net_value.get_style_context ().remove_class ("small-label");
+                    net_value.get_style_context ().remove_class ("small-%d".printf (_compact_size));
                 }
 
                 _compact_net = value;
+            }
+        }
+
+        private int _compact_size = -1;
+        public int compact_size {
+            get {
+                return _compact_size;
+            }
+            set {
+                if (_compact_size >= 0 && compact_net) {
+                    unowned Gtk.StyleContext net_value_style = net_value.get_style_context ();
+                    net_value_style.remove_class ("small-%d".printf (_compact_size));
+                    net_value_style.add_class ("small-%d".printf (value));
+                }
+
+                _compact_size = value;
             }
         }
         private Gtk.Image mem_image;
