@@ -16,12 +16,12 @@
  *
  */
 
+// 
 namespace Monitor {
-    public class Widgets.Network : Services.Circle {
+    public class Tools.DrawNetCircle : Tools.DrawCircle {
         public int net_speed { get; set; default = 0;}
 
-        public Network (string net_name, Gdk.RGBA current_color) {
-            // _net_speed = 0;
+        public DrawNetCircle (string net_name, Gdk.RGBA current_color) {
             layout_name = create_pango_layout (net_name);
             layout_name.set_font_description (description_name);
             t_color = current_color;

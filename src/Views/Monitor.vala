@@ -21,8 +21,8 @@ namespace Monitor {
         private uint t_id = 0;
 
         private Widgets.Cpu widget_cpu;
-        private Widgets.Network widget_down;
-        private Widgets.Network widget_up;
+        private Tools.DrawNetCircle widget_down;
+        private Tools.DrawNetCircle widget_up;
         private Widgets.Memory widget_memory;
 
         private Services.CPU cpu_serv;
@@ -86,10 +86,10 @@ namespace Monitor {
             net_box.hexpand = true;
             net_box.halign = Gtk.Align.CENTER;
 
-            widget_down = new Widgets.Network ("▼ (MB)", c_color);
+            widget_down = new Tools.DrawNetCircle ("▼ (MB)", c_color);
             widget_down.halign = Gtk.Align.CENTER;
             widget_down.tooltip_text = _("Download");
-            widget_up = new Widgets.Network ("▲ (MB)", c_color);
+            widget_up = new Tools.DrawNetCircle ("▲ (MB)", c_color);
             widget_up.halign = Gtk.Align.CENTER;
             widget_up.tooltip_text = _("Upload");
 

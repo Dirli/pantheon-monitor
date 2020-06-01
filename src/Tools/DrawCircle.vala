@@ -19,7 +19,7 @@
 using Math;
 
 namespace Monitor {
-    public class Services.Circle : Gtk.Bin {
+    public class Tools.DrawCircle : Gtk.Bin {
         protected int line_width = 6;
         private int radius_pad = 64;
 

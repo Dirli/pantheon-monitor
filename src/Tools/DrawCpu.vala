@@ -33,7 +33,7 @@ namespace Monitor {
             ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
             ctx.fill();
 
-            ctx.set_source_rgba (0.24, 0.35, 0.36,, 1);
+            ctx.set_source_rgba (0.24, 0.35, 0.36, 1);
 
             // grid
             ctx.move_to (column_width, field);
