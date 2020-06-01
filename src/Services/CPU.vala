@@ -18,10 +18,14 @@
 
 namespace Monitor {
     public class Services.CPU  : GLib.Object {
-        private float last_total;
-        private float last_used;
+        private Structs.CpuData common_data;
+        private Structs.CpuData[] commons_data;
 
-        private int _quantity_cores;
+        public int quantity_cores {
+            get;
+            construct set;
+        }
+
         private int _percentage_used;
 
         public double frequency {
@@ -55,38 +59,62 @@ namespace Monitor {
         }
 
         public int percentage_used {
-            get { update_percentage_used (); return _percentage_used; }
-        }
-        public int quantity_cores {
-            get { return _quantity_cores; }
+            get {
+                update_percentage_used ();
+                return _percentage_used;
+            }
         }
 
-        public CPU (){
-            last_used = 0;
-            last_total = 0;
+        public CPU () {
+            Object (quantity_cores: (int) get_num_processors ());
         }
 
         construct {
-            update_quantity_cores ();
+            common_data = Structs.CpuData () {last_total = 0, last_used = 0};
+            commons_data = {};
+
+            int i = 0;
+            while (quantity_cores > i++) {
+                Structs.CpuData core = {};
+                core.last_used = 0;
+                core.last_total = 0;
+
+                commons_data += core;
+            }
         }
 
-        private void update_percentage_used (){
+        public int[] get_percentage () {
+            int[] return_arr = {};
+
             GTop.Cpu cpu;
             GTop.get_cpu (out cpu);
 
-    		var used = cpu.user + cpu.nice + cpu.sys;                               // get cpu used
-    		var difference_used = (float) used - last_used;                         // calculate the difference used
-    		var difference_total = (float) cpu.total - last_total;                  // calculate the difference total
-    		var pre_percentage = difference_used.abs () / difference_total.abs ();  // calculate the pre percentage
+            for (int core = 0; core < quantity_cores; core++) {
+                var used = cpu.xcpu_user[core] + cpu.xcpu_nice[core] + cpu.xcpu_sys[core];
+        		var difference_used = (float) used - commons_data[core].last_used;
+        		var difference_total = (float) cpu.xcpu_total[core] - commons_data[core].last_total;
+        		var pre_percentage = difference_used.abs () / difference_total.abs ();
+
+                return_arr += (int) Math.round(pre_percentage * 100);
+
+                commons_data[core] = Structs.CpuData () {last_used = (float) used, last_total = (float) cpu.xcpu_total[core]};
+            }
+
+            return return_arr;
+        }
+
+        private void update_percentage_used () {
+            GTop.Cpu cpu;
+            GTop.get_cpu (out cpu);
+
+    		var used = cpu.user + cpu.nice + cpu.sys;
+    		var difference_used = (float) used - common_data.last_used;
+    		var difference_total = (float) cpu.total - common_data.last_total;
+    		var pre_percentage = difference_used.abs () / difference_total.abs ();
 
             _percentage_used = (int) Math.round(pre_percentage * 100);
 
-            last_used = (float) used;
-            last_total = (float) cpu.total;
-        }
-
-        private void update_quantity_cores (){
-            _quantity_cores = (int) get_num_processors ();
+            common_data = Structs.CpuData () {last_used = (float) used, last_total = (float) cpu.total};
         }
     }
 }

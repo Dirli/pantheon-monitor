@@ -17,17 +17,41 @@
  */
 
 namespace Monitor {
-    public class Widgets.Cpu : Services.Circle {
-        public int cores = 0;
+    public class Widgets.Cpu : Gtk.Box {
+        private Gtk.Label freq_val;
 
-        public Cpu (string circle_name, Gdk.RGBA current_color) {
-            layout_name = create_pango_layout (circle_name);
-            layout_name.set_font_description (description_name);
-            t_color = current_color;
+        private Tools.DrawCpu draw_cpu;
+
+        public Cpu (Gdk.RGBA font_color, int cores) {
+            orientation = Gtk.Orientation.HORIZONTAL;
+            hexpand = true;
+            halign = Gtk.Align.CENTER;
+            valign = Gtk.Align.CENTER;
+            spacing = 8;
+            margin = 25;
+
+            var info_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 5);
+            info_box.valign = Gtk.Align.CENTER;
+            var cpu_label = new Gtk.Label (_("CPU"));
+            cpu_label.get_style_context ().add_class ("section");
+            freq_val = new Gtk.Label ("");
+            freq_val.set_width_chars (8);
+            var cores_label = new Gtk.Label ("%d %s".printf (cores, _("cores")));
+
+            info_box.add (cpu_label);
+            info_box.add (freq_val);
+            info_box.add (cores_label);
+
+            draw_cpu = new Tools.DrawCpu (font_color, cores);
+            draw_cpu.hexpand = true;
+
+            add (info_box);
+            add (draw_cpu);
         }
 
-        public override string get_signature () {
-            return "%d".printf(cores);
+        public void update_values (string new_freq, int[] cpus_percentage) {
+            freq_val.label = new_freq;
+            draw_cpu.update_used (cpus_percentage);
         }
     }
 }

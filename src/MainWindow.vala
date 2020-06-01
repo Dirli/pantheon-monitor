@@ -46,22 +46,25 @@ namespace Monitor {
                 Gtk.Widget? widget = null;
 
                 if (headerbar.view_box.selected == 1) {
-                    widget = new Widgets.Monitoring (headerbar.view_box, current_color ());
-                    statusbar.set_sensitive (false);
+                    widget = new Views.Monitor (current_color ());
+                    statusbar.hide ();
                 } else if (headerbar.view_box.selected == 2) {
                     widget = get_scrolled_window (new Widgets.Disks ());
-                    statusbar.set_sensitive (false);
+                    statusbar.hide ();
                 } else {
                     generic_model = new Models.GenericModel ();
                     process_view = new Widgets.Process (generic_model);
                     widget = get_scrolled_window (process_view);
-                    statusbar.set_sensitive (true);
+                    statusbar.show ();
                 }
 
                 if (widget != null) {
                     var exist_widget = view.get_child_at (0,0);
 
                     if (exist_widget != null) {
+                        if (exist_widget is Views.Monitor) {
+                            ((Views.Monitor) exist_widget).stop_timer ();
+                        }
                         exist_widget.destroy ();
                     }
 

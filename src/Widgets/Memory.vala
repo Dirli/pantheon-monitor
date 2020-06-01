@@ -1,34 +1,61 @@
-/*
- * Copyright (c) 2018 Dirli <litandrej85@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
-
 namespace Monitor {
-    public class Widgets.Memory : Services.Circle {
-        public float used { get; set; default = 0;}
-        public float total { get; set; default = 0;}
+    public class Widgets.Memory : Gtk.Grid {
+        private Tools.DrawRAM draw_ram;
+        private Tools.DrawRAM draw_swap;
 
-        public Memory (string circle_name, Gdk.RGBA current_color) {
-            layout_name = create_pango_layout (circle_name);
-            layout_name.set_font_description (description_name);
-            t_color = current_color;
+        private Gtk.Label swap_val;
+        private Gtk.Label memory_val;
+
+        private float memory_total;
+        private float swap_total;
+
+        public Memory (float m_total, float s_total, Gdk.RGBA font_color) {
+            margin_start = 12;
+            margin_end = 12;
+            hexpand = true;
+            row_spacing = 8;
+            column_spacing = 8;
+            halign = Gtk.Align.FILL;
+            valign = Gtk.Align.CENTER;
+
+            memory_total = m_total;
+            swap_total = s_total;
+
+            var total_label = new Gtk.Label (_("Memory") + ": ");
+            total_label.halign = Gtk.Align.START;
+            memory_val = new Gtk.Label ("%.1f GiB".printf (m_total));
+            memory_val.halign = Gtk.Align.CENTER;
+
+            draw_ram = new Tools.DrawRAM (font_color);
+            draw_ram.hexpand = true;
+
+            attach (total_label, 0, 0);
+            attach (draw_ram,    1, 0);
+            attach (memory_val,  0, 1, 2, 1);
+
+            if (s_total > 0.0) {
+                var swap_label = new Gtk.Label (_("Swap") + ": ");
+                swap_label.halign = Gtk.Align.START;
+                swap_val = new Gtk.Label ("%.1f GiB".printf (s_total));
+                swap_val.halign = Gtk.Align.CENTER;
+
+                draw_swap = new Tools.DrawRAM (font_color);
+                draw_swap.hexpand = true;
+
+                attach (swap_label,  0, 2);
+                attach (draw_swap,   1, 2);
+                attach (swap_val,    0, 3, 2, 1);
+            }
         }
 
-        public override string get_signature () {
-            return "%.1f GiB / %.1f GiB".printf(used, total);
+        public void update_values (int mem_percent, float mem_used, int swap_percent, float swap_used) {
+            draw_ram.update_used (mem_percent);
+            memory_val.label = "%.1f GiB / %.1f GiB".printf (mem_used, memory_total);
+
+            if (swap_total > 0.0) {
+                draw_swap.update_used (swap_percent);
+                swap_val.label = "%.1f GiB / %.1f GiB".printf (swap_used, swap_total);
+            }
         }
     }
 }

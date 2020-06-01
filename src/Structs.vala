@@ -6,6 +6,11 @@ namespace Monitor.Structs {
         public uint64 total_out;
     }
 
+    public struct CpuData {
+        public float last_used;
+        public float last_total;
+    }
+
     public struct MonitorVolume {
         public string device;
         public string label;
