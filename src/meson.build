@@ -27,6 +27,7 @@ executable(
     'Widgets/Disks.vala',
     'Widgets/Headerbar.vala',
     'Widgets/Memory.vala',
+    'Widgets/Network.vala',
     'Widgets/Preferences.vala',
     'Widgets/Process.vala',
     'Widgets/Statusbar.vala',
