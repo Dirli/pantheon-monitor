@@ -23,11 +23,10 @@
     padding: 0.5em;
     font-weight: bold;
 }
+.volume-wrapper {
+    border: 0.1px solid;
+}
 .volumes {
-    border-radius: 0.3em;
     opacity: 0.9;
-    font-weight: bold;
-    background-color: Khaki;
-    padding-bottom: 5px;
-    padding-top: 5px;
+    padding: 0;
 }

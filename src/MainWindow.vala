@@ -49,7 +49,7 @@ namespace Monitor {
                     widget = new Views.Monitor (current_color ());
                     statusbar.hide ();
                 } else if (headerbar.view_box.selected == 2) {
-                    widget = get_scrolled_window (new Widgets.Disks ());
+                    widget = get_scrolled_window (new Views.Disks ());
                     statusbar.hide ();
                 } else {
                     generic_model = new Models.GenericModel ();
