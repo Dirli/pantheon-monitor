@@ -76,11 +76,7 @@ namespace Monitor {
         private Widgets.Popover popover_wid = null;
         private Widgets.Panel panel_wid;
 
-        private Services.CPU? cpu_serv;
-        private Services.Memory? memory_serv;
-        private Services.Swap? swap_serv;
-        private Services.Net? net_serv;
-        /* private Services.Disks disks_serv; */
+        private Services.ResourcesManager resource_manager;
 
         private bool extended;
         private uint timeout_id;
@@ -100,10 +96,7 @@ namespace Monitor {
             settings = Services.SettingsManager.get_default ();
             visible = settings.get_boolean ("indicator");
 
-            cpu_serv = new Services.CPU ();
-            memory_serv = new Services.Memory ();
-            swap_serv = new Services.Swap ();
-            net_serv = new Services.Net ();
+            resource_manager = new Services.ResourcesManager ();
 
             settings.bind ("indicator-ram", this, "indicator-ram", SettingsBindFlags.DEFAULT);
             settings.bind ("indicator-net", this, "indicator-net", SettingsBindFlags.DEFAULT);
@@ -125,22 +118,25 @@ namespace Monitor {
         private unowned bool update() {
             if (extended) {
                 if (popover_wid != null) {
+                    var memory_data = resource_manager.update_memory ();
+                    var m_total = resource_manager.memory_total;
                     popover_wid.update_state (
-                        Utils.format_frequency (cpu_serv.frequency),
-                        "%.1f GiB / %.1f GiB".printf(memory_serv.used, memory_serv.total),
-                        "%.1f GiB / %.1f GiB".printf(swap_serv.used, swap_serv.total),
-                        Services.Uptime.get_uptime
+                        Utils.format_frequency (resource_manager.update_freq ()),
+                        "%.1f GiB / %.1f GiB".printf (memory_data.used_memory, m_total.memory),
+                        m_total.swap > 0 ? "%.1f GiB / %.1f GiB".printf (memory_data.used_swap, m_total.swap) : _("Off"),
+                        resource_manager.update_uptime ()
                     );
                 }
             } else {
                 if (indicator_cpu) {
-                    panel_wid.update_cpu ("%.2d%%".printf (cpu_serv.percentage_used));
+                    panel_wid.update_cpu ("%.2d%%".printf (resource_manager.update_cpu ()));
                 }
                 if (indicator_ram) {
-                    panel_wid.update_mem ("%.2d%%".printf (memory_serv.percentage_used));
+                    var m = resource_manager.update_memory (false);
+                    panel_wid.update_mem ("%.2d%%".printf (m.percent_memory));
                 }
                 if (indicator_net) {
-                    Structs.NetLoadData net_data = net_serv.update_bytes (true);
+                    Structs.NetLoadData net_data = resource_manager.update_network (false);
                     string down_val = net_data.bytes_in > 0 ? Utils.format_net_speed ((uint64) net_data.bytes_in) : "";
                     string up_val = net_data.bytes_out > 0 ? Utils.format_net_speed ((uint64) net_data.bytes_out) : "";
 
@@ -205,7 +201,7 @@ namespace Monitor {
         public override void opened () {
             extended = true;
             if (popover_wid != null) {
-                Structs.NetLoadData net_data = net_serv.update_bytes (true);
+                Structs.NetLoadData net_data = resource_manager.update_network (false);
                 popover_wid.update_total_network (Utils.format_net_speed (net_data.total_in, true),
                                                   Utils.format_net_speed (net_data.total_out, true));
 

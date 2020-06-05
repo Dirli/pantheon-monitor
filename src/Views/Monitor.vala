@@ -24,14 +24,9 @@ namespace Monitor {
         private Widgets.Memory widget_memory;
         private Widgets.Network widget_net;
 
-        private Services.CPU cpu_serv;
-        private Services.Memory memory_serv;
-        private Services.Swap swap_serv;
-        private Services.Net net_serv;
+        private Services.ResourcesManager resource_manager;
 
         private Gtk.Label uptime_val;
-
-        private bool first_step;
 
         public Monitor (Gdk.RGBA current_color) {
             orientation = Gtk.Orientation.VERTICAL;
@@ -39,18 +34,13 @@ namespace Monitor {
             margin = 15;
             expand = true;
 
-            first_step = true;
+            resource_manager = new Services.ResourcesManager ();
 
-            cpu_serv = new Services.CPU ();
-            memory_serv = new Services.Memory ();
-            swap_serv = new Services.Swap ();
-            net_serv = new Services.Net ();
-
-            widget_cpu = new Widgets.Cpu (current_color, cpu_serv.quantity_cores);
+            widget_cpu = new Widgets.Cpu (current_color, resource_manager.quantity_cores);
 
             add (widget_cpu);
 
-            widget_memory = new Widgets.Memory (memory_serv.total, swap_serv.total, current_color);
+            widget_memory = new Widgets.Memory (resource_manager.memory_total, current_color);
 
             var ram_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
             ram_separator.hexpand = true;
@@ -66,7 +56,9 @@ namespace Monitor {
             add (net_separator);
             add (widget_net);
 
-            net_serv.new_max_value.connect (widget_net.set_new_max);
+            resource_manager.notify["network-speed"].connect (() => {
+                widget_net.set_new_max (resource_manager.network_speed);
+            });
 
             var bottom_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
             bottom_separator.hexpand = true;
@@ -92,20 +84,12 @@ namespace Monitor {
         }
 
         private bool update () {
-            widget_cpu.update_values (Utils.format_frequency (cpu_serv.frequency), cpu_serv.get_percentage ());
+            widget_cpu.update_values (Utils.format_frequency (resource_manager.update_freq ()), resource_manager.update_cpus ());
 
-            uptime_val.label = _("Uptime") + ": " + Services.Uptime.get_uptime;
+            widget_memory.update_values (resource_manager.update_memory ());
+            widget_net.update_values (resource_manager.update_network (true, true));
 
-            widget_memory.update_values (memory_serv.percentage_used,
-                                         memory_serv.used,
-                                         swap_serv.percentage_used,
-                                         swap_serv.used);
-
-            widget_net.update_values (net_serv.update_bytes (first_step),
-                                      net_serv.percentage_down,
-                                      net_serv.percentage_up);
-
-            if (first_step) {first_step = false;}
+            uptime_val.label = _("Uptime") + ": " + resource_manager.update_uptime ();
 
             return true;
     	}

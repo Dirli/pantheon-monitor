@@ -89,7 +89,6 @@ namespace Monitor.Utils {
     }
     public static string format_frequency (double val) {
         const string[] units = {
-            " kHz",
             " MHz",
             " GHz"
         };

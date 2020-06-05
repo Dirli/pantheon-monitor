@@ -37,13 +37,24 @@ namespace Monitor {
             info_grid.row_spacing = 8;
             info_grid.halign = Gtk.Align.START;
             info_grid.attach (net_label,   0, 0, 2, 1);
-            info_grid.attach (net_u_label, 0, 1);
-            info_grid.attach (net_u_val,   1, 1);
-            info_grid.attach (net_d_label, 0, 2);
-            info_grid.attach (net_d_val,   1, 2);
+            info_grid.attach (net_d_label, 0, 1);
+            info_grid.attach (net_d_val,   1, 1);
+            info_grid.attach (net_u_label, 0, 2);
+            info_grid.attach (net_u_val,   1, 2);
+
+            var info_wrapper = new Gtk.EventBox ();
+            info_wrapper.add_events(Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
+
+            info_wrapper.enter_notify_event.connect ((e) => {
+                e.window.set_cursor (new Gdk.Cursor.from_name(Gdk.Display.get_default(), "hand2"));
+
+                return true;
+            });
+
+            info_wrapper.add (info_grid);
 
             add (widget_down);
-            add (info_grid);
+            add (info_wrapper);
             add (widget_up);
         }
 
@@ -52,12 +63,12 @@ namespace Monitor {
             widget_up.max_numbers = max_val;
         }
 
-        public void update_values (Structs.NetLoadData data, int percent_down, int percent_up) {
+        public void update_values (Structs.NetLoadData data) {
             widget_down.net_speed = data.bytes_in;
             widget_up.net_speed = data.bytes_out;
 
-            widget_down.progress = percent_down;
-            widget_up.progress = percent_up;
+            widget_down.progress = data.percent_in;
+            widget_up.progress = data.percent_out;
 
             net_d_val.label = Utils.format_net_speed (data.total_in, true);
             net_u_val.label = Utils.format_net_speed (data.total_out, true);

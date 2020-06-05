@@ -2,11 +2,25 @@ namespace Monitor.Structs {
     public struct NetLoadData {
         public int bytes_in;
         public int bytes_out;
+        public int percent_in;
+        public int percent_out;
         public uint64 total_in;
         public uint64 total_out;
     }
 
-    public struct CpuData {
+    public struct MemoryData {
+        public float used_memory;
+        public float used_swap;
+        public int percent_memory;
+        public int percent_swap;
+    }
+
+    public struct MemoryTotal {
+        public float memory;
+        public float swap;
+    }
+
+    public struct CpuLast {
         public float last_used;
         public float last_total;
     }

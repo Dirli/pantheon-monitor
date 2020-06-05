@@ -6,10 +6,11 @@ namespace Monitor {
         private Gtk.Label swap_val;
         private Gtk.Label memory_val;
 
-        private float memory_total;
-        private float swap_total;
+        private bool swap_on;
 
-        public Memory (float m_total, float s_total, Gdk.RGBA font_color) {
+        private Structs.MemoryTotal memory_total;
+
+        public Memory (Structs.MemoryTotal memory_total, Gdk.RGBA font_color) {
             margin_start = 12;
             margin_end = 12;
             hexpand = true;
@@ -18,12 +19,12 @@ namespace Monitor {
             halign = Gtk.Align.FILL;
             valign = Gtk.Align.CENTER;
 
-            memory_total = m_total;
-            swap_total = s_total;
+            this.memory_total = memory_total;
+            swap_on = memory_total.swap > 0;
 
             var total_label = new Gtk.Label (_("Memory") + ": ");
             total_label.halign = Gtk.Align.START;
-            memory_val = new Gtk.Label ("%.1f GiB".printf (m_total));
+            memory_val = new Gtk.Label ("%.1f GiB".printf (memory_total.memory));
             memory_val.halign = Gtk.Align.CENTER;
 
             draw_ram = new Tools.DrawRAM (font_color);
@@ -33,10 +34,10 @@ namespace Monitor {
             attach (draw_ram,    1, 0);
             attach (memory_val,  0, 1, 2, 1);
 
-            if (s_total > 0.0) {
+            if (swap_on) {
                 var swap_label = new Gtk.Label (_("Swap") + ": ");
                 swap_label.halign = Gtk.Align.START;
-                swap_val = new Gtk.Label ("%.1f GiB".printf (s_total));
+                swap_val = new Gtk.Label ("%.1f GiB".printf (memory_total.swap));
                 swap_val.halign = Gtk.Align.CENTER;
 
                 draw_swap = new Tools.DrawRAM (font_color);
@@ -48,13 +49,13 @@ namespace Monitor {
             }
         }
 
-        public void update_values (int mem_percent, float mem_used, int swap_percent, float swap_used) {
-            draw_ram.update_used (mem_percent);
-            memory_val.label = "%.1f GiB / %.1f GiB".printf (mem_used, memory_total);
+        public void update_values (Structs.MemoryData memory_data) {
+            draw_ram.update_used (memory_data.percent_memory);
+            memory_val.label = "%.1f GiB / %.1f GiB".printf (memory_data.used_memory, memory_total.memory);
 
-            if (swap_total > 0.0) {
-                draw_swap.update_used (swap_percent);
-                swap_val.label = "%.1f GiB / %.1f GiB".printf (swap_used, swap_total);
+            if (swap_on) {
+                draw_swap.update_used (memory_data.percent_swap);
+                swap_val.label = "%.1f GiB / %.1f GiB".printf (memory_data.used_swap, memory_total.swap);
             }
         }
     }
