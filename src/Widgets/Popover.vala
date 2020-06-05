@@ -18,6 +18,9 @@
 
 namespace Monitor {
     public class Widgets.Popover : Gtk.Grid {
+        public signal void open_monitor ();
+        public signal void hide_indicator ();
+
         private Gtk.Label ram_value;
         private Gtk.Label swap_value;
         private Gtk.Label freq_value;
@@ -26,8 +29,6 @@ namespace Monitor {
         private Gtk.Label up_value;
 
         private Gtk.Box volumes_box;
-
-        public signal void close_popover ();
 
         public Popover () {
             orientation = Gtk.Orientation.HORIZONTAL;
@@ -140,22 +141,13 @@ namespace Monitor {
             var hide_button = new Gtk.ModelButton ();
             hide_button.text = _("Hide indicator");
             hide_button.clicked.connect (() => {
-                Monitor.Services.SettingsManager.get_default ().set_boolean ("indicator", false);
+                hide_indicator ();
             });
 
             var app_button = new Gtk.ModelButton ();
             app_button.text = _("Start monitor");
             app_button.clicked.connect (() => {
-                close_popover ();
-                var app_info = new GLib.DesktopAppInfo("io.elementary.monitor.desktop");
-
-                if (app_info == null) {return;}
-
-                try {
-                    app_info.launch(null, null);
-                } catch (Error e) {
-                    warning ("Unable to launch io.elementary.monitor.desktop: %s", e.message);
-                }
+                open_monitor ();
             });
 
             attach (hide_button, 0, 11, 2, 1);

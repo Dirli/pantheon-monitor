@@ -93,7 +93,7 @@ namespace Monitor {
             provider.load_from_resource ("/io/elementary/monitor/style/application.css");
             Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-            settings = Services.SettingsManager.get_default ();
+            settings = new GLib.Settings ("io.elementary.monitor");
             visible = settings.get_boolean ("indicator");
 
             resource_manager = new Services.ResourcesManager ();
@@ -176,8 +176,20 @@ namespace Monitor {
         public override Gtk.Widget? get_widget () {
             if (popover_wid == null) {
                 popover_wid = new Widgets.Popover ();
-                popover_wid.close_popover.connect (() => {
-                    extended = false;
+                popover_wid.open_monitor.connect (() => {
+                    close ();
+
+                    var app_info = new GLib.DesktopAppInfo ("io.elementary.monitor.desktop");
+                    if (app_info == null) {return;}
+
+                    try {
+                        app_info.launch (null, null);
+                    } catch (Error e) {
+                        warning ("Unable to launch io.elementary.monitor.desktop: %s", e.message);
+                    }
+                });
+                popover_wid.hide_indicator.connect (() => {
+                    settings.set_boolean ("indicator", false);
                 });
             }
 
@@ -195,6 +207,8 @@ namespace Monitor {
         private void stop_watcher () {
             if (timeout_id > 0) {
                 Source.remove (timeout_id);
+
+                timeout_id = 0;
             }
         }
 

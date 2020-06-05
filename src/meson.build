@@ -11,7 +11,6 @@ executable(
     'Services/Disks.vala',
     'Services/DisksManager.vala',
     'Services/ResourcesManager.vala',
-    'Services/Settings.vala',
     'Tools/DrawCircle.vala',
     'Tools/DrawCpu.vala',
     'Tools/DrawNetCircle.vala',
@@ -59,7 +58,6 @@ if get_option('indicator')
         'Widgets/Popover.vala',
         'Services/Disks.vala',
         'Services/ResourcesManager.vala',
-        'Services/Settings.vala',
         'Utils/Format.vala',
         gresource,
         dependencies: [

@@ -47,7 +47,7 @@ namespace Monitor {
 
             //Select indicator
 #if INDICATOR_EXIST
-            GLib.Settings settings = Services.SettingsManager.get_default ();
+            GLib.Settings settings = new GLib.Settings ("io.elementary.monitor");
             int top = 0;
 
             Gtk.Label indicator_sec = new Gtk.Label (_("Indicator"));
