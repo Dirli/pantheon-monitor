@@ -26,6 +26,7 @@ namespace Monitor {
 
         private Services.ResourcesManager resource_manager;
 
+        private Gtk.Popover extended_window;
         private Gtk.Label uptime_val;
 
         public Monitor (Gdk.RGBA current_color) {
@@ -35,6 +36,7 @@ namespace Monitor {
             expand = true;
 
             resource_manager = new Services.ResourcesManager ();
+            extended_window = new Gtk.Popover (null);
 
             widget_cpu = new Widgets.Cpu (current_color, resource_manager.quantity_cores);
 
@@ -49,6 +51,11 @@ namespace Monitor {
             add (widget_memory);
 
             widget_net = new Widgets.Network (current_color);
+            widget_net.show_popover.connect ((w) => {
+                var popover_grid = new Widgets.NetworkPopover (resource_manager.update_ifaces ());
+
+                open_popover (w, popover_grid);
+            });
 
             var net_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
             net_separator.hexpand = true;
@@ -93,5 +100,15 @@ namespace Monitor {
 
             return true;
     	}
+
+        public void open_popover (Gtk.Widget relative, Gtk.Widget grid) {
+            extended_window.foreach ((inner_widget) => {
+                inner_widget.destroy ();
+            });
+
+            extended_window.add (grid);
+            extended_window.set_relative_to (relative);
+            extended_window.popup ();
+        }
     }
 }

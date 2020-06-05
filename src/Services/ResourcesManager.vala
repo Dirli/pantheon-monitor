@@ -136,7 +136,7 @@ namespace Monitor {
 
             for (uint j = 0; j < netlist.number; ++j) {
                 var device = devices[j];
-                if (device != "lo" && device.substring (0, 3) != "tun") {
+                if (device != "lo" && device.substring (0, 3) != "tun" && !device.has_prefix ("vir")) {
                     GTop.get_netload (out netload, device);
                     new_total_in += netload.bytes_in;
                     new_total_out += netload.bytes_out;
@@ -180,6 +180,44 @@ namespace Monitor {
             percents += (int) Math.round ((bytes_in / bytes_speed) * 100);
 
             return percents;
+        }
+
+        public Structs.NetIface[] update_ifaces () {
+            Structs.NetIface[] ifaces = {};
+
+            GTop.NetList netlist;
+            GTop.NetLoad netload;
+            var devices = GTop.get_netlist (out netlist);
+
+            for (uint j = 0; j < netlist.number; ++j) {
+                var device = devices[j];
+                if (device != "lo" && device.substring (0, 3) != "tun" && !device.has_prefix ("vir")) {
+                    Structs.NetIface iface = {};
+                    iface.name = device;
+
+                    GTop.get_netload (out netload, device);
+
+                    iface.address = netload.address;
+
+                    string mac_value;
+                    try {
+                        GLib.FileUtils.get_contents (@"/sys/class/net/$device/address", out mac_value);
+                        iface.hwaddress = mac_value != null ? mac_value.strip () : "";
+                    } catch (Error e) {
+                        warning (e.message);
+                    }
+
+                    iface.bytes_in = netload.bytes_in;
+                    iface.bytes_out = netload.bytes_out;
+
+                    iface.packets_in = netload.packets_in;
+                    iface.packets_out = netload.packets_out;
+
+                    ifaces += iface;
+                }
+            }
+
+            return ifaces;
         }
 
         public string update_uptime () {

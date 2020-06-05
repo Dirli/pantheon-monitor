@@ -8,6 +8,17 @@ namespace Monitor.Structs {
         public uint64 total_out;
     }
 
+    public struct NetIface {
+        public string name;
+        public uint32 address;
+        public uint32 subnet;
+        public string hwaddress;
+        public uint64 bytes_in;
+        public uint64 bytes_out;
+        public uint64 packets_in;
+        public uint64 packets_out;
+    }
+
     public struct MemoryData {
         public float used_memory;
         public float used_swap;

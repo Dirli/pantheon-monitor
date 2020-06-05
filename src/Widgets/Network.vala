@@ -1,5 +1,7 @@
 namespace Monitor {
     public class Widgets.Network : Gtk.Box {
+        public signal void show_popover (Gtk.Widget w);
+
         private Tools.DrawNetCircle widget_down;
         private Tools.DrawNetCircle widget_up;
 
@@ -49,6 +51,15 @@ namespace Monitor {
                 e.window.set_cursor (new Gdk.Cursor.from_name(Gdk.Display.get_default(), "hand2"));
 
                 return true;
+            });
+
+            info_wrapper.button_press_event.connect ((e) => {
+                if (e.button == Gdk.BUTTON_PRIMARY) {
+                    show_popover (info_wrapper);
+                    return true;
+                }
+
+                return false;
             });
 
             info_wrapper.add (info_grid);

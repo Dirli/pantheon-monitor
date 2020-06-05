@@ -25,6 +25,7 @@ executable(
     'Widgets/Headerbar.vala',
     'Widgets/Memory.vala',
     'Widgets/Network.vala',
+    'Widgets/NetworkPopover.vala',
     'Widgets/Preferences.vala',
     'Widgets/Process.vala',
     'Widgets/Statusbar.vala',
