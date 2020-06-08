@@ -11,10 +11,7 @@ namespace Monitor {
 
         private Pango.FontDescription description_layout;
 
-        public Gdk.RGBA font_color;
-
-        public DrawCpu (Gdk.RGBA font_color, int cores) {
-            this.font_color = font_color;
+        public DrawCpu (int cores) {
             this.cores = cores;
 
             grid_width = cores * column_width;
@@ -30,34 +27,30 @@ namespace Monitor {
         private bool on_draw (Cairo.Context ctx) {
             // background
             ctx.rectangle (0, 0, bound_width, bound_height);
-            ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
+            ctx.set_source_rgba (0.24, 0.35, 0.36, 1);
             ctx.fill();
 
-            ctx.set_source_rgba (0.24, 0.35, 0.36, 1);
+            ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
 
             // grid
             ctx.move_to (column_width, field);
             ctx.line_to (column_width, bound_height - field);
-            ctx.move_to (column_width, bound_height - field);
             ctx.line_to (bound_width - 5, bound_height - field);
 
             ctx.stroke ();
             ctx.save ();
 
-            ctx.set_source_rgba (0.24, 0.35, 0.36, 0.5);
+            ctx.set_source_rgba (1.0, 0.92, 0.80, 0.5);
+            // ctx.set_source_rgba (0.24, 0.35, 0.36, 0.5);
             ctx.set_line_width (0.5);
 
-            ctx.move_to (column_width, bound_height - field - 25);
-            ctx.line_to (bound_width - 5, bound_height - field - 25);
+            int dec = 25;
+            while ((bound_height - dec) > 0) {
+                ctx.move_to (column_width, bound_height - dec - field);
+                ctx.line_to (bound_width - 5, bound_height - dec - field);
 
-            ctx.move_to (column_width, bound_height - field - 50);
-            ctx.line_to (bound_width - 5, bound_height - field - 50);
-
-            ctx.move_to (column_width, bound_height - field - 75);
-            ctx.line_to (bound_width - 5, bound_height - field - 75);
-
-            ctx.move_to (column_width, field);
-            ctx.line_to (bound_width - 5, field);
+                dec += 25;
+            }
 
             ctx.stroke ();
             ctx.restore ();
@@ -87,9 +80,9 @@ namespace Monitor {
             if (Gtk.Align.CENTER == align_text) {
                 ctx.move_to (15 - (fontw / 2), (bound_height / 2) - (fonth / 2));
             } else if (Gtk.Align.START == align_text) {
-                ctx.move_to (15 - (fontw / 2), 0);
+                ctx.move_to (15 - (fontw / 2), field);
             } else if (Gtk.Align.END == align_text) {
-                ctx.move_to (15 - (fontw / 2), bound_height - fonth);
+                ctx.move_to (15 - (fontw / 2), bound_height - field - fonth);
             } else {
                 return;
             }

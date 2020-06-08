@@ -1,7 +1,7 @@
 namespace Monitor.Structs {
     public struct NetLoadData {
-        public int bytes_in;
-        public int bytes_out;
+        public uint64 bytes_in;
+        public uint64 bytes_out;
         public int percent_in;
         public int percent_out;
         public uint64 total_in;
@@ -20,15 +20,20 @@ namespace Monitor.Structs {
     }
 
     public struct MemoryData {
-        public float used_memory;
-        public float used_swap;
+        public uint64 used_memory;
+        public uint64? used_swap;
         public int percent_memory;
         public int percent_swap;
     }
 
     public struct MemoryTotal {
-        public float memory;
-        public float swap;
+        public uint64 memory;
+        public uint64? swap;
+    }
+
+    public struct DiskioData {
+        public uint64 read;
+        public uint64 write;
     }
 
     public struct CpuLast {

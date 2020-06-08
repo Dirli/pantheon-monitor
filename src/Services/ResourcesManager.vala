@@ -11,6 +11,8 @@ namespace Monitor {
             construct set;
         }
 
+        private Structs.DiskioData diskio_last;
+
         private Structs.CpuLast cpu_last;
         private Structs.CpuLast[] cpus_last;
 
@@ -36,6 +38,10 @@ namespace Monitor {
             while (quantity_cores > i++) {
                 cpus_last += Structs.CpuLast () {last_total = 0, last_used = 0};
             }
+
+            diskio_last = Structs.DiskioData () {read = 0, write = 0};
+
+            update_diskio ();
         }
 
         private void init_memory () {
@@ -43,13 +49,13 @@ namespace Monitor {
 
             GTop.Memory memory;
             GTop.get_mem (out memory);
-            memory_total.memory = (float) memory.total / 1024 /1024 / 1024;
+            memory_total.memory = memory.total;
 
             GTop.Swap swap;
             GTop.get_swap (out swap);
             if (swap.total > 0) {
                 swap_on = true;
-                memory_total.swap = (float) swap.total / 1024 /1024 / 1024;
+                memory_total.swap = swap.total;
             }
         }
 
@@ -58,14 +64,14 @@ namespace Monitor {
 
             GTop.Memory memory;
             GTop.get_mem (out memory);
-            memory_data.used_memory = (float) memory.user / 1024 /1024 / 1024;
-            memory_data.percent_memory = (int) Math.round ((memory_data.used_memory / memory_total.memory) * 100);
+            memory_data.used_memory = memory.user;
+            memory_data.percent_memory = (int) Math.round (((float) memory_data.used_memory / memory_total.memory) * 100);
 
             if (swap_on && need_swap) {
                 GTop.Swap swap;
                 GTop.get_swap (out swap);
-                memory_data.used_swap = (float) swap.used / 1024 /1024 / 1024;
-                memory_data.percent_swap = (int) Math.round ((memory_data.used_swap / memory_total.swap) * 100);
+                memory_data.used_swap = swap.used;
+                memory_data.percent_swap = (int) Math.round (((float) memory_data.used_swap / memory_total.swap) * 100);
             }
 
             return memory_data;
@@ -124,6 +130,38 @@ namespace Monitor {
             return max_freq;
         }
 
+        public Structs.DiskioData update_diskio () {
+            GTop.MountList mount_list;
+            GTop.MountEntry[] mount_entries = GTop.get_mountlist(out mount_list, false);
+
+            uint64 last_read = 0;
+            uint64 last_write = 0;
+
+            Structs.DiskioData diskio_diff = {};
+
+            for (int i = 0; i < mount_list.number; i++) {
+                if (!((string) mount_entries[i].devname).has_prefix ("/dev/")) {continue;}
+                if (((string) mount_entries[i].mountdir).has_prefix ("/media/")) {continue;}
+
+                Posix.statvfs buf;
+                if (Posix.statvfs_exec ((string) mount_entries[i].mountdir, out buf) < 0) {continue;}
+
+                GTop.FsUsage fs_usage;
+                GTop.get_fsusage (out fs_usage, ((string) mount_entries[i].mountdir));
+
+                last_read += fs_usage.read * fs_usage.block_size;
+                last_write += fs_usage.write * fs_usage.block_size;
+            }
+
+            diskio_diff.read = last_read - diskio_last.read;
+            diskio_diff.write = last_write - diskio_last.write;
+
+            diskio_last.read = last_read;
+            diskio_last.write = last_write;
+
+            return diskio_diff;
+        }
+
         public Structs.NetLoadData update_network (bool check_max, bool need_percent = false) {
             GTop.NetList netlist;
             GTop.NetLoad netload;
@@ -146,8 +184,8 @@ namespace Monitor {
             net_data.total_in = new_total_in;
             net_data.total_out = new_total_out;
 
-            int bytes_out = (int) (new_total_out - network_old_data[0]) / 1;
-            int bytes_in = (int) (new_total_in - network_old_data[1]) / 1;
+            uint64 bytes_out = (new_total_out - network_old_data[0]) / 1;
+            uint64 bytes_in = (new_total_in - network_old_data[1]) / 1;
 
             if (need_percent) {
                 var new_percents = update_network_percents (bytes_out, bytes_in);
@@ -159,10 +197,10 @@ namespace Monitor {
             network_old_data[1] = new_total_in;
 
             if (check_max) {
-                var tmp_val = int.max (bytes_out, bytes_in);
+                var tmp_val = uint64.max (bytes_out, bytes_in);
                 tmp_val = (int) Math.round ((double) tmp_val / 1048576 + 0.5);
                 if (tmp_val > network_speed) {
-                    network_speed = tmp_val;
+                    network_speed = (int) tmp_val;
                 }
             }
 
@@ -172,7 +210,7 @@ namespace Monitor {
             return net_data;
         }
 
-        private int[] update_network_percents (int bytes_out, int bytes_in) {
+        private int[] update_network_percents (uint64 bytes_out, uint64 bytes_in) {
             double bytes_speed = network_speed <= 0 ? 5 * 1048576.0 : network_speed * 1048576.0;
 
             int[] percents = {};

@@ -55,8 +55,8 @@ namespace Monitor {
             var bytes_title = new Gtk.Label (_("Bytes"));
             iface_grid.attach (bytes_title, 0, top++, 2, 1);
 
-            add_new_str (ref iface_grid, _("Downloaded"), Utils.format_net_speed (iface.bytes_in, true), top++);
-            add_new_str (ref iface_grid, _("Uploaded"), Utils.format_net_speed (iface.bytes_out, true), top++);
+            add_new_str (ref iface_grid, _("Downloaded"), Utils.format_bytes (iface.bytes_in, true), top++);
+            add_new_str (ref iface_grid, _("Uploaded"), Utils.format_bytes (iface.bytes_out, true), top++);
 
             var packets_title = new Gtk.Label (_("Packets"));
             iface_grid.attach (packets_title, 0, top++, 2, 1);

@@ -25,7 +25,7 @@ namespace Monitor {
         private bool on_draw (Cairo.Context ctx) {
             // background
             ctx.rectangle (0, 0, bound_width, bound_height);
-            ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
+            ctx.set_source_rgba (0.24, 0.35, 0.36, 1);
             ctx.fill();
 
             if (used_memory == 0) {
@@ -38,7 +38,7 @@ namespace Monitor {
             ctx.fill();
 
             // text
-            ctx.set_source_rgba (font_color.red, font_color.green, font_color.blue, 1);
+            ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
 
             var used_name = create_pango_layout ("%d%%".printf (used_memory));
             used_name.set_font_description (description_layout);

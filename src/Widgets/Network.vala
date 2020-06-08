@@ -81,8 +81,8 @@ namespace Monitor {
             widget_down.progress = data.percent_in;
             widget_up.progress = data.percent_out;
 
-            net_d_val.label = Utils.format_net_speed (data.total_in, true);
-            net_u_val.label = Utils.format_net_speed (data.total_out, true);
+            net_d_val.label = Utils.format_bytes (data.total_in, true);
+            net_u_val.label = Utils.format_bytes (data.total_out, true);
         }
     }
 }

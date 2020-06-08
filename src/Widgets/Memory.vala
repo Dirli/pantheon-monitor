@@ -20,11 +20,11 @@ namespace Monitor {
             valign = Gtk.Align.CENTER;
 
             this.memory_total = memory_total;
-            swap_on = memory_total.swap > 0;
+            swap_on = memory_total.swap != null;
 
             var total_label = new Gtk.Label (_("Memory") + ": ");
             total_label.halign = Gtk.Align.START;
-            memory_val = new Gtk.Label ("%.1f GiB".printf (memory_total.memory));
+            memory_val = new Gtk.Label (Utils.format_bytes (memory_total.memory));
             memory_val.halign = Gtk.Align.CENTER;
 
             draw_ram = new Tools.DrawRAM (font_color);
@@ -37,7 +37,7 @@ namespace Monitor {
             if (swap_on) {
                 var swap_label = new Gtk.Label (_("Swap") + ": ");
                 swap_label.halign = Gtk.Align.START;
-                swap_val = new Gtk.Label ("%.1f GiB".printf (memory_total.swap));
+                swap_val = new Gtk.Label (Utils.format_bytes (memory_total.swap));
                 swap_val.halign = Gtk.Align.CENTER;
 
                 draw_swap = new Tools.DrawRAM (font_color);
@@ -51,11 +51,13 @@ namespace Monitor {
 
         public void update_values (Structs.MemoryData memory_data) {
             draw_ram.update_used (memory_data.percent_memory);
-            memory_val.label = "%.1f GiB / %.1f GiB".printf (memory_data.used_memory, memory_total.memory);
+            memory_val.label = "%s / %s".printf (Utils.format_bytes (memory_data.used_memory, true),
+                                                 Utils.format_bytes (memory_total.memory, true));
 
             if (swap_on) {
                 draw_swap.update_used (memory_data.percent_swap);
-                swap_val.label = "%.1f GiB / %.1f GiB".printf (memory_data.used_swap, memory_total.swap);
+                swap_val.label = "%s / %s".printf (Utils.format_bytes (memory_data.used_swap, true),
+                                                   Utils.format_bytes (memory_total.swap, true));
             }
         }
     }

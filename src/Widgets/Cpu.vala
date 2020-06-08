@@ -22,13 +22,12 @@ namespace Monitor {
 
         private Tools.DrawCpu draw_cpu;
 
-        public Cpu (Gdk.RGBA font_color, int cores) {
+        public Cpu (int cores) {
             orientation = Gtk.Orientation.HORIZONTAL;
             hexpand = true;
             halign = Gtk.Align.CENTER;
             valign = Gtk.Align.CENTER;
             spacing = 8;
-            margin = 25;
 
             var info_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 5);
             info_box.valign = Gtk.Align.CENTER;
@@ -42,7 +41,7 @@ namespace Monitor {
             info_box.add (freq_val);
             info_box.add (cores_label);
 
-            draw_cpu = new Tools.DrawCpu (font_color, cores);
+            draw_cpu = new Tools.DrawCpu (cores);
             draw_cpu.hexpand = true;
 
             add (info_box);

@@ -119,13 +119,15 @@ namespace Monitor {
             if (extended) {
                 if (popover_wid != null) {
                     var memory_data = resource_manager.update_memory ();
-                    var m_total = resource_manager.memory_total;
                     popover_wid.update_state (
                         Utils.format_frequency (resource_manager.update_freq ()),
-                        "%.1f GiB / %.1f GiB".printf (memory_data.used_memory, m_total.memory),
-                        m_total.swap > 0 ? "%.1f GiB / %.1f GiB".printf (memory_data.used_swap, m_total.swap) : _("Off"),
+                        Utils.format_bytes (memory_data.used_memory, true),
+                        memory_data.used_swap != null ? Utils.format_bytes (memory_data.used_swap, true) : _("Off"),
                         resource_manager.update_uptime ()
                     );
+
+                    var io_data = resource_manager.update_diskio ();
+                    popover_wid.update_io (Utils.format_bytes (io_data.read), Utils.format_bytes (io_data.write));
                 }
             } else {
                 if (indicator_cpu) {
@@ -137,8 +139,8 @@ namespace Monitor {
                 }
                 if (indicator_net) {
                     Structs.NetLoadData net_data = resource_manager.update_network (false);
-                    string down_val = net_data.bytes_in > 0 ? Utils.format_net_speed ((uint64) net_data.bytes_in) : "";
-                    string up_val = net_data.bytes_out > 0 ? Utils.format_net_speed ((uint64) net_data.bytes_out) : "";
+                    string down_val = net_data.bytes_in > 0 ? Utils.format_bytes (net_data.bytes_in) : "";
+                    string up_val = net_data.bytes_out > 0 ? Utils.format_bytes (net_data.bytes_out) : "";
 
                     panel_wid.update_net (down_val, up_val);
                 }
@@ -216,8 +218,8 @@ namespace Monitor {
             extended = true;
             if (popover_wid != null) {
                 Structs.NetLoadData net_data = resource_manager.update_network (false);
-                popover_wid.update_total_network (Utils.format_net_speed (net_data.total_in, true),
-                                                  Utils.format_net_speed (net_data.total_out, true));
+                popover_wid.update_total_network (Utils.format_bytes (net_data.total_in, true),
+                                                  Utils.format_bytes (net_data.total_out, true));
 
                 popover_wid.clear_volumes_box ();
 

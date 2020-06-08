@@ -17,8 +17,8 @@
  */
 
 namespace Monitor.Utils {
-    public static string format_net_speed (uint64 bytes, bool round = false) {
-        string[] sizes = { " B/s", "KB/s", "MB/s", "GB/s", "TB/s" };
+    public static string format_bytes (uint64 bytes, bool round = false) {
+        string[] sizes = { "B/s", "KB/s", "MB/s", "GB/s", "TB/s" };
         double len = (double) bytes;
         int order = 0;
         string speed = "";
@@ -46,47 +46,6 @@ namespace Monitor.Utils {
         return speed;
     }
 
-    public static string format_size (uint64 bytes) {
-        string[] sizes = { " B", "KB", "MB", "GB", "TB" };
-        double len = (double) bytes;
-        int order = 0;
-        string size = "";
-
-        while (len >= 1024 && order < sizes.length - 1) {
-            order++;
-            len = len/1024;
-        }
-
-        if (bytes < 0) {
-            len = 0;
-            order = 0;
-        }
-
-        size = "%3.0f %s".printf(len, sizes[order]);
-
-        return size;
-    }
-
-    public static string format_net_size (int bytes) {
-        string[] sizes = { " B", "KB", "MB", "GB", "TB" };
-        double len = (double) bytes;
-        int order = 0;
-        string speed = "";
-
-        while (len >= 1024 && order < sizes.length - 1) {
-            order++;
-            len = len/1024;
-        }
-
-        if (bytes < 0) {
-            len = 0;
-            order = 0;
-        }
-
-        speed = "%3.0f %s".printf(len, sizes[order]);
-
-        return speed;
-    }
     public static string format_frequency (double val) {
         const string[] units = {
             " MHz",

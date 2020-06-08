@@ -16,10 +16,10 @@
  *
  */
 
-// 
+//
 namespace Monitor {
     public class Tools.DrawNetCircle : Tools.DrawCircle {
-        public int net_speed { get; set; default = 0;}
+        public uint64 net_speed { get; set; default = 0;}
 
         public DrawNetCircle (string net_name, Gdk.RGBA current_color) {
             layout_name = create_pango_layout (net_name);
@@ -28,7 +28,7 @@ namespace Monitor {
         }
 
         public override string get_signature () {
-            return Utils.format_net_speed ((uint64) net_speed);
+            return Utils.format_bytes (net_speed);
         }
 
         protected override void draw_numbers (Cairo.Context cr, double center_x, double center_y, float radius){

@@ -23,6 +23,7 @@ namespace Monitor {
         private Widgets.Cpu widget_cpu;
         private Widgets.Memory widget_memory;
         private Widgets.Network widget_net;
+        private Widgets.DiskIO widget_diskio;
 
         private Services.ResourcesManager resource_manager;
 
@@ -38,17 +39,21 @@ namespace Monitor {
             resource_manager = new Services.ResourcesManager ();
             extended_window = new Gtk.Popover (null);
 
-            widget_cpu = new Widgets.Cpu (current_color, resource_manager.quantity_cores);
+            widget_cpu = new Widgets.Cpu (resource_manager.quantity_cores);
 
             add (widget_cpu);
 
+            add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+
             widget_memory = new Widgets.Memory (resource_manager.memory_total, current_color);
-
-            var ram_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
-            ram_separator.hexpand = true;
-
-            add (ram_separator);
             add (widget_memory);
+
+            add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+
+            widget_diskio = new Widgets.DiskIO ();
+            add (widget_diskio);
+
+            add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
             widget_net = new Widgets.Network (current_color);
             widget_net.show_popover.connect ((w) => {
@@ -56,24 +61,16 @@ namespace Monitor {
 
                 open_popover (w, popover_grid);
             });
-
-            var net_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
-            net_separator.hexpand = true;
-
-            add (net_separator);
             add (widget_net);
 
             resource_manager.notify["network-speed"].connect (() => {
                 widget_net.set_new_max (resource_manager.network_speed);
             });
 
-            var bottom_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
-            bottom_separator.hexpand = true;
-
             uptime_val = new Gtk.Label ("-");
             uptime_val.halign = Gtk.Align.CENTER;
 
-            add (bottom_separator);
+            add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
             add (uptime_val);
 
             border_width = 0;
@@ -97,6 +94,9 @@ namespace Monitor {
             widget_net.update_values (resource_manager.update_network (true, true));
 
             uptime_val.label = _("Uptime") + ": " + resource_manager.update_uptime ();
+
+            var dio = resource_manager.update_diskio ();
+            widget_diskio.update_values (dio.read, dio.write);
 
             return true;
     	}
