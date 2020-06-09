@@ -1,20 +1,12 @@
 namespace Monitor {
-    public class Tools.DrawRAM : Gtk.DrawingArea {
-        private int bound_width = 0;
-        private int bound_height = 30;
-
+    public class Tools.DrawRAM : Tools.DrawBody {
         private int used_memory = 0;
 
-        private Pango.FontDescription description_layout;
+        public DrawRAM () {
+            bound_width = 0;
+            bound_height = 30;
 
-        public Gdk.RGBA font_color;
-
-        public DrawRAM (Gdk.RGBA font_color) {
-            this.font_color = font_color;
-
-            description_layout = new Pango.FontDescription ();
-            description_layout.set_size ((int) (14 * Pango.SCALE));
-            description_layout.set_weight (Pango.Weight.NORMAL);
+            text_size = 14;
 
             size_allocate.connect ((allocation) => {
                 bound_width = allocation.width;
@@ -23,10 +15,7 @@ namespace Monitor {
         }
 
         private bool on_draw (Cairo.Context ctx) {
-            // background
-            ctx.rectangle (0, 0, bound_width, bound_height);
-            ctx.set_source_rgba (0.24, 0.35, 0.36, 1);
-            ctx.fill();
+            draw_background (ctx);
 
             if (used_memory == 0) {
                 return true;
@@ -62,11 +51,6 @@ namespace Monitor {
             used_memory = used_percent;
 
             queue_draw ();
-        }
-
-        public override void get_preferred_height (out int minimum_height, out int natural_height) {
-            minimum_height = bound_height;
-            natural_height = bound_height;
         }
     }
 }

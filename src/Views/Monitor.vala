@@ -45,7 +45,7 @@ namespace Monitor {
 
             add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
-            widget_memory = new Widgets.Memory (resource_manager.memory_total, current_color);
+            widget_memory = new Widgets.Memory (resource_manager.memory_total);
             add (widget_memory);
 
             add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));

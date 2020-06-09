@@ -1,5 +1,5 @@
 namespace Monitor {
-    public class Tools.DrawDiskIO : Gtk.DrawingArea {
+    public class Tools.DrawDiskIO : Tools.DrawBody {
         private bool draw_graphic = false;
 
         private uint64 max_scale = 0;
@@ -16,27 +16,20 @@ namespace Monitor {
             }
         }
 
-        private int bound_width = 0;
-        private int bound_height = 140;
-
-        private int left_field = 60;
-        private int field = 5;
-        private int bottom_field = 35;
-
         private string[] scale_titles;
 
         private uint64[] read_points;
         private uint64[] write_points;
 
-        private Pango.FontDescription description_layout;
-
         public DrawDiskIO () {
+            fields = Structs.DrawFields () {left = 60, bottom = 35, top = 5, right = 5};
             read_points = {};
             write_points = {};
 
-            description_layout = new Pango.FontDescription ();
-            description_layout.set_size ((int) (8 * Pango.SCALE));
-            description_layout.set_weight (Pango.Weight.NORMAL);
+            text_size = 8;
+
+            bound_width = 0;
+            bound_height = 140;
 
             size_allocate.connect ((allocation) => {
                 bound_width = allocation.width;
@@ -59,106 +52,46 @@ namespace Monitor {
         }
 
         private bool on_draw (Cairo.Context ctx) {
-            // background
-            ctx.rectangle (0, 0, bound_width, bound_height);
-            ctx.set_source_rgba (0.24, 0.35, 0.36, 1);
-            ctx.fill();
+            int right_grid = bound_width - fields.right;
 
-            int bottom_grid = bound_height - bottom_field;
-            int right_grid = bound_width - field;
-
-            // grid
             ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
-            ctx.move_to (left_field, field);
-            ctx.line_to (left_field, bottom_grid);
-            ctx.line_to (right_grid, bottom_grid);
 
-            ctx.stroke ();
-            ctx.save ();
-            int y_title = field;
+            draw_background (ctx);
+            draw_axes (ctx);
+            draw_horizontal_grid (ctx, 20);
+            draw_vertical_grid (ctx, 20);
+
+            int y_title = fields.top;
             if (scale_titles.length == 3) {
                 foreach (string title in scale_titles) {
-                    create_scale_element (ctx, title, y_title);
+                    var h_text = create_pango_layout (title);
+                    h_text.set_font_description (description_layout);
+                    draw_text (ctx, h_text, fields.left / 2, y_title);
                     y_title += 40;
                 }
             }
 
-            ctx.set_line_width (0.5);
-            // horizontal grid
-            int dec = 20;
-            while ((bottom_grid - dec) >= field) {
-                int y_coord = bottom_grid - dec;
-                ctx.move_to (left_field, y_coord);
-                ctx.line_to (right_grid, y_coord);
-
-                dec += 20;
-            }
-
-            ctx.stroke ();
-
-            // verical grid
-            int inc = right_grid - left_field;
+            int inc = right_grid - fields.left;
 
             int sec_label = 0;
             while (inc > 0) {
-                int x_coord = inc + left_field;
-                ctx.move_to (x_coord, field);
-                ctx.line_to (x_coord, bottom_grid);
-
                 if (sec_label == 0 || sec_label % 60 == 0) {
-                    var time_layout = create_pango_layout ("%d m".printf (sec_label / 60));
-                    time_layout.set_font_description (description_layout);
-
-                    int fontw, fonth;
-                    time_layout.get_pixel_size (out fontw, out fonth);
-
-                    ctx.move_to (x_coord - (fontw / 2), bound_height - 25 - (fonth / 2));
-                    Pango.cairo_update_layout (ctx, time_layout);
-                    Pango.cairo_show_layout (ctx, time_layout);
+                    var v_text = create_pango_layout ("%d m".printf (sec_label / 60));
+                    v_text.set_font_description (description_layout);
+                    draw_text (ctx, v_text, inc + fields.left, bound_height - 25);
                 }
 
                 sec_label += 10;
                 inc -= 20;
             }
 
-            ctx.stroke ();
-            ctx.restore ();
-
-            // legend
-            ctx.set_source_rgba (1.0, 0, 0, 1);
-            ctx.rectangle (left_field, bound_height - 15, 10, 10);
-            ctx.fill();
-
-            ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
-            var write_layout = create_pango_layout (_("Write"));
-            write_layout.set_font_description (description_layout);
-
-            int fontw, fonth;
-            write_layout.get_pixel_size (out fontw, out fonth);
-
-            ctx.move_to (left_field + 15, bound_height - 10 - (fonth / 2));
-            Pango.cairo_update_layout (ctx, write_layout);
-            Pango.cairo_show_layout (ctx, write_layout);
-
-            ctx.set_source_rgba (0, 1.0, 0, 1);
-            ctx.rectangle (left_field + 20 + fontw, bound_height - 15, 10, 10);
-            ctx.fill();
-
-            ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
-            var read_layout = create_pango_layout (_("Read"));
-            read_layout.set_font_description (description_layout);
-
-            read_layout.get_pixel_size (out fontw, out fonth);
-
-            ctx.move_to (left_field + 35 + fontw, bound_height - 10 - (fonth / 2));
-            Pango.cairo_update_layout (ctx, read_layout);
-            Pango.cairo_show_layout (ctx, read_layout);
+            draw_legend (ctx);
 
             // graphic
             if (draw_graphic) {
                 draw_graphic = false;
 
-                int sec_total = (right_grid - left_field) / 2;
+                int sec_total = (right_grid - fields.left) / 2;
                 var points_length = read_points.length;
 
                 int iter_count = int.min (points_length, sec_total);
@@ -170,61 +103,71 @@ namespace Monitor {
                 }
 
                 int x_point = right_grid - iter_count * 2;
-                uint64 new_max = 0;
 
-                ctx.move_to (x_point, bottom_grid - (int) (read_points[0] * 100.0 / max_scale));
                 ctx.set_source_rgba (0, 1.0, 0, 1);
+                uint64 new_max_read = draw_points (ctx, read_points, x_point, iter_count);
 
-                for (int i = 1; i < iter_count; i++) {
-                    uint64 next_point = read_points[i];
-                    if (next_point > new_max) {
-                        new_max = next_point;
-                    }
-
-                    x_point += 2;
-                    ctx.line_to (x_point, bottom_grid - (int) (next_point * 100.0 / max_scale));
-                }
-                ctx.stroke ();
-
-                x_point = right_grid - iter_count * 2;
-                ctx.move_to (x_point, bottom_grid - (int) (write_points[0] * 100.0 / max_scale));
                 ctx.set_source_rgba (1.0, 0, 0, 1);
+                uint64 new_max_write = draw_points (ctx, write_points, x_point, iter_count);
 
-                for (int i = 1; i < iter_count; i++) {
-                    uint64 next_point = write_points[i];
-                    if (next_point > new_max) {
-                        new_max = next_point;
-                    }
-
-                    x_point += 2;
-                    ctx.line_to (x_point, bottom_grid - (int) (next_point * 100.0 / max_scale));
-                }
-                ctx.stroke ();
-
-                if (new_max > 0) {
-                    max_point = new_max;
-                }
+                max_point = uint64.max (new_max_read, new_max_write);
             }
 
             return true;
         }
 
-        private void create_scale_element (Cairo.Context ctx, string layout_text, int y_pos) {
-            var text = create_pango_layout (layout_text);
-            text.set_font_description (description_layout);
+        private uint64 draw_points (Cairo.Context ctx, uint64[] points, int start_point, int count) {
+            uint64 max = 0;
+            int x_point = start_point;
 
-            int fontw, fonth;
-            text.get_pixel_size (out fontw, out fonth);
+            int bottom_grid = bound_height - fields.bottom;
 
-            ctx.move_to (left_field / 2 - (fontw / 2), y_pos - (fonth / 2));
+            ctx.move_to (x_point, bottom_grid - (int) (points[0] * 100.0 / max_scale));
 
-            Pango.cairo_update_layout (ctx, text);
-            Pango.cairo_show_layout (ctx, text);
+            for (int i = 1; i < count; i++) {
+                uint64 next_point = points[i];
+                if (next_point > max) {
+                    max = next_point;
+                }
+
+                x_point += 2;
+                ctx.line_to (x_point, bottom_grid - (int) (next_point * 100.0 / max_scale));
+            }
+
+            ctx.stroke ();
+
+            return max;
+        }
+
+        private void draw_legend (Cairo.Context ctx) {
+            ctx.save ();
+
+            int r_fontw, w_fontw, fonth;
+            var write_text = create_pango_layout (_("Write"));
+            write_text.set_font_description (description_layout);
+            write_text.get_pixel_size (out w_fontw, out fonth);
+
+            ctx.set_source_rgba (1.0, 0, 0, 1);
+            ctx.rectangle (fields.left, bound_height - 15, 10, 10);
+            ctx.fill();
+
+            draw_text (ctx, write_text, fields.left + + w_fontw / 2 + 15, bound_height - 10);
+
+            var read_text = create_pango_layout (_("Read"));
+            read_text.set_font_description (description_layout);
+            read_text.get_pixel_size (out r_fontw, out fonth);
+
+            ctx.set_source_rgba (0, 1.0, 0, 1);
+            ctx.rectangle (fields.left + 20 + w_fontw, bound_height - 15, 10, 10);
+            ctx.fill();
+
+            draw_text (ctx, read_text, fields.left + w_fontw + 35 + r_fontw / 2, bound_height - 10);
+
+            ctx.restore ();
         }
 
         private string[] round_max (uint64 max_val) {
             string[] scale_elems = {};
-
             string[] sizes = { "B", "KB", "MB", "GB", "TB" };
             double len = (double) max_val;
             int order = 0;
@@ -233,7 +176,6 @@ namespace Monitor {
                 order++;
                 len = len/1024;
             }
-
 
             uint64 tmp_scale = (uint64) (GLib.Math.round (len / 5.0) * 5);
 
@@ -248,11 +190,6 @@ namespace Monitor {
             max_scale = tmp_scale;
 
             return scale_elems;
-        }
-
-        public override void get_preferred_height (out int minimum_height, out int natural_height) {
-            minimum_height = bound_height;
-            natural_height = bound_height;
         }
 
         public override void get_preferred_width (out int minimum_width, out int natural_width) {

@@ -43,6 +43,8 @@ namespace Monitor {
             swap_value = add_new_str (_("Swap"), 2);
             uptime_value = add_new_str (_("Uptime"), 3);
 
+
+
             attach (new Wingpanel.Widgets.Separator (), 0, 4, 2, 1);
 
             init_network ();
@@ -109,6 +111,7 @@ namespace Monitor {
             }
 
             volumes_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 8);
+            volumes_box.hexpand = true;
             volumes_box.margin_start = volumes_box.margin_end = 15;
 
             attach (volumes_box, 0, 11, 2, 1);

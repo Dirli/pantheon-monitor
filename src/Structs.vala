@@ -1,4 +1,10 @@
 namespace Monitor.Structs {
+    public struct DrawFields {
+        public int top;
+        public int bottom;
+        public int left;
+        public int right;
+    }
     public struct NetLoadData {
         public uint64 bytes_in;
         public uint64 bytes_out;

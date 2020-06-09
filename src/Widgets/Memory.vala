@@ -10,7 +10,7 @@ namespace Monitor {
 
         private Structs.MemoryTotal memory_total;
 
-        public Memory (Structs.MemoryTotal memory_total, Gdk.RGBA font_color) {
+        public Memory (Structs.MemoryTotal memory_total) {
             margin_start = 12;
             margin_end = 12;
             hexpand = true;
@@ -27,7 +27,7 @@ namespace Monitor {
             memory_val = new Gtk.Label (Utils.format_bytes (memory_total.memory));
             memory_val.halign = Gtk.Align.CENTER;
 
-            draw_ram = new Tools.DrawRAM (font_color);
+            draw_ram = new Tools.DrawRAM ();
             draw_ram.hexpand = true;
 
             attach (total_label, 0, 0);
@@ -40,7 +40,7 @@ namespace Monitor {
                 swap_val = new Gtk.Label (Utils.format_bytes (memory_total.swap));
                 swap_val.halign = Gtk.Align.CENTER;
 
-                draw_swap = new Tools.DrawRAM (font_color);
+                draw_swap = new Tools.DrawRAM ();
                 draw_swap.hexpand = true;
 
                 attach (swap_label,  0, 2);

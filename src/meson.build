@@ -11,6 +11,7 @@ executable(
     'Services/Disks.vala',
     'Services/DisksManager.vala',
     'Services/ResourcesManager.vala',
+    'Tools/DrawBody.vala',
     'Tools/DrawCircle.vala',
     'Tools/DrawCpu.vala',
     'Tools/DrawDiskIO.vala',
