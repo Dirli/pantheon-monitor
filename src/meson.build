@@ -22,6 +22,8 @@ executable(
     'Utils/Format.vala',
     'Views/Disks.vala',
     'Views/Monitor.vala',
+    'Views/Processes.vala',
+    'Views/ViewWrapper.vala',
     'Widgets/About.vala',
     'Widgets/Cpu.vala',
     'Widgets/DiskIO.vala',

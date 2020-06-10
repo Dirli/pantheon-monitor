@@ -20,6 +20,10 @@ namespace Monitor {
             add (draw_diskio);
         }
 
+        public void clear_cache () {
+            draw_diskio.clear_cache ();
+        }
+
         public void update_values (uint64 read_value, uint64 write_value) {
             draw_diskio.add_values (read_value, write_value);
         }

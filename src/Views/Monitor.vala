@@ -17,7 +17,7 @@
  */
 
 namespace Monitor {
-    public class Views.Monitor: Gtk.Box {
+    public class Views.Monitor : Views.ViewWrapper {
         private uint t_id = 0;
 
         private Widgets.Cpu widget_cpu;
@@ -30,30 +30,40 @@ namespace Monitor {
         private Gtk.Popover extended_window;
         private Gtk.Label uptime_val;
 
+        public Gdk.RGBA current_color {
+            get;
+            construct set;
+        }
+
         public Monitor (Gdk.RGBA current_color) {
-            orientation = Gtk.Orientation.VERTICAL;
-            spacing = 15;
-            margin = 15;
-            expand = true;
+            Object (orientation: Gtk.Orientation.VERTICAL,
+                    current_color: current_color);
+        }
+
+        construct {
+            var inner_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 15);
+            inner_box.margin = 15;
+            inner_box.spacing = 15;
+            inner_box.expand = true;
 
             resource_manager = new Services.ResourcesManager ();
             extended_window = new Gtk.Popover (null);
 
             widget_cpu = new Widgets.Cpu (resource_manager.quantity_cores);
 
-            add (widget_cpu);
+            inner_box.add (widget_cpu);
 
-            add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+            inner_box.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
             widget_memory = new Widgets.Memory (resource_manager.memory_total);
-            add (widget_memory);
+            inner_box.add (widget_memory);
 
-            add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+            inner_box.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
             widget_diskio = new Widgets.DiskIO ();
-            add (widget_diskio);
+            inner_box.add (widget_diskio);
 
-            add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+            inner_box.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
             widget_net = new Widgets.Network (current_color);
             widget_net.show_popover.connect ((w) => {
@@ -61,7 +71,7 @@ namespace Monitor {
 
                 open_popover (w, popover_grid);
             });
-            add (widget_net);
+            inner_box.add (widget_net);
 
             resource_manager.notify["network-speed"].connect (() => {
                 widget_net.set_new_max (resource_manager.network_speed);
@@ -70,21 +80,27 @@ namespace Monitor {
             uptime_val = new Gtk.Label ("-");
             uptime_val.halign = Gtk.Align.CENTER;
 
-            add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
-            add (uptime_val);
+            inner_box.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+            inner_box.add (uptime_val);
 
             border_width = 0;
 
-            show_all ();
-
-            t_id = GLib.Timeout.add_seconds (1, update);
+            main_widget.add (inner_box);
         }
 
-        public void stop_timer () {
+        public override void start_timer () {
+            if (t_id == 0) {
+                t_id = GLib.Timeout.add_seconds (1, update);
+            }
+        }
+
+        public override void stop_timer () {
             if (t_id > 0) {
                 GLib.Source.remove (t_id);
                 t_id = 0;
             }
+
+            widget_diskio.clear_cache ();
         }
 
         private bool update () {

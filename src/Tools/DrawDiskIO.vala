@@ -192,6 +192,16 @@ namespace Monitor {
             return scale_elems;
         }
 
+        public void clear_cache () {
+            max_scale = 0;
+            _max_point = 0;
+
+            scale_titles = {};
+
+            write_points = {};
+            read_points = {};
+        }
+
         public override void get_preferred_width (out int minimum_width, out int natural_width) {
             minimum_width = bound_width;
             natural_width = bound_width;

@@ -18,106 +18,117 @@
 
 namespace Monitor {
     public class MainWindow : Gtk.Window {
-        private Gtk.Grid view;
-        private Widgets.Process process_view;
-        private Models.GenericModel generic_model;
+        private string current_view_name = "";
+
+        private Gtk.Stack stack;
+        private Views.Processes processes_view;
 
         public MainWindow (MonitorApp app) {
             set_application (app);
-            set_default_size (600, 600);
+            set_default_size (840, 600);
             window_position = Gtk.WindowPosition.CENTER;
 
             var provider = new Gtk.CssProvider ();
             provider.load_from_resource ("/io/elementary/monitor/style/application.css");
             Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-            Widgets.Headerbar headerbar = new Widgets.Headerbar (this);
-            set_titlebar (headerbar);
-
-            view = new Gtk.Grid ();
+            var view = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
             view.expand = true;
             view.halign = view.valign = Gtk.Align.FILL;
 
-            Widgets.Statusbar statusbar = Widgets.Statusbar.get_default ();
-            view.attach (statusbar, 0, 1, 1, 1);
+            stack = new Gtk.Stack ();
+            stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
 
+            processes_view = new Views.Processes ();
+            stack.add_named (processes_view, "processes");
+            stack.add_named (new Views.Monitor (current_color ()), "monitor");
+            stack.add_named (new Views.Disks (), "disks");
+
+            stack.notify["visible-child-name"].connect (on_changed_child);
+
+            build_headerbar ();
+
+            view.add (stack);
             add (view);
-            headerbar.view_box.mode_changed.connect (() => {
-                Gtk.Widget? widget = null;
 
-                if (headerbar.view_box.selected == 1) {
-                    widget = new Views.Monitor (current_color ());
-                    statusbar.hide ();
-                } else if (headerbar.view_box.selected == 2) {
-                    widget = get_scrolled_window (new Views.Disks ());
-                    statusbar.hide ();
+            show_all ();
+        }
+
+        private void on_changed_child () {
+            var new_view_name = stack.get_visible_child_name ();
+            if (new_view_name == null) {
+                return;
+            }
+
+            if (current_view_name != "" && new_view_name != current_view_name) {
+                var prev_widget = stack.get_child_by_name (current_view_name);
+                if (prev_widget != null && prev_widget is Views.ViewWrapper) {
+                    ((Views.ViewWrapper) prev_widget).stop_timer ();
+                }
+            }
+
+            current_view_name = new_view_name;
+
+            var new_widget = stack.get_child_by_name (current_view_name);
+            if (new_widget != null && new_widget is Views.ViewWrapper) {
+                ((Views.ViewWrapper) new_widget).start_timer ();
+            }
+        }
+
+        private void build_headerbar () {
+            var header_bar = new Widgets.Headerbar (this);
+
+            var view_box = new Granite.Widgets.ModeButton ();
+            view_box.homogeneous = false;
+            view_box.valign = Gtk.Align.CENTER;
+
+            var search_entry = new Gtk.SearchEntry ();
+
+            view_box.append (create_model_button ("view-list-symbolic", _("Processes")));
+            view_box.append (create_model_button ("utilities-system-monitor-symbolic", _("Monitor")));
+            view_box.append (create_model_button ("drive-harddisk-symbolic", _("Disks")));
+
+            view_box.mode_changed.connect (() => {
+                if (view_box.selected == 0) {
+                    search_entry.show ();
                 } else {
-                    generic_model = new Models.GenericModel ();
-                    process_view = new Widgets.Process (generic_model);
-                    widget = get_scrolled_window (process_view);
-                    statusbar.show ();
+                    search_entry.hide ();
                 }
-
-                if (widget != null) {
-                    var exist_widget = view.get_child_at (0,0);
-
-                    if (exist_widget != null) {
-                        if (exist_widget is Views.Monitor) {
-                            ((Views.Monitor) exist_widget).stop_timer ();
-                        }
-                        exist_widget.destroy ();
-                    }
-
-                    view.attach (widget, 0, 0, 1, 1);
-                }
+                stack.set_visible_child_name (view_box.selected == 0 ? "processes" :
+                                              view_box.selected == 1 ? "monitor" :
+                                              view_box.selected == 2 ? "disks" : "processes");
             });
 
-            headerbar.search_process.connect ((proc_pattern) => {
-                unowned Gtk.Widget exist_widget = view.get_child_at (0, 0);
-                if (exist_widget != null) {
-                    unowned Gtk.Widget w = (exist_widget as Gtk.Container).get_children ().nth_data (0);
-                    if (w is Widgets.Process) {
-                        (w as Widgets.Process).filter_text = proc_pattern;
-                    }
+            search_entry.valign = Gtk.Align.CENTER;
+            search_entry.placeholder_text = _("Search Process");
+            search_entry.set_tooltip_text (_("Type Process Name or PID"));
+            search_entry.search_changed.connect (() => {
+                if (stack.visible_child_name != "processes" || search_entry.text_length == 1) {
+                    return;
                 }
+
+                processes_view.filter_text = search_entry.text;
             });
 
-            headerbar.view_box.selected = 0;
+            header_bar.pack_start (view_box);
+            header_bar.pack_end (search_entry);
 
-            init_statusbar (statusbar);
+            set_titlebar (header_bar);
+
+            view_box.selected = 0;
+            // on_changed_child ();
+        }
+
+        private Gtk.Image create_model_button (string icon_name, string tooltip_text) {
+            Gtk.Image m_button = new Gtk.Image.from_icon_name (icon_name, Gtk.IconSize.BUTTON);
+            m_button.tooltip_text = tooltip_text;
+            m_button.margin_start = m_button.margin_end = 5;
+
+            return m_button;
         }
 
         private Gdk.RGBA current_color () {
             return get_style_context ().get_color (Gtk.StateFlags.NORMAL);
-        }
-
-        private void init_statusbar (Widgets.Statusbar statusbar) {
-            var end_process_button = new Gtk.Button.with_label (_("End Process"));
-            end_process_button.valign = Gtk.Align.CENTER;
-            end_process_button.margin = 10;
-            end_process_button.clicked.connect (process_view.end_process);
-            // end_process_button.tooltip_text = (_("Ctrl+E"));
-
-            var kill_process_button = new Gtk.Button.with_label (_("Kill process"));
-            kill_process_button.valign = Gtk.Align.CENTER;
-            kill_process_button.margin = 10;
-            kill_process_button.clicked.connect (process_view.kill_process);
-            // kill_process_button.tooltip_text = ("Ctrl+E");
-
-            statusbar.pack_start (end_process_button);
-            statusbar.pack_start (kill_process_button);
-        }
-
-        private Gtk.ScrolledWindow get_scrolled_window (Gtk.Widget widget) {
-            Gtk.ScrolledWindow scr_window = new Gtk.ScrolledWindow (null, null);
-
-            scr_window.add (widget);
-            scr_window.expand = true;
-            scr_window.margin_start = scr_window.margin_end = 15;
-            scr_window.margin_top = scr_window.margin_bottom = 10;
-            scr_window.show_all ();
-
-            return scr_window;
         }
     }
 }

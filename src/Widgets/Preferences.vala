@@ -18,7 +18,7 @@
 
 namespace Monitor {
     public class Widgets.Preferences : Gtk.Dialog {
-        public Preferences (Monitor.MainWindow window, Granite.Widgets.ModeButton view_box) {
+        public Preferences (Monitor.MainWindow window) {
             resizable = false;
             deletable = false;
             transient_for = window;
@@ -119,7 +119,6 @@ namespace Monitor {
             response.connect ((source, response_id) => {
                 switch (response_id) {
                     case Gtk.ResponseType.CLOSE:
-                        view_box.selected = 0;
                         destroy ();
                         break;
                 }

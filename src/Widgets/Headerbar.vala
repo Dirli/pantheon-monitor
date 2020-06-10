@@ -18,36 +18,10 @@
 
 namespace Monitor {
     public class Widgets.Headerbar : Gtk.HeaderBar {
-        public signal void search_process (string process_pattern);
-
-        public Granite.Widgets.ModeButton view_box;
-
-        construct {
+        public Headerbar (MainWindow window) {
             show_close_button = true;
             has_subtitle = false;
             title = "Monitor";
-        }
-
-        public Headerbar (MainWindow window) {
-            view_box = new Granite.Widgets.ModeButton ();
-            view_box.homogeneous = false;
-            view_box.valign = Gtk.Align.CENTER;
-            pack_start (view_box);
-
-            Gtk.Image proc_button = new Gtk.Image.from_icon_name ("view-list-symbolic", Gtk.IconSize.BUTTON);
-            proc_button.tooltip_text = _("Processes");
-            proc_button.margin_start = proc_button.margin_end = 5;
-            view_box.append (proc_button);
-
-            Gtk.Image mon_button = new Gtk.Image.from_icon_name ("utilities-system-monitor-symbolic", Gtk.IconSize.BUTTON);
-            mon_button.tooltip_text = _("Monitor");
-            mon_button.margin_start = mon_button.margin_end = 5;
-            view_box.append (mon_button);
-
-            Gtk.Image disk_button = new Gtk.Image.from_icon_name ("drive-harddisk-symbolic", Gtk.IconSize.BUTTON);
-            disk_button.tooltip_text = _("Disks");
-            disk_button.margin_start = disk_button.margin_end = 5;
-            view_box.append (disk_button);
 
             Gtk.Menu menu = new Gtk.Menu ();
             var pref_item = new Gtk.MenuItem.with_label (_("Preferences"));
@@ -55,35 +29,12 @@ namespace Monitor {
             menu.add (pref_item);
             menu.add (about_item);
             pref_item.activate.connect (() => {
-                var preferences = new Widgets.Preferences (window, view_box);
+                var preferences = new Widgets.Preferences (window);
                 preferences.run ();
             });
             about_item.activate.connect (() => {
                 var about = new Widgets.About ();
                 about.show ();
-            });
-
-            var search_entry = new Gtk.SearchEntry ();
-            search_entry.valign = Gtk.Align.CENTER;
-            search_entry.placeholder_text = _("Search Process");
-            search_entry.set_tooltip_text (_("Type Process Name or PID"));
-            search_entry.search_changed.connect (() => {
-                if (view_box.selected == 0) {
-                    if (search_entry.text_length == 1) {
-                        return;
-                    }
-
-                    search_process (search_entry.text);
-                }
-            });
-
-            view_box.mode_changed.connect (() => {
-                if (view_box.selected == 0) {
-                    search_entry.show ();
-                } else {
-                    search_entry.hide ();
-                    search_entry.text = "";
-                }
             });
 
             var app_button = new Gtk.MenuButton ();
@@ -94,7 +45,6 @@ namespace Monitor {
             menu.show_all ();
 
             pack_end (app_button);
-            pack_end (search_entry);
         }
     }
 }

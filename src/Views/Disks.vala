@@ -1,14 +1,18 @@
 namespace Monitor {
-    public class Views.Disks: Gtk.Box {
+    public class Views.Disks : Views.ViewWrapper {
         private Services.DisksManager disks_manager;
+
+        private Gtk.Box inner_widget;
 
         public Disks () {
             Object (orientation: Gtk.Orientation.VERTICAL,
-                    hexpand: false,
-                    spacing: 15);
+                    spacing: 0);
         }
 
         construct {
+            inner_widget = new Gtk.Box (Gtk.Orientation.VERTICAL, 15);
+            inner_widget.hexpand = true;
+
             disks_manager = new Services.DisksManager ();
 
             if (!disks_manager.init ()) {
@@ -17,7 +21,7 @@ namespace Monitor {
                 disks_manager.get_drives ().foreach (add_drive);
             }
 
-            show_all ();
+            main_widget.add (inner_widget);
         }
 
         private bool add_drive (owned Structs.MonitorDrive? drive) {
@@ -55,7 +59,7 @@ namespace Monitor {
             volumes_box.changed_box_size.connect (on_changed_box_size);
             drive_box.add (volumes_box);
 
-            add (drive_box);
+            inner_widget.add (drive_box);
 
             return true;
         }
@@ -212,5 +216,8 @@ namespace Monitor {
             free_popover.add (free_grid);
             free_popover.show_all ();
         }
+
+        public override void stop_timer () {}
+        public override void start_timer () {}
     }
 }
