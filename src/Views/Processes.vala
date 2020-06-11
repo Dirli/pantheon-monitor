@@ -1,7 +1,10 @@
 namespace Monitor {
     public class Views.Processes : Views.ViewWrapper {
+        private uint t_id = 0;
+
+        private Services.ProcessManager process_manager;
         private Widgets.Process process_view;
-        private Models.GenericModel process_list;
+        // private Models.GenericModel process_list;
         private Gtk.TreeModelFilter proc_filter;
 
         private Gtk.TreeSelection tree_selection;
@@ -20,13 +23,14 @@ namespace Monitor {
         }
 
         construct {
-            process_list = new Models.GenericModel ();
+            process_manager = new Services.ProcessManager ();
 
             process_view = new Widgets.Process ();
 
-            proc_filter = new Gtk.TreeModelFilter (process_list, null);
+            proc_filter = new Gtk.TreeModelFilter (process_manager.process_store, null);
             proc_filter.set_visible_func (row_visible);
             process_view.set_model (proc_filter);
+            // process_view.set_model (process_manager.process_store);
 
             main_widget.add (process_view);
 
@@ -34,44 +38,46 @@ namespace Monitor {
             tree_selection.set_mode (Gtk.SelectionMode.SINGLE);
         }
 
+        // Gtk.TreeIter first_iter;
+        // if (list_store.get_iter_first (out first_iter)) {
+        //     var first_path = list_store.get_path (first_iter);
+        //     if (first_path != null) {
+        //         list_view.set_cursor (first_path, null, false);
+        //     }
+        // }
+
+        // public void focus_on_first_row () {
+        //     Gtk.TreePath tree_path = new Gtk.TreePath.from_indices (0);
+        //     this.set_cursor (tree_path, null, false);
+        //     grab_focus ();
+        // }
+
         private bool row_visible (Gtk.TreeModel model, Gtk.TreeIter iter) {
-            string proc_name;
-            int proc_pid;
-            bool found = false;
             if ( _filter_text.length == 0 ) {
                 return true;
             }
 
-            model.get( iter, Column.NAME, out proc_name, Column.PID, out proc_pid, -1);
+            string proc_name;
+            int proc_pid;
+            bool found = false;
+
+            model.get( iter, Enums.Column.NAME, out proc_name, Enums.Column.PID, out proc_pid, -1);
 
             if (proc_name != null) {
                 found = (proc_name.casefold ().index_of (_filter_text) >= 0) || (proc_pid.to_string () == _filter_text);
             }
 
-            Gtk.TreeIter child_iter;
-            bool child_found = false;
-
-            if (model.iter_children (out child_iter, iter)) {
-                do {
-                    child_found = row_visible (model, child_iter);
-                } while (model.iter_next (ref child_iter) && !child_found);
-            }
-
-            if (child_found && _filter_text.length > 0) {
-                process_view.expand_all ();
-            }
-
-            return found || child_found;
+            return found;
         }
 
         public void kill_process () {
             int pid = get_selected_pid ();
-            process_list.kill_process (pid);
+            process_manager.stop_process (pid, Posix.Signal.KILL);
         }
 
         public void end_process () {
             int pid = get_selected_pid ();
-            process_list.end_process (pid);
+            process_manager.stop_process (pid, Posix.Signal.TERM);
         }
 
         public int get_selected_pid () {
@@ -80,19 +86,21 @@ namespace Monitor {
             int pid = 0;
 
             if (tree_selection.get_selected (out temp_model, out iter)) {
-                temp_model.@get (iter, Column.PID, out pid, -1);
+                temp_model.@get (iter, Enums.Column.PID, out pid, -1);
             }
 
             return pid;
         }
 
         // private void init_statusbar (Widgets.Statusbar statusbar) {
+        // Posix.Signal.TERM
         //     var end_process_button = new Gtk.Button.with_label (_("End Process"));
         //     end_process_button.valign = Gtk.Align.CENTER;
         //     end_process_button.margin = 10;
         //     end_process_button.clicked.connect (process_view.end_process);
         //     // end_process_button.tooltip_text = (_("Ctrl+E"));
         //
+        // Posix.Signal.KILL
         //     var kill_process_button = new Gtk.Button.with_label (_("Kill process"));
         //     kill_process_button.valign = Gtk.Align.CENTER;
         //     kill_process_button.margin = 10;
@@ -104,11 +112,21 @@ namespace Monitor {
         // }
 
         public override void stop_timer () {
-            //
+            if (t_id > 0) {
+                GLib.Source.remove (t_id);
+                t_id = 0;
+            }
         }
 
         public override void start_timer () {
-            //
+            if (t_id == 0) {
+                process_manager.update_processes ();
+
+                t_id = GLib.Timeout.add_seconds (1, () => {
+                    process_manager.update_processes ();
+                    return true;
+                });
+            }
         }
     }
 }
