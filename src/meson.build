@@ -4,6 +4,7 @@
 executable(
     meson.project_name(),
     'MainWindow.vala',
+    'Constants.vala',
     'Enums.vala',
     'Monitor.vala',
     'Structs.vala',

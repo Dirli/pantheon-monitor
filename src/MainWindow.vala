@@ -21,12 +21,27 @@ namespace Monitor {
         private string current_view_name = "";
 
         private Gtk.Stack stack;
+        private Gtk.SearchEntry search_entry;
         private Views.Processes processes_view;
 
+        private const ActionEntry[] ACTION_ENTRIES = {
+            { Constants.ACTION_END_PROC, action_end_proc },
+            { Constants.ACTION_KILL_PROC, action_kill_proc },
+            { Constants.ACTION_SEARCH, action_search }
+        };
+
         public MainWindow (MonitorApp app) {
+            var actions = new GLib.SimpleActionGroup ();
+            actions.add_action_entries (ACTION_ENTRIES, this);
+            insert_action_group ("win", actions);
+
             set_application (app);
-            set_default_size (840, 600);
+            set_default_size (700, 700);
             window_position = Gtk.WindowPosition.CENTER;
+
+            application.set_accels_for_action (Constants.ACTION_PREFIX + Constants.ACTION_SEARCH, {"<Control>f"});
+            application.set_accels_for_action (Constants.ACTION_PREFIX + Constants.ACTION_END_PROC, {"<Control>e"});
+            application.set_accels_for_action (Constants.ACTION_PREFIX + Constants.ACTION_KILL_PROC, {"<Control>k"});
 
             var provider = new Gtk.CssProvider ();
             provider.load_from_resource ("/io/elementary/monitor/style/application.css");
@@ -75,6 +90,22 @@ namespace Monitor {
             }
         }
 
+        private void action_end_proc () {
+            if (stack.visible_child_name == "processes") {
+                processes_view.end_process ();
+            }
+        }
+
+        private void action_kill_proc () {
+            if (stack.visible_child_name == "processes") {
+                processes_view.kill_process ();
+            }
+        }
+
+        private void action_search () {
+            search_entry.grab_focus ();
+        }
+
         private void build_headerbar () {
             var header_bar = new Widgets.Headerbar (this);
 
@@ -82,7 +113,7 @@ namespace Monitor {
             view_box.homogeneous = false;
             view_box.valign = Gtk.Align.CENTER;
 
-            var search_entry = new Gtk.SearchEntry ();
+            search_entry = new Gtk.SearchEntry ();
 
             view_box.append (create_model_button ("view-list-symbolic", _("Processes")));
             view_box.append (create_model_button ("utilities-system-monitor-symbolic", _("Monitor")));
