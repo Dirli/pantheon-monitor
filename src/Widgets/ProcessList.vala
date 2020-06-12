@@ -17,10 +17,10 @@
  */
 
 namespace Monitor {
-    public class Widgets.Process : Gtk.TreeView {
+    public class Widgets.ProcessList : Gtk.TreeView {
         const string NO_DATA = "\u2014";
 
-        public Process () {
+        public ProcessList () {
             var name_cell = new Gtk.CellRendererText ();
             name_cell.ellipsize = Pango.EllipsizeMode.END;
             name_cell.set_fixed_height_from_font (1);

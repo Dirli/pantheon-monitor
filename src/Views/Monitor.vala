@@ -42,6 +42,7 @@ namespace Monitor {
 
         construct {
             var inner_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 15);
+            inner_box.valign = Gtk.Align.CENTER;
             inner_box.margin = 15;
             inner_box.spacing = 15;
             inner_box.expand = true;
@@ -80,7 +81,6 @@ namespace Monitor {
             uptime_val = new Gtk.Label ("-");
             uptime_val.halign = Gtk.Align.CENTER;
 
-            inner_box.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
             inner_box.add (uptime_val);
 
             border_width = 0;

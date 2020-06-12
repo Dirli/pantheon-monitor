@@ -32,7 +32,7 @@ executable(
     'Widgets/Network.vala',
     'Widgets/NetworkPopover.vala',
     'Widgets/Preferences.vala',
-    'Widgets/Process.vala',
+    'Widgets/ProcessList.vala',
     'Widgets/Statusbar.vala',
     'Widgets/VolumesBox.vala',
     gresource,
