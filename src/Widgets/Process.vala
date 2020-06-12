@@ -39,6 +39,8 @@ namespace Monitor {
             insert_column (create_numeric_column (Enums.Column.MEMORY, _("Memory")), -1);
             insert_column (create_numeric_column (Enums.Column.PID, _("PID")), -1);
 
+            set_tooltip_column (Enums.Column.USER);
+
             columns_autosize ();
         }
 

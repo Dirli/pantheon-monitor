@@ -10,7 +10,7 @@ namespace Monitor {
         public Gtk.ListStore process_store;
 
         public ProcessManager () {
-            process_store = new Gtk.ListStore (4, typeof (string), typeof (double), typeof (uint64), typeof (int));
+            process_store = new Gtk.ListStore (5, typeof (string), typeof (double), typeof (uint64), typeof (int), typeof (string));
             process_cache = new Gee.HashMap<int, Gtk.TreeIter?> ();
             pid_cpu_usage = new Gee.HashMap<int, GTop.ProcTime?> ();
 
@@ -87,6 +87,7 @@ namespace Monitor {
                         Enums.Column.PID, pid,
                         Enums.Column.CPU, cpu_usage,
                         Enums.Column.MEMORY, mem_usage,
+                        Enums.Column.USER, user_name,
                         -1);
 
                     process_cache[pid] = iter;

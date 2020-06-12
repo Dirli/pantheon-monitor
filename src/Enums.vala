@@ -4,5 +4,6 @@ namespace Monitor.Enums {
         CPU,
         MEMORY,
         PID,
+        USER,
     }
 }
