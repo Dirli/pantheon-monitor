@@ -6,16 +6,13 @@ Manage processes, monitor of system resources and drives.
 ![Screenshot](data/screenshot1.png)
 
 ### Indicator
-![Screenshot](data/screenshot2.png)
+![Screenshot](data/screenshot4.png)
 
 ### Resource monitor
-![Screenshot](data/screenshot4.png)
+![Screenshot](data/screenshot2.png)
 
 ### Disks monitor
 ![Screenshot](data/screenshot3.png)
-
-### Prefrences
-![Screenshot](data/screenshot5.png)
 
 ---
 
