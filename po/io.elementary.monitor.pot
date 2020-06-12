@@ -8,33 +8,109 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.monitor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-10 23:58+0300\n"
+"POT-Creation-Date: 2020-06-12 22:20+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.3.1\n"
 "X-Poedit-Basepath: ../src\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: Indicator.vala:36
+#: Indicator.vala:86
 msgid "Monitor Indicator"
 msgstr ""
 
-#: Indicator.vala:37
+#: Indicator.vala:87
 msgid "Displays processes, consumed resources and drives on a Wingpanel"
 msgstr ""
 
-#: Indicator.vala:148
+#: Indicator.vala:125
+msgid "Off"
+msgstr ""
+
+#: Indicator.vala:235
 msgid "free / total"
 msgstr ""
 
-#: MainWindow.vala:114
-msgid "End process"
+#: MainWindow.vala:118
+msgid "Processes"
+msgstr ""
+
+#: MainWindow.vala:119
+msgid "Monitor"
+msgstr ""
+
+#: MainWindow.vala:120 Widgets/Popover.vala:69
+msgid "Disks"
+msgstr ""
+
+#: MainWindow.vala:134
+msgid "Search Process"
+msgstr ""
+
+#: MainWindow.vala:135
+msgid "Type Process Name or PID"
+msgstr ""
+
+#: Tools/DrawDiskIO.vala:146 Widgets/Popover.vala:77
+msgid "Write"
+msgstr ""
+
+#: Tools/DrawDiskIO.vala:156 Widgets/Popover.vala:89
+msgid "Read"
+msgstr ""
+
+#: Views/Disks.vala:48
+msgid "Partitioning:"
+msgstr ""
+
+#: Views/Disks.vala:50 Views/Disks.vala:194 Views/Disks.vala:212
+msgid "Size:"
+msgstr ""
+
+#: Views/Disks.vala:175 Views/Disks.vala:211
+msgid "Device:"
+msgstr ""
+
+#: Views/Disks.vala:178
+msgid "Label:"
+msgstr ""
+
+#: Views/Disks.vala:182
+msgid "Filesystem:"
+msgstr ""
+
+#: Views/Disks.vala:186
+msgid "Mount point:"
+msgstr ""
+
+#: Views/Disks.vala:194
+msgid "Size (free / total):"
+msgstr ""
+
+#: Views/Disks.vala:213
+msgid "Contents:"
+msgstr ""
+
+#: Views/Disks.vala:213
+msgid "Unallocated Space"
+msgstr ""
+
+#: Views/Monitor.vala:112 Widgets/Popover.vala:44
+msgid "Uptime"
+msgstr ""
+
+#: Views/Processes.vala:96
+msgid "End Process"
+msgstr ""
+
+#: Views/Processes.vala:108
+msgid "Kill process"
 msgstr ""
 
 #: Widgets/About.vala:30
@@ -45,111 +121,98 @@ msgstr ""
 msgid "website"
 msgstr ""
 
-#: Widgets/Disks.vala:31
-msgid "Partitioning:"
+#: Widgets/Cpu.vala:34 Widgets/ProcessList.vala:38
+msgid "CPU"
 msgstr ""
 
-#: Widgets/Disks.vala:38 Widgets/Disks.vala:138 Widgets/Disks.vala:154
-msgid "Size:"
+#: Widgets/Cpu.vala:38
+msgid "cores"
 msgstr ""
 
-#: Widgets/Disks.vala:119 Widgets/Disks.vala:153
-msgid "Device:"
+#: Widgets/DiskIO.vala:14
+msgid "Disk read/write"
 msgstr ""
 
-#: Widgets/Disks.vala:122
-msgid "Label:"
-msgstr ""
-
-#: Widgets/Disks.vala:126
-msgid "Filesystem:"
-msgstr ""
-
-#: Widgets/Disks.vala:130
-msgid "Mount point:"
-msgstr ""
-
-#: Widgets/Disks.vala:138
-msgid "Size (free / total):"
-msgstr ""
-
-#: Widgets/Disks.vala:155
-msgid "Contents:"
-msgstr ""
-
-#: Widgets/Disks.vala:155
-msgid "Unallocated Space"
-msgstr ""
-
-#: Widgets/Headerbar.vala:36
-msgid "Processes"
-msgstr ""
-
-#: Widgets/Headerbar.vala:42
-msgid "Monitor"
-msgstr ""
-
-#: Widgets/Headerbar.vala:48
-msgid "Disks"
-msgstr ""
-
-#: Widgets/Headerbar.vala:54
+#: Widgets/Headerbar.vala:27
 msgid "Preferences"
 msgstr ""
 
-#: Widgets/Headerbar.vala:55
+#: Widgets/Headerbar.vala:28
 msgid "About"
 msgstr ""
 
-#: Widgets/Headerbar.vala:69
+#: Widgets/Headerbar.vala:42
 msgid "Options"
 msgstr ""
 
-#: Widgets/Monitoring.vala:59
-msgid "Download"
+#: Widgets/Memory.vala:25 Widgets/Popover.vala:42
+#: Widgets/ProcessList.vala:39
+msgid "Memory"
 msgstr ""
 
-#: Widgets/Monitoring.vala:61
-msgid "Upload"
-msgstr ""
-
-#: Widgets/Monitoring.vala:68
-msgid "Common"
-msgstr ""
-
-#: Widgets/Monitoring.vala:70
-msgid "Network"
-msgstr ""
-
-#: Widgets/Monitoring.vala:78
-msgid "Total download"
-msgstr ""
-
-#: Widgets/Monitoring.vala:81
-msgid "Total upload"
-msgstr ""
-
-#: Widgets/Monitoring.vala:84 Widgets/Popover.vala:49
+#: Widgets/Memory.vala:38 Widgets/Popover.vala:43
 msgid "Swap"
 msgstr ""
 
-#: Widgets/Monitoring.vala:87 Widgets/Popover.vala:56
-msgid "Uptime"
+#: Widgets/Network.vala:19
+msgid "Download"
 msgstr ""
 
-#: Widgets/Popover.vala:35
+#: Widgets/Network.vala:22
+msgid "Upload"
+msgstr ""
+
+#: Widgets/Network.vala:24 Widgets/Popover.vala:56
+msgid "Network"
+msgstr ""
+
+#: Widgets/Network.vala:28 Widgets/NetworkPopover.vala:58
+#: Widgets/Popover.vala:61
+msgid "Downloaded"
+msgstr ""
+
+#: Widgets/Network.vala:31 Widgets/NetworkPopover.vala:59
+#: Widgets/Popover.vala:62
+msgid "Uploaded"
+msgstr ""
+
+#: Widgets/NetworkPopover.vala:40
+msgid "Unplugged"
+msgstr ""
+
+#: Widgets/NetworkPopover.vala:49
+msgid "IP address"
+msgstr ""
+
+#: Widgets/NetworkPopover.vala:52
+msgid "MAC address"
+msgstr ""
+
+#: Widgets/NetworkPopover.vala:55
+msgid "Bytes"
+msgstr ""
+
+#: Widgets/NetworkPopover.vala:61
+msgid "Packets"
+msgstr ""
+
+#: Widgets/NetworkPopover.vala:64
+msgid "Received"
+msgstr ""
+
+#: Widgets/NetworkPopover.vala:65
+msgid "Transferred"
+msgstr ""
+
+#: Widgets/Popover.vala:41
 msgid "Frequency"
 msgstr ""
 
-#: Widgets/Popover.vala:42
-msgid "Ram"
-msgstr ""
-
-#: Widgets/Popover.vala:104
+#: Widgets/Popover.vala:127
 msgid "Hide indicator"
 msgstr ""
 
-#: Widgets/Popover.vala:110
+#: Widgets/Popover.vala:133
 msgid "Start monitor"
 msgstr ""
 
@@ -173,30 +236,26 @@ msgstr ""
 msgid "Show RAM:"
 msgstr ""
 
-#: Widgets/Preferences.vala:83
+#: Widgets/Preferences.vala:75
+msgid "Network indicator"
+msgstr ""
+
+#: Widgets/Preferences.vala:81
+msgid "Show Network:"
+msgstr ""
+
+#: Widgets/Preferences.vala:84
+msgid "Show compact Network:"
+msgstr ""
+
+#: Widgets/Preferences.vala:118
 msgid "Close"
 msgstr ""
 
-#: Widgets/Process.vala:36
+#: Widgets/ProcessList.vala:29
 msgid "Process Name"
 msgstr ""
 
-#: Widgets/Process.vala:57
-msgid "CPU"
-msgstr ""
-
-#: Widgets/Process.vala:68
-msgid "Memory"
-msgstr ""
-
-#: Widgets/Process.vala:78
+#: Widgets/ProcessList.vala:40
 msgid "PID"
-msgstr ""
-
-#: Widgets/Search.vala:27
-msgid "Search Process"
-msgstr ""
-
-#: Widgets/Search.vala:28
-msgid "Type Process Name or PID"
 msgstr ""
