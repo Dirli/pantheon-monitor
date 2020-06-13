@@ -56,8 +56,8 @@ executable(
         wnck_dep,
         cairo_dep,
         udisks2_dep,
-        meson.get_compiler('c').find_library('m', required : false),
-        meson.get_compiler('vala').find_library('posix')
+        meson.get_compiler ('c').find_library ('m'),
+        meson.get_compiler ('vala').find_library ('posix')
     ],
     install : true
 )
@@ -84,10 +84,10 @@ if get_option('indicator')
             gtop_dep,
             udisks2_dep,
             wingpanel_dep,
-            meson.get_compiler('vala').find_library('posix')
+            meson.get_compiler ('c').find_library ('m'),
+            meson.get_compiler ('vala').find_library ('posix')
         ],
         vala_args: vala_args,
-        link_args: ['-lm'],
         install: true,
         install_dir: wingpanel_dep.get_pkgconfig_variable('indicatorsdir'),
     )

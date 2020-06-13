@@ -32,9 +32,6 @@ namespace Monitor {
             layout.margin = 12;
             layout.margin_top = 0;
 
-
-            //Select indicator
-#if INDICATOR_EXIST
             GLib.Settings settings = new GLib.Settings (Constants.PROJECT_NAME);
             int top = 0;
 
@@ -95,7 +92,6 @@ namespace Monitor {
             mod_button.mode_changed.connect (() => {
                 settings.set_int ("compact-size", mod_button.selected);
             });
-#endif
 
             Gtk.Box content = this.get_content_area () as Gtk.Box;
             content.valign = Gtk.Align.START;

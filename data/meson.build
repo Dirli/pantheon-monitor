@@ -14,9 +14,11 @@ install_data ('io.elementary.monitor.desktop',
     install_dir: join_paths (data_dir, 'applications')
 )
 
-install_data ('io.elementary.monitor.gschema.xml',
-    install_dir: join_paths (data_dir, 'glib-2.0/schemas')
-)
+if get_option ('indicator')
+    install_data ('io.elementary.monitor.gschema.xml',
+        install_dir: join_paths (data_dir, 'glib-2.0/schemas')
+    )
+endif
 
 gresource = gnome.compile_resources (
     'as-resources',
