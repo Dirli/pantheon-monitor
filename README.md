@@ -16,6 +16,8 @@ Manage processes, monitor of system resources and drives.
 
 ---
 
+Special thanks Alexey Varfolomeev (@varlesh) who designed icons.
+
 ## Building and Installation
 
 You'll need the following dependencies to build:

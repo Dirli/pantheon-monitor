@@ -1,4 +1,4 @@
-project ('io.elementary.monitor', ['vala', 'c'], version: '0.5.0')
+project ('io.elementary.monitor', ['vala', 'c'], version: '0.9.0')
 
 gnome = import ('gnome')
 i18n = import ('i18n')
