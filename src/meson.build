@@ -1,6 +1,12 @@
-#'Managers/Process.vala',
-#'Managers/ProcessManager.vala',
-#'Models/GenericModel.vala',
+conf_data = configuration_data()
+conf_data.set_quoted('PROJECT_NAME', meson.project_name())
+conf_data.set_quoted('VERSION', meson.project_version())
+config_header = configure_file(
+    input : 'config.vala.in',
+    output : 'config.vala',
+    configuration : conf_data
+)
+
 executable(
     meson.project_name(),
     'MainWindow.vala',
@@ -8,6 +14,8 @@ executable(
     'Enums.vala',
     'Monitor.vala',
     'Structs.vala',
+    'Dialogs/About.vala',
+    'Dialogs/Preferences.vala',
     'Services/DisksManager.vala',
     'Services/ProcessManager.vala',
     'Services/ResourcesManager.vala',
@@ -24,18 +32,17 @@ executable(
     'Views/Monitor.vala',
     'Views/Processes.vala',
     'Views/ViewWrapper.vala',
-    'Widgets/About.vala',
     'Widgets/Cpu.vala',
     'Widgets/DiskIO.vala',
     'Widgets/Headerbar.vala',
     'Widgets/Memory.vala',
     'Widgets/Network.vala',
     'Widgets/NetworkPopover.vala',
-    'Widgets/Preferences.vala',
     'Widgets/ProcessList.vala',
     'Widgets/Statusbar.vala',
     'Widgets/VolumesBox.vala',
     gresource,
+    config_header,
     c_args: c_args,
     vala_args: vala_args,
     dependencies: [
@@ -66,6 +73,7 @@ if get_option('indicator')
         'Services/ResourcesManager.vala',
         'Utils/Format.vala',
         gresource,
+        config_header,
         dependencies: [
             gio_dep,
             gobject_dep,

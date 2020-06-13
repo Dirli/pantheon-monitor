@@ -29,12 +29,12 @@ namespace Monitor {
             menu.add (pref_item);
             menu.add (about_item);
             pref_item.activate.connect (() => {
-                var preferences = new Widgets.Preferences (window);
+                var preferences = new Dialogs.Preferences ();
                 preferences.run ();
             });
             about_item.activate.connect (() => {
-                var about = new Widgets.About ();
-                about.show ();
+                var about = new Dialogs.About ();
+                about.run ();
             });
 
             var app_button = new Gtk.MenuButton ();

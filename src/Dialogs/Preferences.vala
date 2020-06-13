@@ -17,20 +17,12 @@
  */
 
 namespace Monitor {
-    public class Widgets.Preferences : Gtk.Dialog {
-        public Preferences (Monitor.MainWindow window) {
-            resizable = false;
-            deletable = false;
-            transient_for = window;
-            modal = true;
-
-            /* Gtk.Label general_sec = new Gtk.Label (_("General"));
-            general_sec.get_style_context ().add_class ("preferences");
-            general_sec.halign = Gtk.Align.START; */
-
-            /* Gtk.Label interface_sec = new Gtk.Label (_("Interface"));
-            interface_sec.get_style_context ().add_class ("preferences");
-            interface_sec.halign = Gtk.Align.START; */
+    public class Dialogs.Preferences : Gtk.Dialog {
+        public Preferences () {
+            Object (modal: true,
+                    deletable: false,
+                    resizable: false,
+                    destroy_with_parent: true);
 
             //Create UI
             var layout = new Gtk.Grid ();
@@ -40,14 +32,10 @@ namespace Monitor {
             layout.margin = 12;
             layout.margin_top = 0;
 
-            /* layout.attach (general_sec,  0, top, 2, 1);
-            ++top;
-            layout.attach (interface_sec,  0, top, 2, 1);
-            ++top; */
 
             //Select indicator
 #if INDICATOR_EXIST
-            GLib.Settings settings = new GLib.Settings ("io.elementary.monitor");
+            GLib.Settings settings = new GLib.Settings (Constants.PROJECT_NAME);
             int top = 0;
 
             Gtk.Label indicator_sec = new Gtk.Label (_("Indicator"));

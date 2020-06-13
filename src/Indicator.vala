@@ -93,7 +93,7 @@ namespace Monitor {
             provider.load_from_resource ("/io/elementary/monitor/style/application.css");
             Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-            settings = new GLib.Settings ("io.elementary.monitor");
+            settings = new GLib.Settings (Constants.PROJECT_NAME);
             visible = settings.get_boolean ("indicator");
 
             resource_manager = new Services.ResourcesManager ();
@@ -181,7 +181,7 @@ namespace Monitor {
                 popover_wid.open_monitor.connect (() => {
                     close ();
 
-                    var app_info = new GLib.DesktopAppInfo ("io.elementary.monitor.desktop");
+                    var app_info = new GLib.DesktopAppInfo (Constants.PROJECT_NAME + ".desktop");
                     if (app_info == null) {return;}
 
                     try {
