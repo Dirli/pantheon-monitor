@@ -53,8 +53,12 @@ namespace Monitor {
                             current_drive.size = drive_dev.size;
                             current_drive.revision = drive_dev.revision;
 
-                            var dev_id = drive_dev.id.split("-");
-                            current_drive.id = dev_id[dev_id.length - 1];
+                            if (drive_dev.id == "") {
+                                current_drive.id = "";
+                            } else {
+                                var dev_id = drive_dev.id.split("-");
+                                current_drive.id = dev_id[dev_id.length - 1];
+                            }
                             current_drive.device = block_dev.device;
                             current_drive.partition = p_type_display != null ? p_type_display : "Unknown";
 
