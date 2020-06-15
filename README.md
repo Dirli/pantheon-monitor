@@ -1,18 +1,21 @@
 # Pantheon-monitor
 Manage processes, monitor of system resources and drives.
 
+<p align="left">
+    <a href="https://paypal.me/Dirli85">
+        <img src="https://img.shields.io/badge/Donate-PayPal-green.svg">
+    </a>
+</p>
+
 ----
 
-![Screenshot](data/screenshot1.png)
+<img src="data/screenshot1.png" title="Process monitor" width="600"> </img>
 
 ### Indicator
 ![Screenshot](data/screenshot4.png)
 
-### Resource monitor
-![Screenshot](data/screenshot2.png)
-
-### Disks monitor
-![Screenshot](data/screenshot3.png)
+<img src="data/screenshot2.png" title="Resource monitor" width="420"> </img>
+<img src="data/screenshot3.png" title="Disks monitor" width="420"> </img>
 
 ---
 
@@ -24,7 +27,6 @@ You'll need the following dependencies to build:
 * valac
 * libgtk-3-dev
 * libgranite-dev
-* libbamf3-dev
 * libwnck-3-dev
 * libgee-0.8-dev
 * libgtop2-dev
