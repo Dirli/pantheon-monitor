@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Dirli <litandrej85@gmail.com>
+ * Copyright (c) 2018-2020 Dirli <litandrej85@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,8 @@ namespace Monitor {
         private const ActionEntry[] ACTION_ENTRIES = {
             { Constants.ACTION_END_PROC, action_end_proc },
             { Constants.ACTION_KILL_PROC, action_kill_proc },
-            { Constants.ACTION_SEARCH, action_search }
+            { Constants.ACTION_SEARCH, action_search },
+            { Constants.ACTION_QUIT, action_quit },
         };
 
         public MainWindow (MonitorApp app) {
@@ -40,6 +41,7 @@ namespace Monitor {
             window_position = Gtk.WindowPosition.CENTER;
 
             application.set_accels_for_action (Constants.ACTION_PREFIX + Constants.ACTION_SEARCH, {"<Control>f"});
+            application.set_accels_for_action (Constants.ACTION_PREFIX + Constants.ACTION_QUIT, {"<Control>q"});
             application.set_accels_for_action (Constants.ACTION_PREFIX + Constants.ACTION_END_PROC, {"<Control>e"});
             application.set_accels_for_action (Constants.ACTION_PREFIX + Constants.ACTION_KILL_PROC, {"<Control>k"});
 
@@ -88,6 +90,17 @@ namespace Monitor {
             if (new_widget != null && new_widget is Views.ViewWrapper) {
                 ((Views.ViewWrapper) new_widget).start_timer ();
             }
+        }
+
+        private void action_quit () {
+            if (current_view_name != "") {
+                var prev_widget = stack.get_child_by_name (current_view_name);
+                if (prev_widget != null && prev_widget is Views.ViewWrapper) {
+                    ((Views.ViewWrapper) prev_widget).stop_timer ();
+                }
+            }
+
+            destroy ();
         }
 
         private void action_end_proc () {
@@ -160,6 +173,17 @@ namespace Monitor {
 
         private Gdk.RGBA current_color () {
             return get_style_context ().get_color (Gtk.StateFlags.NORMAL);
+        }
+
+        public override bool delete_event (Gdk.EventAny event) {
+            if (current_view_name != "") {
+                var prev_widget = stack.get_child_by_name (current_view_name);
+                if (prev_widget != null && prev_widget is Views.ViewWrapper) {
+                    ((Views.ViewWrapper) prev_widget).stop_timer ();
+                }
+            }
+
+            return false;
         }
     }
 }
