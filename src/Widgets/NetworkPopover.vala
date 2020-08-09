@@ -1,3 +1,21 @@
+/*
+ * Copyright (c) 2018-2020 Dirli <litandrej85@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 namespace Monitor {
     public class Widgets.NetworkPopover : Gtk.Box {
         public NetworkPopover (Structs.NetIface[] ifaces) {
@@ -61,8 +79,8 @@ namespace Monitor {
             var packets_title = new Gtk.Label (_("Packets"));
             iface_grid.attach (packets_title, 0, top++, 2, 1);
 
-            add_new_str (ref iface_grid, _("Received"), "%llu".printf (iface.packets_in), top++);
-            add_new_str (ref iface_grid, _("Transferred"), "%llu".printf (iface.packets_out), top++);
+            add_new_str (ref iface_grid, _("Received"), @"$(iface.packets_in)", top++);
+            add_new_str (ref iface_grid, _("Transferred"), @"$(iface.packets_out)", top++);
 
             add (iface_grid);
         }

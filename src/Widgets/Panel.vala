@@ -28,10 +28,10 @@ namespace Monitor {
 
                 if (value) {
                     net_value.set_width_chars (8);
-                    net_value.get_style_context ().add_class ("small-%d".printf (_compact_size));
+                    net_value.get_style_context ().add_class (@"small-$(_compact_size)");
                 } else {
                     net_value.set_width_chars (-1);
-                    net_value.get_style_context ().remove_class ("small-%d".printf (_compact_size));
+                    net_value.get_style_context ().remove_class (@"small-$(_compact_size)");
                 }
 
                 _compact_net = value;
@@ -46,8 +46,8 @@ namespace Monitor {
             set {
                 if (_compact_size >= 0 && compact_net) {
                     unowned Gtk.StyleContext net_value_style = net_value.get_style_context ();
-                    net_value_style.remove_class ("small-%d".printf (_compact_size));
-                    net_value_style.add_class ("small-%d".printf (value));
+                    net_value_style.remove_class (@"small-$(_compact_size)");
+                    net_value_style.add_class (@"small-$(value)");
                 }
 
                 _compact_size = value;
@@ -107,12 +107,9 @@ namespace Monitor {
             }
 
             if (compact_net) {
-                net_value.label = "%s\n%s".printf (up_val != "" ? up_val : "0 B/s",
-                                                   down_val != "" ? down_val : "0 B/s");
-
+                net_value.label = @"$(up_val != "" ? up_val : "0 B/s")\n$(down_val != "" ? down_val : "0 B/s")";
             } else {
-                net_value.label = "%s / %s".printf (down_val != "" ? down_val : "0 B/s",
-                                                    up_val != "" ? up_val : "0 B/s");
+                net_value.label = @"$(down_val != "" ? down_val : "0 B/s") / $(up_val != "" ? up_val : "0 B/s")";
             }
         }
 

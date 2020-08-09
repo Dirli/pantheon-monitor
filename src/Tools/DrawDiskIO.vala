@@ -179,9 +179,9 @@ namespace Monitor {
 
             uint64 tmp_scale = (uint64) (GLib.Math.round (len / 5.0) * 5);
 
-            scale_elems += "%llu %s".printf (tmp_scale, sizes[order]);
-            scale_elems += "%llu %s".printf (tmp_scale * 3 / 5, sizes[order]);
-            scale_elems += "%llu %s".printf (tmp_scale / 5, sizes[order]);
+            scale_elems += @"$(tmp_scale) $(sizes[order])";
+            scale_elems += @"$(tmp_scale * 3 / 5) $(sizes[order])";
+            scale_elems += @"$(tmp_scale / 5) $(sizes[order])";
 
             while (order-- > 0) {
                 tmp_scale *= 1024;
