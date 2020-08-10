@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Dirli <litandrej85@gmail.com>
+ * Copyright (c) 2018-2020 Dirli <litandrej85@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ namespace Monitor {
                 )
             );
 
-            var comments_label = new AboutLabel (_("System monitor for ElementaryOS"));
+            var comments_label = new AboutLabel (_("System monitor designed for Pantheon DE"));
 
             var license_url = "http://www.gnu.org/licenses/lgpl.html";
             var license_label = new AboutLabel ("");
