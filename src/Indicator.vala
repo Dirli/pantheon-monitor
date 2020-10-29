@@ -82,9 +82,8 @@ namespace Monitor {
         private uint timeout_id;
 
         public Indicator () {
-            Object (code_name : "monitor-indicator",
-            display_name : _("Monitor Indicator"),
-            description: _("Displays processes, consumed resources and drives on a Wingpanel"));
+            Object (code_name: "monitor-indicator");
+
             extended = false;
 
             Gtk.IconTheme.get_default().add_resource_path("/io/elementary/monitor/icons");
