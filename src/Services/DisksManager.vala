@@ -116,7 +116,10 @@ namespace Monitor {
                         current_volume.type = block_dev.id_type;
                         current_volume.size = block_dev.size;
                         current_volume.uuid = block_dev.id_uuid;
-                        current_volume.offset = udisks_obj.get_partition ().offset;
+                        var partition = udisks_obj.get_partition ();
+                        if (partition != null) {
+                            current_volume.offset = partition.offset;
+                        }
 
                         var block_fs = udisks_obj.get_filesystem ();
                         if (block_fs != null && block_fs.mount_points[0] != null) {
