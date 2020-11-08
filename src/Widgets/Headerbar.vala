@@ -19,8 +19,9 @@
 namespace Monitor {
     public class Widgets.Headerbar : Gtk.HeaderBar {
         public Headerbar (MainWindow window) {
+            get_style_context ().add_class ("compact");
+
             show_close_button = true;
-            has_subtitle = false;
             title = "Monitor";
 
             var menu_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 5);
