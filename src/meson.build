@@ -51,7 +51,6 @@ executable(
         glib_dep,
         gtk_dep,
         granite_dep,
-        bamf_dep,
         gtop_dep,
         wnck_dep,
         cairo_dep,
