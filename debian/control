@@ -10,7 +10,7 @@ Build-Depends: debhelper (>= 11),
                libgee-0.8-dev,
                libgtop2-dev,
                libcairo2-dev,
-               libwingpanel-2.0-dev,
+               libwingpanel-dev,
                libudisks2-dev,
                valac,
                meson

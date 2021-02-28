@@ -31,7 +31,7 @@ c_args = [
 vala_args = ['--vapidir=' + meson.source_root() + '/vapi/']
 
 if get_option ('indicator')
-    wingpanel_dep = dependency('wingpanel-2.0')
+    wingpanel_dep = dependency('wingpanel')
     vala_args += ['--define=INDICATOR_EXIST']
 endif
 
