@@ -43,9 +43,7 @@ namespace Monitor {
             swap_value = add_new_str (_("Swap"), 2);
             uptime_value = add_new_str (_("Uptime"), 3);
 
-
-
-            attach (new Wingpanel.Widgets.Separator (), 0, 4, 2, 1);
+            attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 0, 4, 2, 1);
 
             init_network ();
             init_disks ();
@@ -61,9 +59,8 @@ namespace Monitor {
             down_value = add_new_str (_("Downloaded"), 6);
             up_value = add_new_str (_("Uploaded"), 7);
 
-            attach (new Wingpanel.Widgets.Separator (), 0, 8, 2, 1);
+            attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 0, 8, 2, 1);
         }
-
 
         private void init_disks () {
             Gtk.Label disks_label = new Gtk.Label (_("Disks"));
@@ -101,7 +98,7 @@ namespace Monitor {
             attach (disks_label, 0, 9, 2, 1);
             attach (io_box, 0, 10, 2, 1);
 
-            attach (new Wingpanel.Widgets.Separator (), 0, 12, 2, 1);
+            attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 0, 12, 2, 1);
         }
 
         public void clear_volumes_box () {
