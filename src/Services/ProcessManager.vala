@@ -65,8 +65,9 @@ namespace Monitor {
                 last_cpu = cpu;
             }
 
+            var uid = Posix.getuid ();
             GTop.ProcList proclist;
-            int[] pids = GTop.get_proclist (out proclist, GTop.GLIBTOP_KERN_PROC_ALL, -1);
+            int[] pids = GTop.get_proclist (out proclist, GTop.GLIBTOP_KERN_PROC_UID, uid);
 
             double real_time_interval = ((double) cpu.total / cpu.frequency) - ((double) last_cpu.total / last_cpu.frequency);
 
