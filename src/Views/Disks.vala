@@ -42,7 +42,7 @@ namespace Monitor {
             main_widget.add (inner_widget);
         }
 
-        private bool add_drive (owned Structs.MonitorDrive? drive) {
+        private bool add_drive (owned Objects.DiskDrive? drive) {
             Gtk.Box drive_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 15);
             drive_box.get_style_context ().add_class ("block");
             drive_box.expand = false;
@@ -94,7 +94,7 @@ namespace Monitor {
 
             uint64 volume_offset = 0;
             int allocation_width = alloc.width;
-            disks_manager.get_drive_volumes (did).foreach ((volume) => {
+            drive.get_volumes ().foreach ((volume) => {
                 if (volume_offset != 0 && volume_offset < volume.offset) {
                     var free_size = volume.offset - volume_offset;
                     int free_part = (int) (alloc.width * ((float) free_size / drive.size));

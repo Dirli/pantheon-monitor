@@ -222,17 +222,16 @@ namespace Monitor {
 
                 popover_wid.clear_volumes_box ();
 
-                var disks_serv = new Services.Disks ();
-
-                disks_serv.get_mounted_volumes ().foreach ((volume) => {
+                var d_manager = new Services.DisksManager ();
+                d_manager.get_mounted_volumes ().foreach ((volume) => {
                     var vol_label = new Gtk.Label (volume.label != ""
                                                    ? "%s (%s)".printf (volume.label, volume.device)
                                                    : volume.device);
                     vol_label.halign = Gtk.Align.START;
 
                     var progress_bar = new Gtk.ProgressBar ();
-                    progress_bar.tooltip_text = _("free / total") + ": %s / %s".printf (disks_serv.size_to_display (volume.free),
-                                                                                disks_serv.size_to_display (volume.size));
+                    progress_bar.tooltip_text = _("free / total") + ": %s / %s".printf (d_manager.size_to_display (volume.free),
+                                                                                        d_manager.size_to_display (volume.size));
 
                     var used_percent = 1 - (double) volume.free / volume.size;
 

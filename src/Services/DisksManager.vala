@@ -21,9 +21,7 @@ namespace Monitor {
         private UDisks.Client? udisks_client;
         private GLib.List<GLib.DBusObject> obj_proxies;
 
-        private Gee.HashMap<string, Structs.MonitorDrive?> drives_hash;
-        private Gee.HashMap<string, Structs.MonitorVolume?> volumes_hash;
-        private Gee.HashMap<string, Gee.HashSet<string>> drive_volumes;
+        private Gee.HashMap<string, Objects.DiskDrive?> drives_hash;
 
         public DisksManager () {
             try {
@@ -41,9 +39,7 @@ namespace Monitor {
                 return false;
             }
 
-            drives_hash = new Gee.HashMap<string, Structs.MonitorDrive?> ();
-            volumes_hash = new Gee.HashMap<string, Structs.MonitorVolume?> ();
-            drive_volumes = new Gee.HashMap<string, Gee.HashSet<string>> ();
+            drives_hash = new Gee.HashMap<string, Objects.DiskDrive?> ();
 
             init_drives ();
             init_volumes ();
@@ -65,7 +61,7 @@ namespace Monitor {
 
                         var drive_dev = udisks_client.get_drive_for_block (block_dev);
                         if (drive_dev != null) {
-                            Structs.MonitorDrive current_drive = {};
+                            var current_drive = new Objects.DiskDrive ();
 
                             current_drive.model = drive_dev.model;
                             current_drive.size = drive_dev.size;
@@ -85,8 +81,6 @@ namespace Monitor {
                             }
 
                             drives_hash[current_drive.id] = current_drive;
-
-                            drive_volumes[current_drive.id] = new Gee.HashSet<string> ();
                         }
                     }
                 }
@@ -102,14 +96,6 @@ namespace Monitor {
 
                     var block_dev = udisks_obj.get_block ();
                     if (block_dev != null && block_dev.drive != "/") {
-                        drives_hash.values.foreach ((d) => {
-                            if (drive_volumes.has_key (d.id) && block_dev.device.contains (d.device)) {
-                                drive_volumes[d.id].add (block_dev.id_uuid);
-                            }
-
-                            return true;
-                        });
-
                         Structs.MonitorVolume current_volume = {};
                         current_volume.device = block_dev.device;
                         current_volume.label = block_dev.id_label;
@@ -131,13 +117,20 @@ namespace Monitor {
                         //     current_volume.mount_point = "";
                         }
 
-                        volumes_hash[current_volume.uuid] = current_volume;
+                        var d = udisks_client.get_drive_for_block (block_dev);
+                        if (d != null) {
+                            var dev_id = d.id.split("-");
+                            var did = dev_id[dev_id.length - 1];
+                            if (drives_hash.has_key (did) && block_dev.device.contains (drives_hash[did].device)) {
+                                drives_hash[did].add_volume (current_volume);
+                            }
+                        }
                     }
                 }
             });
         }
 
-        public Structs.MonitorDrive? get_drive (string did) {
+        public Objects.DiskDrive? get_drive (string did) {
             if (drives_hash.has_key (did)) {
                 return drives_hash[did];
             }
@@ -145,8 +138,8 @@ namespace Monitor {
             return null;
         }
 
-        public Gee.ArrayList<Structs.MonitorDrive?> get_drives () {
-            var drives_arr = new Gee.ArrayList<Structs.MonitorDrive?> ();
+        public Gee.ArrayList<Objects.DiskDrive?> get_drives () {
+            var drives_arr = new Gee.ArrayList<Objects.DiskDrive?> ();
             drives_hash.values.foreach ((d) => {
                 drives_arr.add (d);
                 return true;
@@ -160,11 +153,9 @@ namespace Monitor {
         public Gee.ArrayList<Structs.MonitorVolume?> get_drive_volumes (string dev_id) {
             var volumes_arr = new Gee.ArrayList<Structs.MonitorVolume?> ();
 
-            if (drive_volumes.has_key (dev_id)) {
-                drive_volumes[dev_id].foreach ((volume_id) => {
-                    if (volumes_hash.has_key (volume_id)) {
-                        volumes_arr.add (volumes_hash[volume_id]);
-                    }
+            if (drives_hash.has_key (dev_id)) {
+                drives_hash[dev_id].get_volumes ().foreach ((vol) => {
+                    volumes_arr.add (vol);
 
                     return true;
                 });
@@ -178,14 +169,43 @@ namespace Monitor {
         public Gee.ArrayList<Structs.MonitorVolume?> get_mounted_volumes () {
             var volumes_list = new Gee.ArrayList<Structs.MonitorVolume?> ();
 
-            volumes_hash.values.foreach ((vol) => {
-                if (vol.mount_point != null) {
-                    volumes_list.add (vol);
-                }
-                return true;
-            });
+            if (udisks_client != null) {
+                obj_proxies.foreach ((iter) => {
+                    var udisks_obj = udisks_client.peek_object (iter.get_object_path ());
 
-            volumes_list.sort (compare_volumes);
+                    var p_table = udisks_obj.get_partition_table ();
+                    if (p_table == null) {
+
+                        var block_dev = udisks_obj.get_block ();
+                        if (block_dev != null && block_dev.drive != "/") {
+                            var block_fs = udisks_obj.get_filesystem ();
+                            if (block_fs != null && block_fs.mount_points[0] != null) {
+                                Structs.MonitorVolume current_volume = {};
+                                current_volume.device = block_dev.device;
+                                current_volume.label = block_dev.id_label;
+                                current_volume.type = block_dev.id_type;
+                                current_volume.size = block_dev.size;
+                                current_volume.uuid = block_dev.id_uuid;
+                                var partition = udisks_obj.get_partition ();
+                                if (partition != null) {
+                                    current_volume.offset = partition.offset;
+                                }
+
+                                current_volume.mount_point = block_fs.mount_points[0];
+                                Posix.statvfs buf;
+                                Posix.statvfs_exec (block_fs.mount_points[0], out buf);
+                                current_volume.free = (uint64) buf.f_bfree * (uint64) buf.f_bsize;
+
+                                volumes_list.add (current_volume);
+                            // } else {
+                            //     current_volume.mount_point = "";
+                            }
+                        }
+                    }
+                });
+
+                volumes_list.sort (compare_volumes);
+            }
 
             return volumes_list;
         }
@@ -194,7 +214,7 @@ namespace Monitor {
             return udisks_client.get_size_for_display (size_to_fmt, false, false);
         }
 
-        private int compare_drives (Structs.MonitorDrive? drive1, Structs.MonitorDrive? drive2) {
+        private int compare_drives (Objects.DiskDrive? drive1, Objects.DiskDrive? drive2) {
             if (drive1 == null) {
                 return (drive2 == null) ? 0 : -1;
             }
