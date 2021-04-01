@@ -280,8 +280,10 @@ namespace Monitor {
             GTop.Uptime uptime;
             GTop.get_uptime (out uptime);
 
-            GLib.DateTime unix_uptime = new GLib.DateTime.from_unix_utc ((int) uptime.uptime);
-            var _uptime = unix_uptime.format("%H:%M:%S");
+            var u_time = uptime.uptime;
+
+            GLib.DateTime unix_uptime = new GLib.DateTime.from_unix_utc ((int) u_time);
+            var _uptime = @"$((uint64) u_time / 86400):" + unix_uptime.format ("%H:%M:%S");
 
             return _uptime;
         }
