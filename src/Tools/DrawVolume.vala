@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Dirli <litandrej85@gmail.com>
+ * Copyright (c) 2020-2021 Dirli <litandrej85@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ namespace Monitor {
             // doesn't display without this action. i don't know why
             get_style_context ().add_class ("volume-wrapper");
 
-            add_events(Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
+            add_events (Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
 
             // create title
             var description_layout = new Pango.FontDescription ();
@@ -44,7 +44,7 @@ namespace Monitor {
 
             area_title = used_percent == 0
                          ? create_pango_layout (volume_size)
-                         : area_title = create_pango_layout ("%d %%".printf (used_percent));
+                         : create_pango_layout ("%d %%".printf (used_percent));
 
             area_title.set_font_description (description_layout);
             area_title.set_ellipsize (Pango.EllipsizeMode.START);
@@ -69,11 +69,10 @@ namespace Monitor {
             cr.stroke ();
 
             // title
-            int fontw, fonth;
-
             var y = 60 / 2;
             var x = custom_width / 2;
 
+            int fontw, fonth;
             area_title.get_pixel_size (out fontw, out fonth);
 
             cr.move_to (x - (fontw / 2), y - (fonth / 2));
@@ -85,7 +84,7 @@ namespace Monitor {
         }
 
         public override bool enter_notify_event (Gdk.EventCrossing e)  {
-            e.window.set_cursor (new Gdk.Cursor.from_name(Gdk.Display.get_default(), "hand2"));
+            e.window.set_cursor (new Gdk.Cursor.from_name (Gdk.Display.get_default (), "hand2"));
 
             return true;
         }
