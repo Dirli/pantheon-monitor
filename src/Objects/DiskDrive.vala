@@ -10,8 +10,23 @@ namespace Monitor {
 
         private Gee.ArrayList<Structs.MonitorVolume?> volumes;
 
+        private Structs.DriveSmart? smart = null;
+        public bool has_smart {
+            get {
+                return smart != null;
+            }
+        }
+
         public DiskDrive () {
             volumes = new Gee.ArrayList <Structs.MonitorVolume?> ();
+        }
+
+        public Structs.DriveSmart? get_smart () {
+            return smart;
+        }
+
+        public void add_smart (Structs.DriveSmart s) {
+            smart = s;
         }
 
         public void add_volume (Structs.MonitorVolume vol) {

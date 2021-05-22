@@ -49,17 +49,18 @@ namespace Monitor {
 
             Gtk.Grid drive_grid = new Gtk.Grid ();
             drive_grid.row_spacing = drive_grid.column_spacing = 8;
+            drive_grid.halign = Gtk.Align.FILL;
+            drive_grid.expand = true;
 
             Gtk.Image d_icon = drive.drive_icon != null
                                ? new Gtk.Image.from_gicon (drive.drive_icon, Gtk.IconSize.DIALOG)
                                : new Gtk.Image.from_icon_name ("drive-harddisk", Gtk.IconSize.DIALOG);
 
-            var top = 0;
             d_icon.halign = d_icon.valign = Gtk.Align.CENTER;
-            drive_grid.attach (d_icon, 0, top, 1, 3);
+            drive_grid.attach (d_icon, 0, 0, 1, 3);
 
+            var top = 0;
             Gtk.Label drive_model_val = new Gtk.Label (drive.model + " (" + drive.revision + ")");
-            drive_model_val.halign = Gtk.Align.START;
             drive_model_val.set_ellipsize (Pango.EllipsizeMode.END);
             drive_grid.attach (drive_model_val, 1, top++, 2, 1);
 
@@ -71,7 +72,20 @@ namespace Monitor {
             drive_device_val.halign = Gtk.Align.CENTER;
             drive_grid.attach (drive_device_val, 0, 3);
 
-            drive_box.add (drive_grid);
+            var info_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+            info_box.add (drive_grid);
+
+            if (drive.has_smart) {
+                var d_smart = drive.get_smart ();
+                var smart_box = new Widgets.SmartBox (drive.id, d_smart.life_left, d_smart.failing);
+                // smart_box.show_smart.connect ((did) => {
+                //
+                // });
+
+                info_box.add (smart_box);
+            }
+
+            drive_box.add (info_box);
 
             var volumes_box = new Widgets.VolumesBox (drive.id);
             volumes_box.changed_box_size.connect (on_changed_box_size);

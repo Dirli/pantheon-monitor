@@ -75,4 +75,14 @@ namespace Monitor.Structs {
         public uint64 free;
         public uint64 offset;
     }
+
+    public struct DriveSmart {
+        public bool enabled;
+        public uint64 updated;
+        public bool failing;
+        public uint64 power_seconds;
+        public uint64 power_counts;
+        public string selftest_status;
+        public uint life_left;
+    }
 }

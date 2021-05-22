@@ -50,37 +50,38 @@ namespace Monitor {
         private void init_drives () {
             obj_proxies.foreach ((iter) => {
                 var udisks_obj = udisks_client.peek_object (iter.get_object_path ());
+                if (udisks_obj != null) {
+                    var p_table = udisks_obj.get_partition_table ();
+                    if (p_table != null) {
+                        var p_type_display = udisks_client.get_partition_table_type_for_display (p_table.type);
 
-                var p_table = udisks_obj.get_partition_table ();
-                if (p_table != null) {
-                    var p_type_display = udisks_client.get_partition_table_type_for_display (p_table.type);
+                        var block_dev = udisks_obj.get_block ();
+                        if (block_dev != null) {
+                            var obj_icon = udisks_client.get_object_info (udisks_obj).get_icon ();
 
-                    var block_dev = udisks_obj.get_block ();
-                    if (block_dev != null) {
-                        var obj_icon = udisks_client.get_object_info (udisks_obj).get_icon ();
+                            var drive_dev = udisks_client.get_drive_for_block (block_dev);
+                            if (drive_dev != null) {
+                                var current_drive = new Objects.DiskDrive ();
 
-                        var drive_dev = udisks_client.get_drive_for_block (block_dev);
-                        if (drive_dev != null) {
-                            var current_drive = new Objects.DiskDrive ();
+                                current_drive.model = drive_dev.model;
+                                current_drive.size = drive_dev.size;
+                                current_drive.revision = drive_dev.revision;
 
-                            current_drive.model = drive_dev.model;
-                            current_drive.size = drive_dev.size;
-                            current_drive.revision = drive_dev.revision;
+                                if (drive_dev.id == "") {
+                                    current_drive.id = "";
+                                } else {
+                                    var dev_id = drive_dev.id.split("-");
+                                    current_drive.id = dev_id[dev_id.length - 1];
+                                }
+                                current_drive.device = block_dev.device;
+                                current_drive.partition = p_type_display != null ? p_type_display : "Unknown";
 
-                            if (drive_dev.id == "") {
-                                current_drive.id = "";
-                            } else {
-                                var dev_id = drive_dev.id.split("-");
-                                current_drive.id = dev_id[dev_id.length - 1];
+                                if (obj_icon != null) {
+                                    current_drive.drive_icon = obj_icon;
+                                }
+
+                                drives_hash[current_drive.id] = current_drive;
                             }
-                            current_drive.device = block_dev.device;
-                            current_drive.partition = p_type_display != null ? p_type_display : "Unknown";
-
-                            if (obj_icon != null) {
-                                current_drive.drive_icon = obj_icon;
-                            }
-
-                            drives_hash[current_drive.id] = current_drive;
                         }
                     }
                 }
@@ -90,6 +91,11 @@ namespace Monitor {
         private void init_volumes () {
             obj_proxies.foreach ((iter) => {
                 var udisks_obj = udisks_client.peek_object (iter.get_object_path ());
+
+                var ata = udisks_obj.get_drive_ata ();
+                if (ata != null) {
+                    get_smart (udisks_obj, ata);
+                }
 
                 var p_table = udisks_obj.get_partition_table ();
                 if (p_table == null) {
@@ -128,6 +134,65 @@ namespace Monitor {
                     }
                 }
             });
+        }
+
+        public void get_smart (UDisks.Object obj, UDisks.DriveAta ata) {
+            if (ata.smart_supported) {
+                var d = obj.get_drive ();
+
+                if (d == null) {
+                    return;
+                }
+
+                var id_arr = d.id.split("-");
+                var did = id_arr[id_arr.length - 1];
+
+                if (!drives_hash.has_key (did)) {
+                    return;
+                }
+
+                Structs.DriveSmart d_smart = {};
+
+                d_smart.enabled = ata.smart_enabled;
+                d_smart.updated = ata.smart_updated;
+                d_smart.failing = ata.smart_failing;
+                d_smart.power_seconds = ata.smart_power_on_seconds;
+                d_smart.selftest_status = ata.smart_selftest_status;
+
+                try {
+                    GLib.Variant var_p = null;
+                    if (ata.call_smart_get_attributes_sync (new GLib.Variant ("a{sv}"), out var_p)) {
+                        GLib.VariantIter v_iter = var_p.iterator ();
+                        uchar id;
+                        int current, worst, threshold, pretty_unit;
+                        string name;
+                        uint16 flags;
+                        uint64 pretty;
+                        GLib.Variant expansion;
+                        while (v_iter.next ("(ysqiiixi@a{sv})",
+                                            out id,
+                                            out name,
+                                            out flags,
+                                            out current,
+                                            out worst,
+                                            out threshold,
+                                            out pretty,
+                                            out pretty_unit,
+                                            out expansion)) {
+
+                            if (id == 231) {
+                                d_smart.life_left = (uint) Utils.parse_pretty (pretty, pretty_unit);
+                            } else if (id == 12) {
+                                d_smart.power_counts = pretty;
+                            }
+                        }
+
+                        drives_hash[did].add_smart (d_smart);
+                    }
+                } catch (Error e) {
+                    warning (e.message);
+                }
+            }
         }
 
         public Objects.DiskDrive? get_drive (string did) {

@@ -17,6 +17,37 @@
  */
 
 namespace Monitor.Utils {
+    public uint64 parse_pretty (uint64 pretty, int unit) {
+        switch (unit) {
+            case 2:
+                return pretty / 3600000;
+            case 4:
+                return (uint64) (pretty / 1000.0 - 273.15);
+            case 7:
+                // FIXME returns a value in gibibytes, but it is not exactly the
+                // same as the one returned by smartmontools
+                return (uint64) ((pretty * 65536 * 512 / 1073741824) * 0.93132257461548);
+            default:
+                return pretty;
+
+        }
+    }
+
+    // public static string pretty_to_string (uint64 pretty, int unit) {
+    //     switch (unit) {
+    //         case 2:
+    //             return "%d".printf ((int) (pretty / 3600000));
+    //         case 3:
+    //             return @"$pretty bad sectors";
+    //         case 4:
+    //             var celcius = pretty / 1000.0 - 273.15;
+    //             return "%.0f° C".printf (celcius);
+    //         case 1:
+    //         default:
+    //             return @"$pretty";
+    //     }
+    // }
+
     public static string format_bytes (uint64 bytes, bool round = false) {
         string[] sizes = { "B/s", "KB/s", "MB/s", "GB/s", "TB/s" };
         double len = (double) bytes;
