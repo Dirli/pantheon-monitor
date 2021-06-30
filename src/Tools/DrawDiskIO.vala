@@ -26,8 +26,12 @@ namespace Monitor {
             get {
                 return _max_point;
             }
-            set {
-                if (value > 0 && max_point != value) {
+            private set {
+                if (value == 0) {
+                    value = 1;
+                }
+
+                if (max_point != value) {
                     _max_point = value;
                     scale_titles = round_max (value);
                 }
@@ -35,6 +39,9 @@ namespace Monitor {
         }
 
         private string[] scale_titles;
+
+        private uint64 last_read = 0;
+        private uint64 last_write = 0;
 
         private uint64[] read_points;
         private uint64[] write_points;
@@ -63,6 +70,9 @@ namespace Monitor {
 
             read_points += read_value;
             write_points += write_value;
+
+            last_read = read_value;
+            last_write = write_value;
 
             draw_graphic = true;
 
@@ -161,7 +171,7 @@ namespace Monitor {
             ctx.save ();
 
             int r_fontw, w_fontw, fonth;
-            var write_text = create_pango_layout (_("Write"));
+            var write_text = create_pango_layout (_("Write") + @" ($(Utils.format_bytes (last_write))) ");
             write_text.set_font_description (description_layout);
             write_text.get_pixel_size (out w_fontw, out fonth);
 
@@ -171,7 +181,7 @@ namespace Monitor {
 
             draw_text (ctx, write_text, fields.left + + w_fontw / 2 + 15, bound_height - 10);
 
-            var read_text = create_pango_layout (_("Read"));
+            var read_text = create_pango_layout (_("Read") + @" ($(Utils.format_bytes (last_read))) ");
             read_text.set_font_description (description_layout);
             read_text.get_pixel_size (out r_fontw, out fonth);
 
@@ -192,10 +202,10 @@ namespace Monitor {
 
             while (len >= 1024 && order < sizes.length - 1) {
                 order++;
-                len = len/1024;
+                len = len / 1024;
             }
 
-            uint64 tmp_scale = (uint64) (GLib.Math.round (len / 5.0) * 5);
+            uint64 tmp_scale = (uint64) (GLib.Math.round (len / 5.0 + 0.5) * 5);
 
             scale_elems += @"$(tmp_scale) $(sizes[order])";
             scale_elems += @"$(tmp_scale * 3 / 5) $(sizes[order])";
