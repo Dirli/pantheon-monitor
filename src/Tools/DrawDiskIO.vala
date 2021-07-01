@@ -43,6 +43,8 @@ namespace Monitor {
         private uint64 last_read = 0;
         private uint64 last_write = 0;
 
+        public Enums.ViewIO view_io = Enums.ViewIO.ALL;
+
         private uint64[] read_points;
         private uint64[] write_points;
 
@@ -132,11 +134,17 @@ namespace Monitor {
 
                 int x_point = right_grid - iter_count * 2;
 
-                ctx.set_source_rgba (0, 1.0, 0, 1);
-                uint64 new_max_read = draw_points (ctx, read_points, x_point, iter_count);
+                uint64 new_max_read = 0;
+                if (view_io != Enums.ViewIO.WRITE) {
+                    ctx.set_source_rgba (0, 1.0, 0, 1);
+                    new_max_read = draw_points (ctx, read_points, x_point, iter_count);
+                }
 
-                ctx.set_source_rgba (1.0, 0, 0, 1);
-                uint64 new_max_write = draw_points (ctx, write_points, x_point, iter_count);
+                uint64 new_max_write = 0;
+                if (view_io != Enums.ViewIO.READ) {
+                    ctx.set_source_rgba (1.0, 0, 0, 1);
+                    new_max_write = draw_points (ctx, write_points, x_point, iter_count);
+                }
 
                 max_point = uint64.max (new_max_read, new_max_write);
             }

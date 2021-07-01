@@ -24,4 +24,10 @@ namespace Monitor.Enums {
         PID,
         USER,
     }
+
+    public enum ViewIO {
+        ALL,
+        WRITE,
+        READ,
+    }
 }
