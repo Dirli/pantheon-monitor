@@ -21,5 +21,6 @@ namespace Monitor.Constants {
     public const string ACTION_END_PROC = "action-end-proc";
     public const string ACTION_KILL_PROC = "action-kill-proc";
     public const string ACTION_SEARCH = "action-search";
+    public const string ACTION_VIEW = "action-view";
     public const string ACTION_QUIT = "action-quit";
 }

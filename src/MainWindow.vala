@@ -23,27 +23,35 @@ namespace Monitor {
         private Gtk.Stack stack;
         private Gtk.SearchEntry search_entry;
         private Views.Processes processes_view;
+        private Granite.Widgets.ModeButton view_box;
 
         private const ActionEntry[] ACTION_ENTRIES = {
             { Constants.ACTION_END_PROC, action_end_proc },
             { Constants.ACTION_KILL_PROC, action_kill_proc },
             { Constants.ACTION_SEARCH, action_search },
+            { Constants.ACTION_VIEW, action_view, "i"  },
             { Constants.ACTION_QUIT, action_quit },
         };
 
         public MainWindow (MonitorApp app) {
-            var actions = new GLib.SimpleActionGroup ();
-            actions.add_action_entries (ACTION_ENTRIES, this);
-            insert_action_group ("win", actions);
-
-            set_application (app);
-            set_default_size (700, 700);
-            window_position = Gtk.WindowPosition.CENTER;
+            Object (window_position: Gtk.WindowPosition.CENTER,
+                    application: app);
 
             application.set_accels_for_action (Constants.ACTION_PREFIX + Constants.ACTION_SEARCH, {"<Control>f"});
             application.set_accels_for_action (Constants.ACTION_PREFIX + Constants.ACTION_QUIT, {"<Control>q"});
             application.set_accels_for_action (Constants.ACTION_PREFIX + Constants.ACTION_END_PROC, {"<Control>e"});
             application.set_accels_for_action (Constants.ACTION_PREFIX + Constants.ACTION_KILL_PROC, {"<Control>k"});
+            application.set_accels_for_action (Constants.ACTION_PREFIX + Constants.ACTION_VIEW + "(0)", {"<Control>1"});
+            application.set_accels_for_action (Constants.ACTION_PREFIX + Constants.ACTION_VIEW + "(1)", {"<Control>2"});
+            application.set_accels_for_action (Constants.ACTION_PREFIX + Constants.ACTION_VIEW + "(2)", {"<Control>3"});
+        }
+
+        construct {
+            var actions = new GLib.SimpleActionGroup ();
+            actions.add_action_entries (ACTION_ENTRIES, this);
+            insert_action_group ("win", actions);
+
+            set_default_size (700, 760);
 
             var provider = new Gtk.CssProvider ();
             provider.load_from_resource ("/io/elementary/monitor/style/application.css");
@@ -119,10 +127,17 @@ namespace Monitor {
             search_entry.grab_focus ();
         }
 
+        private void action_view (GLib.SimpleAction action, GLib.Variant? pars) {
+            int tid;
+            pars.get ("i", out tid);
+
+            view_box.selected = tid;
+        }
+
         private void build_headerbar () {
             var header_bar = new Widgets.Headerbar (this);
 
-            var view_box = new Granite.Widgets.ModeButton ();
+            view_box = new Granite.Widgets.ModeButton ();
             view_box.homogeneous = false;
             view_box.valign = Gtk.Align.CENTER;
 
@@ -160,7 +175,6 @@ namespace Monitor {
             set_titlebar (header_bar);
 
             view_box.selected = 0;
-            // on_changed_child ();
         }
 
         private Gtk.Image create_model_button (string icon_name, string tooltip_text) {
