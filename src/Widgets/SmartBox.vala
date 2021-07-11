@@ -18,6 +18,9 @@ namespace Monitor {
         }
 
         construct {
+            var box_label = new Gtk.Label ("S.M.A.R.T.:");
+            // box_label
+
             var hours_label = new Gtk.Label (_("Total hours:"));
             hours_label.halign = Gtk.Align.END;
             var hours_val = new Gtk.Label (@"$(smart.power_seconds / 3600) h.");
@@ -38,13 +41,15 @@ namespace Monitor {
             life_area_wrapper.valign = Gtk.Align.FILL;
             life_area_wrapper.size_allocate.connect (on_size_allocate);
 
-            attach (hours_label, 0, 0);
-            attach (hours_val, 1, 0);
-            attach (counts_label, 0, 1);
-            attach (counts_val, 1, 1);
-            attach (write_label, 0, 2);
-            attach (write_val, 1, 2);
-            attach (life_area_wrapper, 0, 3, 2);
+            var top = 0;
+            attach (box_label, 0, top++, 2);
+            attach (hours_label, 0, top);
+            attach (hours_val, 1, top++);
+            attach (counts_label, 0, top);
+            attach (counts_val, 1, top++);
+            attach (write_label, 0, top);
+            attach (write_val, 1, top++);
+            attach (life_area_wrapper, 0, top++, 2);
         }
 
         private void on_size_allocate (Gtk.Allocation area_alloc) {

@@ -52,25 +52,23 @@ namespace Monitor {
             drive_grid.halign = Gtk.Align.FILL;
             drive_grid.expand = true;
 
+            var top = 0;
+            Gtk.Label drive_model_val = new Gtk.Label (drive.model + " (" + drive.revision + ")");
+            drive_model_val.halign = Gtk.Align.START;
+            drive_model_val.set_ellipsize (Pango.EllipsizeMode.END);
+            drive_grid.attach (drive_model_val, 0, top++, 3, 1);
+
             Gtk.Image d_icon = drive.drive_icon != null
                                ? new Gtk.Image.from_gicon (drive.drive_icon, Gtk.IconSize.DIALOG)
                                : new Gtk.Image.from_icon_name ("drive-harddisk", Gtk.IconSize.DIALOG);
 
             d_icon.halign = d_icon.valign = Gtk.Align.CENTER;
-            drive_grid.attach (d_icon, 0, 0, 1, 3);
+            drive_grid.attach (d_icon, 0, top, 1, 4);
 
-            var top = 0;
-            Gtk.Label drive_model_val = new Gtk.Label (drive.model + " (" + drive.revision + ")");
-            drive_model_val.set_ellipsize (Pango.EllipsizeMode.END);
-            drive_grid.attach (drive_model_val, 1, top++, 2, 1);
-
+            add_new_str (ref drive_grid, _("Device:"), drive.device, top++, 1);
             add_new_str (ref drive_grid, _("Partitioning:"), drive.partition, top++, 1);
             add_new_str (ref drive_grid, "ID:", drive.id, top++, 1);
             add_new_str (ref drive_grid, _("Size:"), disks_manager.size_to_display (drive.size), top++, 1);
-
-            Gtk.Label drive_device_val = new Gtk.Label (drive.device);
-            drive_device_val.halign = Gtk.Align.CENTER;
-            drive_grid.attach (drive_device_val, 0, 3);
 
             var info_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
             info_box.add (drive_grid);
