@@ -77,7 +77,7 @@ namespace Monitor {
 
             if (drive.has_smart) {
                 var d_smart = drive.get_smart ();
-                var smart_box = new Widgets.SmartBox (drive.id, d_smart.life_left, d_smart.failing);
+                var smart_box = new Widgets.SmartBox (drive.id, d_smart);
                 // smart_box.show_smart.connect ((did) => {
                 //
                 // });

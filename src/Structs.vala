@@ -23,6 +23,7 @@ namespace Monitor.Structs {
         public int left;
         public int right;
     }
+
     public struct NetLoadData {
         public uint64 bytes_in;
         public uint64 bytes_out;
@@ -82,6 +83,7 @@ namespace Monitor.Structs {
         public bool failing;
         public uint64 power_seconds;
         public uint64 power_counts;
+        public uint64 total_write;
         public string selftest_status;
         public uint life_left;
     }

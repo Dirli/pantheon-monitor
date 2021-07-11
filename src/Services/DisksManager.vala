@@ -184,6 +184,8 @@ namespace Monitor {
                                 d_smart.life_left = (uint) Utils.parse_pretty (pretty, pretty_unit);
                             } else if (id == 12) {
                                 d_smart.power_counts = pretty;
+                            } else if (id == 241) {
+                                d_smart.total_write = Utils.parse_pretty (pretty, pretty_unit);
                             }
                         }
 

@@ -26,7 +26,8 @@ namespace Monitor.Utils {
             case 7:
                 // FIXME returns a value in gibibytes, but it is not exactly the
                 // same as the one returned by smartmontools
-                return (uint64) ((pretty * 65536 * 512 / 1073741824) * 0.93132257461548);
+                // return (uint64) ((pretty * 65536 * 512 / 1073741824) * 0.93132257461548);
+                return (uint64) ((pretty * 65536 * 512) * 0.93132257461548);
             default:
                 return pretty;
 
@@ -56,7 +57,7 @@ namespace Monitor.Utils {
 
         while (len >= 1024 && order < sizes.length - 1) {
             order++;
-            len = len/1024;
+            len = len / 1024;
         }
 
         if (bytes < 0) {
@@ -65,12 +66,12 @@ namespace Monitor.Utils {
         }
 
         if (round == true) {
-            speed = "%.1f %s".printf(len, sizes[order].split ("/")[0]);
+            speed = "%.1f %s".printf (len, sizes[order].split ("/")[0]);
         } else {
             if (order < 2) {
-                speed = "%.0f %s".printf(len, sizes[order]);
+                speed = "%.0f %s".printf (len, sizes[order]);
             } else {
-                speed = "%.1f %s".printf(len, sizes[order]);
+                speed = "%.1f %s".printf (len, sizes[order]);
             }
         }
 
