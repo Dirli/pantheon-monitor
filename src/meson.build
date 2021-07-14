@@ -16,6 +16,7 @@ executable(
     'Structs.vala',
     'Dialogs/About.vala',
     'Dialogs/Preferences.vala',
+    'Dialogs/Smart.vala',
     'Objects/DiskDrive.vala',
     'Services/DisksManager.vala',
     'Services/ProcessManager.vala',

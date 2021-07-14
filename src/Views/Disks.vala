@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Dirli <litandrej85@gmail.com>
+ * Copyright (c) 2020-2021 Dirli <litandrej85@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ namespace Monitor {
         private Services.DisksManager disks_manager;
 
         private Gtk.Box inner_widget;
+        private Gtk.Popover popover;
 
         public Disks () {
             Object (orientation: Gtk.Orientation.VERTICAL,
@@ -30,6 +31,13 @@ namespace Monitor {
         construct {
             inner_widget = new Gtk.Box (Gtk.Orientation.VERTICAL, 15);
             inner_widget.hexpand = true;
+
+            popover = new Gtk.Popover (null);
+            popover.closed.connect (() => {
+                popover.@foreach ((w) => {
+                    w.destroy ();
+                });
+            });
 
             disks_manager = new Services.DisksManager ();
 
@@ -43,17 +51,14 @@ namespace Monitor {
         }
 
         private bool add_drive (owned Objects.DiskDrive? drive) {
-            Gtk.Box drive_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 15);
-            drive_box.get_style_context ().add_class ("block");
-            drive_box.expand = false;
-
             Gtk.Grid drive_grid = new Gtk.Grid ();
             drive_grid.row_spacing = drive_grid.column_spacing = 8;
             drive_grid.halign = Gtk.Align.FILL;
             drive_grid.expand = true;
 
             var top = 0;
-            Gtk.Label drive_model_val = new Gtk.Label (drive.model + " (" + drive.revision + ")");
+
+            Gtk.Label drive_model_val = new Gtk.Label (drive.model);
             drive_model_val.halign = Gtk.Align.START;
             drive_model_val.set_ellipsize (Pango.EllipsizeMode.END);
             drive_grid.attach (drive_model_val, 0, top++, 3, 1);
@@ -75,18 +80,25 @@ namespace Monitor {
 
             if (drive.has_smart) {
                 var d_smart = drive.get_smart ();
-                var smart_box = new Widgets.SmartBox (drive.id, d_smart);
-                // smart_box.show_smart.connect ((did) => {
-                //
-                // });
+
+                var smart_box = new Widgets.SmartBox (d_smart);
+                smart_box.show_smart.connect (() => {
+                    var smart_dialog = new Dialogs.Smart (drive);
+                    smart_dialog.show_all ();
+                    smart_dialog.run ();
+                });
 
                 info_box.add (smart_box);
             }
 
-            drive_box.add (info_box);
-
             var volumes_box = new Widgets.VolumesBox (drive.id);
             volumes_box.changed_box_size.connect (on_changed_box_size);
+
+            Gtk.Box drive_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 15);
+            drive_box.get_style_context ().add_class ("block");
+            drive_box.expand = false;
+
+            drive_box.add (info_box);
             drive_box.add (volumes_box);
 
             inner_widget.add (drive_box);
@@ -114,10 +126,10 @@ namespace Monitor {
                     free_part = allocation_width > 0 ? free_part : free_part + allocation_width;
 
                     var free_box = new Tools.DrawVolume (free_part, disks_manager.size_to_display (free_size));
-                    free_box .button_press_event.connect ((e) => {
+                    free_box.button_press_event.connect ((e) => {
                         if (e.button == Gdk.BUTTON_PRIMARY) {
-                             create_popover_free (free_box, (uint64) free_size, drive.device);
-                             return true;
+                            open_popover (free_box, create_popover_free ((uint64) free_size, drive.device));
+                            return true;
                         }
 
                         return false;
@@ -143,7 +155,7 @@ namespace Monitor {
 
                 volume_box.button_press_event.connect ((e) => {
                     if (e.button == Gdk.BUTTON_PRIMARY) {
-                        create_popover_vol (volume_box, volume);
+                        open_popover (volume_box, create_popover_vol (volume));
                         return true;
                     }
 
@@ -169,7 +181,7 @@ namespace Monitor {
                 var drive_free_end = new Tools.DrawVolume (free_end_part, disks_manager.size_to_display (free_end_size));
                 drive_free_end.button_press_event.connect ((e) => {
                     if (e.button == Gdk.BUTTON_PRIMARY) {
-                        create_popover_free (drive_free_end, (uint64) free_end_size, drive.device);
+                        open_popover (drive_free_end, create_popover_free ((uint64) free_end_size, drive.device));
                         return true;
                     }
 
@@ -194,8 +206,15 @@ namespace Monitor {
             vol_widget.attach (iter_value, str_left, str_top);
         }
 
-        private void create_popover_vol (Gtk.Widget w, Structs.MonitorVolume relative_volume) {
+        private void open_popover (Gtk.Widget relative_w, Gtk.Widget grid) {
+            popover.set_relative_to (relative_w);
+            popover.add (grid);
+            popover.show_all ();
+        }
+
+        private Gtk.Grid create_popover_vol (Structs.MonitorVolume relative_volume) {
             var top = 0;
+
             Gtk.Grid vol_grid = new Gtk.Grid ();
             vol_grid.margin = 10;
             vol_grid.row_spacing = 10;
@@ -225,13 +244,13 @@ namespace Monitor {
                          cust_size,
                          top++);
 
-            var volume_popover = new Gtk.Popover (w);
-            volume_popover.add (vol_grid);
-            volume_popover.show_all ();
+
+            return vol_grid;
         }
 
-        private void create_popover_free (Gtk.Widget w, uint64 free_size, string relative_device) {
+        private Gtk.Grid create_popover_free (uint64 free_size, string relative_device) {
             var top = 0;
+
             Gtk.Grid free_grid = new Gtk.Grid ();
             free_grid.margin = 10;
             free_grid.row_spacing = 10;
@@ -242,9 +261,7 @@ namespace Monitor {
             add_new_str (ref free_grid, _("Size:"), disks_manager.size_to_display (free_size), top++);
             add_new_str (ref free_grid, _("Contents:"), _("Unallocated Space"), top++);
 
-            var free_popover = new Gtk.Popover (w);
-            free_popover.add (free_grid);
-            free_popover.show_all ();
+            return free_grid;
         }
 
         public override void stop_timer () {}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Dirli <litandrej85@gmail.com>
+ * Copyright (c) 2020-2021 Dirli <litandrej85@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,6 +66,7 @@ namespace Monitor {
                                 current_drive.model = drive_dev.model;
                                 current_drive.size = drive_dev.size;
                                 current_drive.revision = drive_dev.revision;
+                                current_drive.serial = drive_dev.serial;
 
                                 if (drive_dev.id == "") {
                                     current_drive.id = "";
@@ -169,6 +170,15 @@ namespace Monitor {
                         uint16 flags;
                         uint64 pretty;
                         GLib.Variant expansion;
+
+                        var list_store = new Gtk.ListStore (6,
+                                                            typeof (uchar),
+                                                            typeof (string),
+                                                            typeof (int),
+                                                            typeof (int),
+                                                            typeof (int),
+                                                            typeof (uint64));
+
                         while (v_iter.next ("(ysqiiixi@a{sv})",
                                             out id,
                                             out name,
@@ -187,9 +197,21 @@ namespace Monitor {
                             } else if (id == 241) {
                                 d_smart.total_write = Utils.parse_pretty (pretty, pretty_unit);
                             }
+
+                            Gtk.TreeIter iter;
+                            list_store.append (out iter);
+                            list_store.@set (iter,
+                                             0, id,
+                                             1, name,
+                                             2, current,
+                                             3, worst,
+                                             4, threshold,
+                                             5, pretty, -1);
                         }
 
-                        drives_hash[did].add_smart (d_smart);
+                        d_smart.smart_store = list_store;
+
+                        drives_hash[did].add_smart (d_smart, list_store);
                     }
                 } catch (Error e) {
                     warning (e.message);
@@ -253,6 +275,7 @@ namespace Monitor {
                                 current_volume.type = block_dev.id_type;
                                 current_volume.size = block_dev.size;
                                 current_volume.uuid = block_dev.id_uuid;
+
                                 var partition = udisks_obj.get_partition ();
                                 if (partition != null) {
                                     current_volume.offset = partition.offset;

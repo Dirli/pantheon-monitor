@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Dirli <litandrej85@gmail.com>
+ * Copyright (c) 2020-2021 Dirli <litandrej85@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,6 +85,9 @@ namespace Monitor.Structs {
         public uint64 power_counts;
         public uint64 total_write;
         public string selftest_status;
+        public string serial;
+        public string revision;
         public uint life_left;
+        public Gtk.ListStore smart_store;
     }
 }
