@@ -2,10 +2,9 @@ Source: pantheon-monitor
 Section: system
 Priority: optional
 Maintainer: dirli <litandrej85@gmail.com>
-Build-Depends: debhelper (>= 11),
+Build-Depends: debhelper-compat (= 13),
                libgtk-3-dev,
                libgranite-dev,
-               libbamf3-dev,
                libwnck-3-dev,
                libgee-0.8-dev,
                libgtop2-dev,
@@ -14,11 +13,22 @@ Build-Depends: debhelper (>= 11),
                libudisks2-dev,
                valac,
                meson
-Standards-Version: 4.1.3
+Standards-Version: 4.5.1
 Homepage: https://github.com/Dirli/pantheon-monitor
+Rules-Requires-Root: no
 
 Package: pantheon-monitor
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Manage processes, monitor of system resources and drives.
- Manage processes and monitor system resources in ElementaryOS
+ Manage processes and monitor system resources in Pantheon DE
+
+Package: wingpanel-indicator-monitor
+Architecture: any
+Depends: pantheon-monitor,
+         ${shlibs:Depends}, ${misc:Depends}
+Enhances: wingpanel
+Description: Displays on the panel used resources
+ Displays on the panel used resources
+ .
+ This package provides indicator for Wingpanel.
