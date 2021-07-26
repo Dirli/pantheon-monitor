@@ -42,7 +42,7 @@ namespace Monitor {
 
             var top = 0;
 
-            add_new_str (ref smart_grid, _("Revision:"), drive.revision, top++);
+            add_new_str (ref smart_grid, _("Firmware:"), drive.revision, top++);
             add_new_str (ref smart_grid, _("Serial number:"), drive.serial, top++);
 
             var smart_layout = new Gtk.Box (Gtk.Orientation.VERTICAL, 8);

@@ -2,102 +2,181 @@
 # This file is distributed under the same license as the io.elementary.monitor package.
 #
 # Translators:
-# Dirli <litandrej85@gmail.com>, 2019
+# Dirli <litandrej85@gmail.com>, 2021
 msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.monitor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-12 22:13+0300\n"
-"PO-Revision-Date: 2020-06-12 22:20+0300\n"
-"Last-Translator: Dirli <litandrej85@gmail.com>\n"
+"POT-Creation-Date: 2021-07-26 15:32+0300\n"
+"PO-Revision-Date: 2021-07-26 21:40+0300\n"
+"Last-Translator: dirli <litandrej85@gmail.com>\n"
 "Language-Team: \n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Poedit-Basepath: ../src\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: Indicator.vala:86
-msgid "Monitor Indicator"
-msgstr "Индикатор монитора"
+#: Dialogs/About.vala:46
+msgid "System monitor designed for Pantheon DE"
+msgstr "Системный монитор для Pantheon DE"
 
-#: Indicator.vala:87
-msgid "Displays processes, consumed resources and drives on a Wingpanel"
-msgstr "Отображает процессы, потребляемые ресурсы и диски на Wingpanel"
+#: Dialogs/About.vala:51
+#, c-format
+msgid ""
+"This program is published under the terms of the %s license, it comes with "
+"ABSOLUTELY NO WARRANTY; for details, visit %s"
+msgstr ""
 
-#: Indicator.vala:125
+#: Dialogs/About.vala:63
+msgid "Written by:"
+msgstr "Автор:"
+
+#: Dialogs/About.vala:66
+msgid "Donate"
+msgstr "Пожертвовать"
+
+#: Dialogs/About.vala:95 Dialogs/Preferences.vala:102 Dialogs/Smart.vala:66
+msgid "Close"
+msgstr "Закрыть"
+
+#: Dialogs/Preferences.vala:38
+msgid "Indicator"
+msgstr "Индикатор"
+
+#: Dialogs/Preferences.vala:44
+msgid "Use System Tray Indicator:"
+msgstr "Использовать индикатор:"
+
+#: Dialogs/Preferences.vala:47
+msgid "Show titles:"
+msgstr "Показывать заголовки:"
+
+#: Dialogs/Preferences.vala:50
+msgid "Show CPU:"
+msgstr "Показывать CPU:"
+
+#: Dialogs/Preferences.vala:53
+msgid "Show RAM:"
+msgstr "Показывать память:"
+
+#: Dialogs/Preferences.vala:60
+msgid "Network indicator"
+msgstr "Индикатор сети"
+
+#: Dialogs/Preferences.vala:66
+msgid "Show Network:"
+msgstr "Показывать сеть:"
+
+#: Dialogs/Preferences.vala:69
+msgid "Show compact Network:"
+msgstr "Показывать сеть компактно:"
+
+#: Dialogs/Smart.vala:45
+msgid "Firmware:"
+msgstr "Прошивка:"
+
+#: Dialogs/Smart.vala:46
+msgid "Serial number:"
+msgstr "Серийный номер:"
+
+#: Dialogs/Smart.vala:78
+msgid "ID"
+msgstr ""
+
+#: Dialogs/Smart.vala:79
+msgid "Name"
+msgstr "Название"
+
+#: Dialogs/Smart.vala:80
+msgid "Current"
+msgstr "Текущий"
+
+#: Dialogs/Smart.vala:81
+msgid "Worst"
+msgstr "Худший"
+
+#: Dialogs/Smart.vala:82
+msgid "Threshold"
+msgstr "Порог"
+
+#: Dialogs/Smart.vala:83
+msgid "Pretty"
+msgstr "Значение"
+
+#: Indicator.vala:124
 msgid "Off"
 msgstr "Отключено"
 
-#: Indicator.vala:235
+#: Indicator.vala:233
 msgid "free / total"
 msgstr "доступно / всего"
 
-#: MainWindow.vala:118
+#: MainWindow.vala:146
 msgid "Processes"
 msgstr "Процессы"
 
-#: MainWindow.vala:119
+#: MainWindow.vala:147
 msgid "Monitor"
 msgstr "Монитор"
 
-#: MainWindow.vala:120 Widgets/Popover.vala:69
+#: MainWindow.vala:148 Widgets/Popover.vala:66
 msgid "Disks"
 msgstr "Диски"
 
-#: MainWindow.vala:134
+#: MainWindow.vala:162
 msgid "Search Process"
 msgstr "Поиск процесса"
 
-#: MainWindow.vala:135
+#: MainWindow.vala:163
 msgid "Type Process Name or PID"
 msgstr "Введите имя процесса или PID"
 
-#: Tools/DrawDiskIO.vala:146 Widgets/Popover.vala:77
+#: Tools/DrawDiskIO.vala:182 Widgets/DiskIO.vala:44 Widgets/Popover.vala:74
 msgid "Write"
 msgstr "Запись"
 
-#: Tools/DrawDiskIO.vala:156 Widgets/Popover.vala:89
+#: Tools/DrawDiskIO.vala:192 Widgets/DiskIO.vala:45 Widgets/Popover.vala:86
 msgid "Read"
 msgstr "Чтение"
 
-#: Views/Disks.vala:48
+#: Views/Disks.vala:73 Views/Disks.vala:224 Views/Disks.vala:260
+msgid "Device:"
+msgstr "Устройство:"
+
+#: Views/Disks.vala:74
 msgid "Partitioning:"
 msgstr "Разметка:"
 
-#: Views/Disks.vala:50 Views/Disks.vala:194 Views/Disks.vala:212
+#: Views/Disks.vala:76 Views/Disks.vala:243 Views/Disks.vala:261
 msgid "Size:"
 msgstr "Размер:"
 
-#: Views/Disks.vala:175 Views/Disks.vala:211
-msgid "Device:"
-msgstr "Устройство"
-
-#: Views/Disks.vala:178
+#: Views/Disks.vala:227
 msgid "Label:"
 msgstr "Метка:"
 
-#: Views/Disks.vala:182
+#: Views/Disks.vala:231
 msgid "Filesystem:"
 msgstr "Тип ФС:"
 
-#: Views/Disks.vala:186
+#: Views/Disks.vala:235
 msgid "Mount point:"
 msgstr "Точка монтирования:"
 
-#: Views/Disks.vala:194
+#: Views/Disks.vala:243
 msgid "Size (free / total):"
 msgstr "Размер (доступно / всего):"
 
-#: Views/Disks.vala:213
+#: Views/Disks.vala:262
 msgid "Contents:"
 msgstr "Содержимое:"
 
-#: Views/Disks.vala:213
+#: Views/Disks.vala:262
 msgid "Unallocated Space"
 msgstr "Незанятое пространство"
 
@@ -105,21 +184,13 @@ msgstr "Незанятое пространство"
 msgid "Uptime"
 msgstr "Включен"
 
-#: Views/Processes.vala:96
+#: Views/Processes.vala:114
 msgid "End Process"
 msgstr "Завершить процесс"
 
-#: Views/Processes.vala:108
+#: Views/Processes.vala:126
 msgid "Kill process"
 msgstr "Убить процесс"
-
-#: Widgets/About.vala:30
-msgid "System monitor for ElementaryOS"
-msgstr "Системный монитор для ElementaryOS"
-
-#: Widgets/About.vala:35
-msgid "website"
-msgstr "Веб-сайт"
 
 #: Widgets/Cpu.vala:34 Widgets/ProcessList.vala:38
 msgid "CPU"
@@ -129,77 +200,81 @@ msgstr ""
 msgid "cores"
 msgstr ""
 
-#: Widgets/DiskIO.vala:14
+#: Widgets/DiskIO.vala:34
 msgid "Disk read/write"
 msgstr "Диск запись/чтение"
 
-#: Widgets/Headerbar.vala:27
+#: Widgets/DiskIO.vala:43
+msgid "All"
+msgstr "Все"
+
+#: Widgets/Headerbar.vala:30
 msgid "Preferences"
 msgstr "Свойства"
 
-#: Widgets/Headerbar.vala:28
+#: Widgets/Headerbar.vala:38
 msgid "About"
 msgstr "О программе"
 
-#: Widgets/Headerbar.vala:42
+#: Widgets/Headerbar.vala:52
 msgid "Options"
 msgstr "Опции"
 
-#: Widgets/Memory.vala:25 Widgets/Popover.vala:42 Widgets/ProcessList.vala:39
+#: Widgets/Memory.vala:43 Widgets/Popover.vala:42 Widgets/ProcessList.vala:39
 msgid "Memory"
 msgstr "Память"
 
-#: Widgets/Memory.vala:38 Widgets/Popover.vala:43
+#: Widgets/Memory.vala:56 Widgets/Popover.vala:43
 msgid "Swap"
 msgstr "Подкачка"
 
-#: Widgets/Network.vala:19
+#: Widgets/Network.vala:37
 msgid "Download"
 msgstr "Загрузка"
 
-#: Widgets/Network.vala:22
+#: Widgets/Network.vala:40
 msgid "Upload"
 msgstr "Отдача"
 
-#: Widgets/Network.vala:24 Widgets/Popover.vala:56
+#: Widgets/Network.vala:42 Widgets/Popover.vala:54
 msgid "Network"
 msgstr "Сеть"
 
-#: Widgets/Network.vala:28 Widgets/NetworkPopover.vala:58
-#: Widgets/Popover.vala:61
+#: Widgets/Network.vala:46 Widgets/NetworkPopover.vala:76
+#: Widgets/Popover.vala:59
 msgid "Downloaded"
 msgstr "Загружено"
 
-#: Widgets/Network.vala:31 Widgets/NetworkPopover.vala:59
-#: Widgets/Popover.vala:62
+#: Widgets/Network.vala:49 Widgets/NetworkPopover.vala:77
+#: Widgets/Popover.vala:60
 msgid "Uploaded"
 msgstr "Отдано"
 
-#: Widgets/NetworkPopover.vala:40
+#: Widgets/NetworkPopover.vala:58
 msgid "Unplugged"
 msgstr "Отключен"
 
-#: Widgets/NetworkPopover.vala:49
+#: Widgets/NetworkPopover.vala:67
 msgid "IP address"
 msgstr "IP адрес"
 
-#: Widgets/NetworkPopover.vala:52
+#: Widgets/NetworkPopover.vala:70
 msgid "MAC address"
 msgstr "MAC адрес"
 
-#: Widgets/NetworkPopover.vala:55
+#: Widgets/NetworkPopover.vala:73
 msgid "Bytes"
 msgstr "Байты"
 
-#: Widgets/NetworkPopover.vala:61
+#: Widgets/NetworkPopover.vala:79
 msgid "Packets"
 msgstr "Пакеты"
 
-#: Widgets/NetworkPopover.vala:64
+#: Widgets/NetworkPopover.vala:82
 msgid "Received"
 msgstr "Получено"
 
-#: Widgets/NetworkPopover.vala:65
+#: Widgets/NetworkPopover.vala:83
 msgid "Transferred"
 msgstr "Передано"
 
@@ -207,49 +282,13 @@ msgstr "Передано"
 msgid "Frequency"
 msgstr "Частота"
 
-#: Widgets/Popover.vala:127
+#: Widgets/Popover.vala:124
 msgid "Hide indicator"
 msgstr "Скрыть индикатор"
 
-#: Widgets/Popover.vala:133
+#: Widgets/Popover.vala:130
 msgid "Start monitor"
 msgstr "Запустить Монитор"
-
-#: Widgets/Preferences.vala:53
-msgid "Indicator"
-msgstr "Индикатор"
-
-#: Widgets/Preferences.vala:59
-msgid "Use System Tray Indicator:"
-msgstr "Использовать индикатор:"
-
-#: Widgets/Preferences.vala:62
-msgid "Show titles:"
-msgstr "Показывать заголовки:"
-
-#: Widgets/Preferences.vala:65
-msgid "Show CPU:"
-msgstr "Показывать CPU"
-
-#: Widgets/Preferences.vala:68
-msgid "Show RAM:"
-msgstr "Показывать память"
-
-#: Widgets/Preferences.vala:75
-msgid "Network indicator"
-msgstr "Индикатор сети"
-
-#: Widgets/Preferences.vala:81
-msgid "Show Network:"
-msgstr "Показывать сеть"
-
-#: Widgets/Preferences.vala:84
-msgid "Show compact Network:"
-msgstr "Показывать сеть компактно"
-
-#: Widgets/Preferences.vala:118
-msgid "Close"
-msgstr "Закрыть"
 
 #: Widgets/ProcessList.vala:29
 msgid "Process Name"
@@ -259,11 +298,33 @@ msgstr "Имя процесса"
 msgid "PID"
 msgstr ""
 
+#: Widgets/SmartBox.vala:42
+msgid "Show smart"
+msgstr "Показать смарт"
+
+#: Widgets/SmartBox.vala:51
+msgid "Total hours:"
+msgstr "Всеговключен:"
+
+#: Widgets/SmartBox.vala:56
+msgid "Total power-on:"
+msgstr "Всего включений:"
+
+#: Widgets/SmartBox.vala:61
+msgid "Total write:"
+msgstr "Всего записано:"
+
+#~ msgid "Monitor Indicator"
+#~ msgstr "Индикатор монитора"
+
+#~ msgid "Displays processes, consumed resources and drives on a Wingpanel"
+#~ msgstr "Отображает процессы, потребляемые ресурсы и диски на Wingpanel"
+
+#~ msgid "website"
+#~ msgstr "Веб-сайт"
+
 #~ msgid "Common"
 #~ msgstr "Общие"
-
-#~ msgid "Total download"
-#~ msgstr "Всего загружено"
 
 #~ msgid "Total upload"
 #~ msgstr "Всего отдано"
