@@ -1,3 +1,16 @@
+pantheon-monitor (1.0.0-1) bullseye; urgency=medium
+
+  * The first significant release
+  * Added S.M.A.R.T.
+  * Added process list
+  * Added resource monitor
+  * Added disks (I/O) monitor
+  * Added Wingpanel Indicator
+  * Added keyboard shortcuts for switching the view
+  * Added hotkeys
+
+ -- dirli <litandrej85@gmail.com>  Mon, 26 Jul 2019 11:15:22 +0300
+
 pantheon-monitor (0.5.0-1) testing; urgency=medium
 
   * Initial release

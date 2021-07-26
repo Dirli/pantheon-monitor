@@ -11,19 +11,17 @@ Manage processes, monitor of system resources and drives.
 
 <img src="data/screenshot1.png" title="Process monitor" width="600"> </img>
 
-### Indicator
+#### Indicator
 ![Screenshot](data/screenshot4.png)
 
 <img src="data/screenshot2.png" title="Resource monitor" width="420"> </img>
 <img src="data/screenshot3.png" title="Disks monitor" width="420"> </img>
 
----
-
 Special thanks Alexey Varfolomeev (@varlesh) who designed icons.
 
 ## Building and Installation
 
-You'll need the following dependencies to build:
+### You'll need the following dependencies to build:
 * valac
 * libgtk-3-dev
 * libgranite-dev
@@ -31,12 +29,11 @@ You'll need the following dependencies to build:
 * libgee-0.8-dev
 * libgtop2-dev
 * libcairo2-dev
-* libwingpanel-2.0-dev
+* libwingpanel-dev
 * libudisks2-dev
 * meson
 
-## How To Build
-
+### How to build
     meson build --prefix=/usr
     ninja -C build
     sudo ninja -C build install
