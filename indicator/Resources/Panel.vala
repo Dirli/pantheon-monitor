@@ -17,7 +17,7 @@
  */
 
 namespace Monitor {
-    public class Widgets.Panel : Gtk.Box {
+    public class Resources.Panel : Gtk.Box {
         private bool _compact_net;
         public bool compact_net {
             get {

@@ -25,7 +25,6 @@ namespace Monitor {
             title = "Monitor";
 
             var menu_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 5);
-#if INDICATOR_EXIST
             var preferences_button = new Gtk.ModelButton ();
             preferences_button.text = _("Preferences");
             preferences_button.clicked.connect (() => {
@@ -33,7 +32,7 @@ namespace Monitor {
                 preferences.run ();
             });
             menu_box.add (preferences_button);
-#endif
+
             var about_button = new Gtk.ModelButton ();
             about_button.text = _("About");
             about_button.clicked.connect (() => {

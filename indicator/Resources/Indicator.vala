@@ -17,7 +17,7 @@
  */
 
 namespace Monitor {
-    public class Indicator : Wingpanel.Indicator {
+    public class Resources.Indicator : Wingpanel.Indicator {
         private GLib.Settings settings;
 
         private bool? _indicator_ram = null;
@@ -73,8 +73,8 @@ namespace Monitor {
             }
         }
 
-        private Widgets.Popover popover_wid = null;
-        private Widgets.Panel panel_wid;
+        private Popover popover_wid = null;
+        private Panel panel_wid;
 
         private Services.ResourcesManager resource_manager;
 
@@ -86,13 +86,13 @@ namespace Monitor {
 
             extended = false;
 
-            Gtk.IconTheme.get_default().add_resource_path("/io/elementary/monitor/icons");
+            Gtk.IconTheme.get_default().add_resource_path("/io/elementary/monitor/resources/icons");
 
             var provider = new Gtk.CssProvider ();
             provider.load_from_resource ("/io/elementary/monitor/style/application.css");
             Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-            settings = new GLib.Settings (Constants.PROJECT_NAME);
+            settings = new GLib.Settings (Constants.PROJECT_NAME + ".resources");
             visible = settings.get_boolean ("indicator");
 
             resource_manager = new Services.ResourcesManager ();
@@ -159,7 +159,7 @@ namespace Monitor {
 
         public override Gtk.Widget get_display_widget () {
             if (panel_wid == null) {
-                panel_wid = new Widgets.Panel ();
+                panel_wid = new Panel ();
                 settings.bind ("compact-size", panel_wid, "compact-size", SettingsBindFlags.DEFAULT);
                 settings.bind ("compact-net", panel_wid, "compact-net", SettingsBindFlags.DEFAULT);
                 if (visible) {
@@ -176,7 +176,7 @@ namespace Monitor {
 
         public override Gtk.Widget? get_widget () {
             if (popover_wid == null) {
-                popover_wid = new Widgets.Popover ();
+                popover_wid = new Popover ();
                 popover_wid.open_monitor.connect (() => {
                     close ();
 
@@ -257,6 +257,6 @@ public Wingpanel.Indicator? get_indicator (Module module, Wingpanel.IndicatorMan
         return null;
     }
 
-    var indicator = new Monitor.Indicator ();
+    var indicator = new Monitor.Resources.Indicator ();
     return indicator;
 }

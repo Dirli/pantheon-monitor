@@ -22,7 +22,7 @@ udisks2_dep = dependency ('udisks2')
 gee_dep = dependency ('gee-0.8')
 
 add_project_arguments (
-  '-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name()),
+  '-DGETTEXT_PACKAGE="@0@"'.format (meson.project_name ()),
   language:'c'
 )
 
@@ -30,15 +30,24 @@ c_args = [
   '-DWNCK_I_KNOW_THIS_IS_UNSTABLE'
 ]
 
-vala_args = ['--vapidir=' + meson.source_root() + '/vapi/']
-
-if get_option ('indicator')
-  wingpanel_dep = dependency('wingpanel')
-  vala_args += ['--define=INDICATOR_EXIST']
-endif
+vala_args = ['--vapidir=' + meson.source_root () + '/vapi/']
 
 subdir ('data')
 subdir ('src')
+
+if get_option ('resources')
+  wingpanel_dep = dependency('wingpanel')
+
+  resources_files = files (
+    'src/Structs.vala',
+    'src/Objects/DiskDrive.vala',
+    'src/Services/DisksManager.vala',
+    'src/Services/ResourcesManager.vala',
+    'src/Utils/Format.vala',
+  )
+endif
+
+subdir ('indicator')
 subdir ('po')
 
 meson.add_install_script ('meson/post_install.py')

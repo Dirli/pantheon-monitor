@@ -1,6 +1,5 @@
 <schemalist>
-    <schema id="io.elementary.monitor" path="/io/elementary/monitor/">
-
+    <schema id="io.elementary.monitor.resources" path="/io/elementary/monitor/resources/">
         <key name="indicator" type="b">
             <default>false</default>
             <summary>Use indicator</summary>
@@ -48,6 +47,5 @@
             <summary>Update interval</summary>
             <description>Time in seconds to update state.</description>
         </key>
-
     </schema>
 </schemalist>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="/io/elementary/monitor/resources/icons">
+        <file alias="proc-symbolic.svg" compressed="true" preprocess="xml-stripblanks">Resources/svg/proc-symbolic.svg</file>
+        <file alias="netspeed-active-symbolic.svg" compressed="true" preprocess="xml-stripblanks">Resources/svg/netspeed-active-symbolic.svg</file>
+        <file alias="netspeed-nonactive-symbolic.svg" compressed="true" preprocess="xml-stripblanks">Resources/svg/netspeed-nonactive-symbolic.svg</file>
+        <file alias="netspeed-download-symbolic.svg" compressed="true" preprocess="xml-stripblanks">Resources/svg/netspeed-download-symbolic.svg</file>
+        <file alias="netspeed-upload-symbolic.svg" compressed="true" preprocess="xml-stripblanks">Resources/svg/netspeed-upload-symbolic.svg</file>
+        <file alias="memory-symbolic.svg" compressed="true" preprocess="xml-stripblanks">Resources/svg/memory-symbolic.svg</file>
+    </gresource>
+</gresources>

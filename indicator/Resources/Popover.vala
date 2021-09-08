@@ -17,7 +17,7 @@
  */
 
 namespace Monitor {
-    public class Widgets.Popover : Gtk.Grid {
+    public class Resources.Popover : Gtk.Grid {
         public signal void open_monitor ();
         public signal void hide_indicator ();
 

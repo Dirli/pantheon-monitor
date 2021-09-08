@@ -2,9 +2,9 @@ conf_data = configuration_data()
 conf_data.set_quoted('PROJECT_NAME', meson.project_name())
 conf_data.set_quoted('VERSION', meson.project_version())
 config_header = configure_file(
-    input : 'config.vala.in',
-    output : 'config.vala',
-    configuration : conf_data
+    input: 'config.vala.in',
+    output: 'config.vala',
+    configuration: conf_data
 )
 
 executable(
@@ -64,35 +64,3 @@ executable(
     ],
     install : true
 )
-
-if get_option('indicator')
-    shared_library(
-        'monitor',
-        'Structs.vala',
-        'Indicator.vala',
-        'Objects/DiskDrive.vala',
-        'Widgets/Panel.vala',
-        'Widgets/Popover.vala',
-        'Services/DisksManager.vala',
-        'Services/ResourcesManager.vala',
-        'Utils/Format.vala',
-        gresource,
-        config_header,
-        dependencies: [
-            gio_dep,
-            gobject_dep,
-            glib_dep,
-            gio_unix_dep,
-            gtk_dep,
-            gee_dep,
-            gtop_dep,
-            udisks2_dep,
-            wingpanel_dep,
-            meson.get_compiler ('c').find_library ('m'),
-            meson.get_compiler ('vala').find_library ('posix')
-        ],
-        vala_args: vala_args,
-        install: true,
-        install_dir: wingpanel_dep.get_pkgconfig_variable('indicatorsdir'),
-    )
-endif

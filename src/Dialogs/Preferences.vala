@@ -18,6 +18,8 @@
 
 namespace Monitor {
     public class Dialogs.Preferences : Gtk.Dialog {
+        private int top = 0;
+
         public Preferences () {
             Object (modal: true,
                     deletable: false,
@@ -32,66 +34,19 @@ namespace Monitor {
             layout.margin = 12;
             layout.margin_top = 0;
 
-            GLib.Settings settings = new GLib.Settings (Constants.PROJECT_NAME);
-            int top = 0;
+            var schema_sources = GLib.SettingsSchemaSource.get_default ();
+            if (schema_sources != null) {
+                Gtk.Label indicator_sec = new Gtk.Label (_("Indicator"));
+                indicator_sec.get_style_context ().add_class ("preferences");
+                indicator_sec.halign = Gtk.Align.START;
 
-            Gtk.Label indicator_sec = new Gtk.Label (_("Indicator"));
-            indicator_sec.get_style_context ().add_class ("preferences");
-            indicator_sec.halign = Gtk.Align.START;
-            layout.attach (indicator_sec, 0, top++, 1, 1);
+                layout.attach (indicator_sec, 0, top++, 1, 1);
+                layout.attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 0, top++, 2, 1);
 
-            Gtk.Switch ind_show = new Gtk.Switch ();
-            add_new_str (ref layout, _("Use System Tray Indicator:"), ind_show, top++);
-
-            Gtk.Switch ind_title_show = new Gtk.Switch ();
-            add_new_str (ref layout, _("Show titles:"), ind_title_show, top++);
-
-            Gtk.Switch ind_cpu_show = new Gtk.Switch ();
-            add_new_str (ref layout, _("Show CPU:"), ind_cpu_show, top++);
-
-            Gtk.Switch ind_ram_show = new Gtk.Switch ();
-            add_new_str (ref layout, _("Show RAM:"), ind_ram_show, top++);
-
-            var separator1 = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
-            separator1.hexpand = true;
-
-            layout.attach (separator1, 0, top++, 2, 1);
-
-            Gtk.Label network_sec = new Gtk.Label (_("Network indicator"));
-            network_sec.get_style_context ().add_class ("preferences");
-            network_sec.halign = Gtk.Align.START;
-            layout.attach (network_sec, 0, top++, 1, 1);
-
-            Gtk.Switch ind_net_show = new Gtk.Switch ();
-            add_new_str (ref layout, _("Show Network:"), ind_net_show, top++);
-
-            Gtk.Switch ind_compact_show = new Gtk.Switch ();
-            add_new_str (ref layout, _("Show compact Network:"), ind_compact_show, top++);
-
-            var mod_button = new Granite.Widgets.ModeButton ();
-            mod_button.hexpand = true;
-            mod_button.append (new Gtk.Label ("8px"));
-            mod_button.append (new Gtk.Label ("9px"));
-            mod_button.append (new Gtk.Label ("10px"));
-            mod_button.selected = settings.get_int ("compact-size");
-
-            layout.attach (mod_button, 0, top++, 2, 1);
-
-            var separator2 = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
-            separator2.hexpand = true;
-
-            layout.attach (separator2, 0, top++, 2, 1);
-
-            settings.bind("indicator", ind_show, "active", GLib.SettingsBindFlags.DEFAULT);
-            settings.bind("indicator-titles", ind_title_show, "active", GLib.SettingsBindFlags.DEFAULT);
-            settings.bind("indicator-cpu", ind_cpu_show, "active", GLib.SettingsBindFlags.DEFAULT);
-            settings.bind("indicator-ram", ind_ram_show, "active", GLib.SettingsBindFlags.DEFAULT);
-            settings.bind("indicator-net", ind_net_show, "active", GLib.SettingsBindFlags.DEFAULT);
-            settings.bind("compact-net", ind_compact_show, "active", GLib.SettingsBindFlags.DEFAULT);
-
-            mod_button.mode_changed.connect (() => {
-                settings.set_int ("compact-size", mod_button.selected);
-            });
+                if (schema_sources.lookup (Constants.PROJECT_NAME + ".resources", true) != null) {
+                    build_resources (layout);
+                }
+            }
 
             Gtk.Box content = this.get_content_area () as Gtk.Box;
             content.valign = Gtk.Align.START;
@@ -110,7 +65,52 @@ namespace Monitor {
             show_all ();
         }
 
-        private void add_new_str (ref Gtk.Grid grid_widget, string label_str, Gtk.Widget value_widget, int str_top, int str_left = 0) {
+        private void build_resources (Gtk.Grid layout) {
+            var r_settings = new GLib.Settings (Constants.PROJECT_NAME + ".resources");
+
+            Gtk.Switch ind_show = new Gtk.Switch ();
+            add_new_str (layout, _("Use System Tray Indicator:"), ind_show, top++);
+
+            Gtk.Switch ind_title_show = new Gtk.Switch ();
+            add_new_str (layout, _("Show titles:"), ind_title_show, top++);
+            Gtk.Switch ind_cpu_show = new Gtk.Switch ();
+            add_new_str (layout, _("Show CPU:"), ind_cpu_show, top++);
+            Gtk.Switch ind_ram_show = new Gtk.Switch ();
+            add_new_str (layout, _("Show RAM:"), ind_ram_show, top++);
+
+            Gtk.Label network_sec = new Gtk.Label (_("Network indicator"));
+            network_sec.get_style_context ().add_class ("preferences");
+            network_sec.halign = Gtk.Align.START;
+            layout.attach (network_sec, 0, top++);
+
+            Gtk.Switch ind_net_show = new Gtk.Switch ();
+            add_new_str (layout, _("Show Network:"), ind_net_show, top++);
+
+            Gtk.Switch ind_compact_show = new Gtk.Switch ();
+            add_new_str (layout, _("Show compact Network:"), ind_compact_show, top++);
+
+            var mod_button = new Granite.Widgets.ModeButton ();
+            mod_button.hexpand = true;
+            mod_button.append (new Gtk.Label ("8px"));
+            mod_button.append (new Gtk.Label ("9px"));
+            mod_button.append (new Gtk.Label ("10px"));
+            mod_button.selected = r_settings.get_int ("compact-size");
+
+            layout.attach (mod_button, 0, top++, 2);
+
+            r_settings.bind ("indicator", ind_show, "active", GLib.SettingsBindFlags.DEFAULT);
+            r_settings.bind ("indicator-titles", ind_title_show, "active", GLib.SettingsBindFlags.DEFAULT);
+            r_settings.bind ("indicator-cpu", ind_cpu_show, "active", GLib.SettingsBindFlags.DEFAULT);
+            r_settings.bind ("indicator-ram", ind_ram_show, "active", GLib.SettingsBindFlags.DEFAULT);
+            r_settings.bind ("indicator-net", ind_net_show, "active", GLib.SettingsBindFlags.DEFAULT);
+            r_settings.bind ("compact-net", ind_compact_show, "active", GLib.SettingsBindFlags.DEFAULT);
+
+            mod_button.mode_changed.connect (() => {
+                r_settings.set_int ("compact-size", mod_button.selected);
+            });
+        }
+
+        private void add_new_str (Gtk.Grid grid_widget, string label_str, Gtk.Widget value_widget, int str_top, int str_left = 0) {
             var iter_label = new Gtk.Label (label_str);
             iter_label.halign = Gtk.Align.END;
 
