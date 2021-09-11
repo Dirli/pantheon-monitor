@@ -1,1 +1,2 @@
 option ('resources', type : 'boolean', value : true)
+option ('sensors', type : 'boolean', value : true)

@@ -23,4 +23,9 @@ namespace Monitor.Constants {
     public const string ACTION_SEARCH = "action-search";
     public const string ACTION_VIEW = "action-view";
     public const string ACTION_QUIT = "action-quit";
+
+    public const string HWMON_PATH = "/sys/class/hwmon/";
+    public const string AMD_CPU = "k10temp";
+    public const string INTEL_CPU = "coretemp";
+    public const string NVIDIA_GPU = "nvidia";
 }

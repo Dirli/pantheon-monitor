@@ -35,15 +35,23 @@ vala_args = ['--vapidir=' + meson.source_root () + '/vapi/']
 subdir ('data')
 subdir ('src')
 
-if get_option ('resources')
+if get_option ('sensors') or get_option ('resources')
   wingpanel_dep = dependency('wingpanel')
+endif
 
+if get_option ('resources')
   resources_files = files (
     'src/Structs.vala',
     'src/Objects/DiskDrive.vala',
     'src/Services/DisksManager.vala',
     'src/Services/ResourcesManager.vala',
     'src/Utils/Format.vala',
+  )
+endif
+
+if get_option ('sensors')
+  sensors_files = files (
+    'src/Constants.vala',
   )
 endif
 

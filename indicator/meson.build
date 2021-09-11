@@ -1,39 +1,7 @@
 if get_option ('resources')
-  indicator_resource = gnome.compile_resources (
-      'in-resources',
-      join_paths ('Resources/' + meson.project_name () + '.resources.gresource.xml'),
-      source_dir: 'data',
-      c_name: 'inres'
-  )
+  subdir ('resources')
+endif
 
-  shared_library (
-    'resources',
-    'Resources/Indicator.vala',
-    'Resources/Panel.vala',
-    'Resources/Popover.vala',
-    resources_files,
-    gresource,
-    indicator_resource,
-    config_header,
-    dependencies: [
-      gio_dep,
-      gobject_dep,
-      glib_dep,
-      gio_unix_dep,
-      gtk_dep,
-      gee_dep,
-      gtop_dep,
-      udisks2_dep,
-      wingpanel_dep,
-      meson.get_compiler ('c').find_library ('m'),
-      meson.get_compiler ('vala').find_library ('posix')
-    ],
-    vala_args: vala_args,
-    install: true,
-    install_dir: wingpanel_dep.get_pkgconfig_variable ('indicatorsdir'),
-  )
-
-  install_data ('Resources/' + meson.project_name () + '.resources.gschema.xml',
-    install_dir: join_paths (data_dir, 'glib-2.0/schemas')
-  )
+if get_option ('sensors')
+  subdir ('sensors')
 endif
