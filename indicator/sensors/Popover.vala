@@ -56,6 +56,7 @@ namespace Monitor {
 
         public void add_hwmon_label (string monitor_label) {
             Gtk.Label hwm_label = new Gtk.Label (monitor_label);
+            hwm_label.expand = true;
             hwm_label.ellipsize = Pango.EllipsizeMode.END;
             hwm_label.margin_start = hwm_label.margin_end = 5;
             hwm_label.margin_top = 5;
