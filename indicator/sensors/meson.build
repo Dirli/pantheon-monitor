@@ -12,6 +12,7 @@ shared_module (
   'Popover.vala',
   'Utils.vala',
   sensors_files,
+  config_header,
   indicator_sensors,
   dependencies: [
     glib_dep,
@@ -22,4 +23,8 @@ shared_module (
   ],
   install: true,
   install_dir : wingpanel_dep.get_pkgconfig_variable ('indicatorsdir')
+)
+
+install_data (meson.project_name () + '.sensors.gschema.xml',
+  install_dir: join_paths (data_dir, 'glib-2.0/schemas')
 )

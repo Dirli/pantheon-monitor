@@ -18,15 +18,12 @@
 
 namespace Monitor {
     public class Sensors.Popover : Gtk.Grid {
-        public signal void show_on_paanel (bool s);
-
         private int top = 0;
 
         private Gee.HashMap<string, Gtk.Label> sensors_hash;
 
         public Popover () {
-            Object (margin_top: 10,
-                    margin_bottom: 10,
+            Object (margin: 10,
                     halign: Gtk.Align.FILL,
                     orientation: Gtk.Orientation.HORIZONTAL,
                     hexpand: true,
@@ -35,23 +32,6 @@ namespace Monitor {
 
         construct {
             sensors_hash = new Gee.HashMap<string, Gtk.Label> ();
-
-            Gtk.Label watch_label = new Gtk.Label (_("Show on panel"));
-            watch_label.halign = Gtk.Align.START;
-            watch_label.margin_start = 20;
-
-            Gtk.Switch watch_switch = new Gtk.Switch ();
-            watch_switch.halign = Gtk.Align.END;
-            watch_switch.active = true;
-            watch_switch.margin_end = 20;
-
-            attach (watch_label, 0, top);
-            attach (watch_switch, 1, top++);
-
-            attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 0, top++, 2, 1);
-            watch_switch.notify["active"].connect (() => {
-                show_on_paanel (watch_switch.active);
-            });
         }
 
         public void add_hwmon_label (string monitor_label) {

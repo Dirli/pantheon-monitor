@@ -1,0 +1,15 @@
+<schemalist>
+    <schema id="io.elementary.monitor.sensors" path="/io/elementary/monitor/sensors/">
+        <key name="indicator" type="b">
+            <default>true</default>
+            <summary>Use indicator</summary>
+            <description>Mark to use sensors indicator.</description>
+        </key>
+
+        <key name="interval" type="i">
+            <default>1</default>
+            <summary>Update interval</summary>
+            <description>Time in seconds to update sensors.</description>
+        </key>
+    </schema>
+</schemalist>

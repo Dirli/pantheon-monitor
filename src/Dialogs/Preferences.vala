@@ -36,15 +36,16 @@ namespace Monitor {
 
             var schema_sources = GLib.SettingsSchemaSource.get_default ();
             if (schema_sources != null) {
-                Gtk.Label indicator_sec = new Gtk.Label (_("Indicator"));
-                indicator_sec.get_style_context ().add_class ("preferences");
-                indicator_sec.halign = Gtk.Align.START;
-
-                layout.attach (indicator_sec, 0, top++, 1, 1);
-                layout.attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 0, top++, 2, 1);
-
                 if (schema_sources.lookup (Constants.PROJECT_NAME + ".resources", true) != null) {
+                    add_section_header (layout, _("Resources"));
+
                     build_resources (layout);
+                }
+
+                if (schema_sources.lookup (Constants.PROJECT_NAME + ".sensors", true) != null) {
+                    add_section_header (layout, _("Sensors"));
+
+                    build_sensors (layout);
                 }
             }
 
@@ -65,29 +66,42 @@ namespace Monitor {
             show_all ();
         }
 
+        private void add_section_header (Gtk.Grid layout, string section_name) {
+            Gtk.Label resources_sec = new Gtk.Label (section_name);
+            resources_sec.get_style_context ().add_class ("preferences");
+            resources_sec.halign = Gtk.Align.START;
+
+            layout.attach (resources_sec, 0, top++, 1, 1);
+            layout.attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 0, top++, 2, 1);
+        }
+
         private void build_resources (Gtk.Grid layout) {
             var r_settings = new GLib.Settings (Constants.PROJECT_NAME + ".resources");
 
             Gtk.Switch ind_show = new Gtk.Switch ();
-            add_new_str (layout, _("Use System Tray Indicator:"), ind_show, top++);
+            add_new_str (layout, _("Show resources Indicator:"), ind_show, top++);
 
             Gtk.Switch ind_title_show = new Gtk.Switch ();
-            add_new_str (layout, _("Show titles:"), ind_title_show, top++);
+            add_new_str (layout, _("Show icons:"), ind_title_show, top++);
             Gtk.Switch ind_cpu_show = new Gtk.Switch ();
             add_new_str (layout, _("Show CPU:"), ind_cpu_show, top++);
             Gtk.Switch ind_ram_show = new Gtk.Switch ();
             add_new_str (layout, _("Show RAM:"), ind_ram_show, top++);
 
-            Gtk.Label network_sec = new Gtk.Label (_("Network indicator"));
-            network_sec.get_style_context ().add_class ("preferences");
-            network_sec.halign = Gtk.Align.START;
-            layout.attach (network_sec, 0, top++);
+            Gtk.Label network_lbl = new Gtk.Label (_("Network"));
+            network_lbl.halign = Gtk.Align.CENTER;
+            layout.attach (network_lbl, 0, top++);
 
             Gtk.Switch ind_net_show = new Gtk.Switch ();
             add_new_str (layout, _("Show Network:"), ind_net_show, top++);
 
-            Gtk.Switch ind_compact_show = new Gtk.Switch ();
-            add_new_str (layout, _("Show compact Network:"), ind_compact_show, top++);
+            var network_mod = new Granite.Widgets.ModeButton ();
+            network_mod.hexpand = true;
+            network_mod.append (new Gtk.Label (_("Full")));
+            network_mod.append (new Gtk.Label (_("Compact")));
+            network_mod.selected = r_settings.get_boolean ("compact-net") ? 1 : 0;
+
+            layout.attach (network_mod, 0, top++, 2);
 
             var mod_button = new Granite.Widgets.ModeButton ();
             mod_button.hexpand = true;
@@ -103,11 +117,23 @@ namespace Monitor {
             r_settings.bind ("indicator-cpu", ind_cpu_show, "active", GLib.SettingsBindFlags.DEFAULT);
             r_settings.bind ("indicator-ram", ind_ram_show, "active", GLib.SettingsBindFlags.DEFAULT);
             r_settings.bind ("indicator-net", ind_net_show, "active", GLib.SettingsBindFlags.DEFAULT);
-            r_settings.bind ("compact-net", ind_compact_show, "active", GLib.SettingsBindFlags.DEFAULT);
 
             mod_button.mode_changed.connect (() => {
-                r_settings.set_int ("compact-size", mod_button.selected);
+                r_settings.set_int ("compact-size", network_mod.selected);
             });
+
+            network_mod.mode_changed.connect (() => {
+                r_settings.set_boolean ("compact-net", network_mod.selected == 0 ? false : true);
+            });
+        }
+
+        private void build_sensors (Gtk.Grid layout) {
+            var s_settings = new GLib.Settings (Constants.PROJECT_NAME + ".sensors");
+
+            Gtk.Switch ind_show = new Gtk.Switch ();
+            add_new_str (layout, _("Show sensors Indicator:"), ind_show, top++);
+
+            s_settings.bind ("indicator", ind_show, "active", GLib.SettingsBindFlags.DEFAULT);
         }
 
         private void add_new_str (Gtk.Grid grid_widget, string label_str, Gtk.Widget value_widget, int str_top, int str_left = 0) {
