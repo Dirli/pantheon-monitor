@@ -29,6 +29,7 @@ namespace Monitor {
             preferences_button.text = _("Preferences");
             preferences_button.clicked.connect (() => {
                 var preferences = new Dialogs.Preferences ();
+                preferences.show_all ();
                 preferences.run ();
             });
             menu_box.add (preferences_button);

@@ -26,10 +26,13 @@ namespace Monitor {
             Object (modal: true,
                     deletable: false,
                     resizable: false,
+                    title: _("Preferences"),
                     destroy_with_parent: true);
         }
 
         construct {
+            set_default_response (Gtk.ResponseType.CLOSE);
+
             //Create UI
             layout = new Gtk.Grid ();
             layout.valign = Gtk.Align.START;
@@ -60,15 +63,9 @@ namespace Monitor {
 
             //Actions
             add_button (_("Close"), Gtk.ResponseType.CLOSE);
-            response.connect ((source, response_id) => {
-                switch (response_id) {
-                    case Gtk.ResponseType.CLOSE:
-                        destroy ();
-                        break;
-                }
+            response.connect (() => {
+                destroy ();
             });
-
-            show_all ();
         }
 
         private void add_section_header (string section_name) {
