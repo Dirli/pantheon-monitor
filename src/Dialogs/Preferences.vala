@@ -20,14 +20,18 @@ namespace Monitor {
     public class Dialogs.Preferences : Gtk.Dialog {
         private int top = 0;
 
+        private Gtk.Grid layout;
+
         public Preferences () {
             Object (modal: true,
                     deletable: false,
                     resizable: false,
                     destroy_with_parent: true);
+        }
 
+        construct {
             //Create UI
-            var layout = new Gtk.Grid ();
+            layout = new Gtk.Grid ();
             layout.valign = Gtk.Align.START;
             layout.column_spacing = 12;
             layout.row_spacing = 12;
@@ -37,19 +41,19 @@ namespace Monitor {
             var schema_sources = GLib.SettingsSchemaSource.get_default ();
             if (schema_sources != null) {
                 if (schema_sources.lookup (Constants.PROJECT_NAME + ".resources", true) != null) {
-                    add_section_header (layout, _("Resources"));
+                    add_section_header (_("Resources"));
 
-                    build_resources (layout);
+                    build_resources ();
                 }
 
                 if (schema_sources.lookup (Constants.PROJECT_NAME + ".sensors", true) != null) {
-                    add_section_header (layout, _("Sensors"));
+                    add_section_header (_("Sensors"));
 
-                    build_sensors (layout);
+                    build_sensors ();
                 }
             }
 
-            Gtk.Box content = this.get_content_area () as Gtk.Box;
+            Gtk.Box content = get_content_area () as Gtk.Box;
             content.valign = Gtk.Align.START;
             content.border_width = 6;
             content.add (layout);
@@ -63,10 +67,11 @@ namespace Monitor {
                         break;
                 }
             });
+
             show_all ();
         }
 
-        private void add_section_header (Gtk.Grid layout, string section_name) {
+        private void add_section_header (string section_name) {
             Gtk.Label resources_sec = new Gtk.Label (section_name);
             resources_sec.get_style_context ().add_class ("preferences");
             resources_sec.halign = Gtk.Align.START;
@@ -75,25 +80,25 @@ namespace Monitor {
             layout.attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 0, top++, 2, 1);
         }
 
-        private void build_resources (Gtk.Grid layout) {
+        private void build_resources () {
             var r_settings = new GLib.Settings (Constants.PROJECT_NAME + ".resources");
 
             Gtk.Switch ind_show = new Gtk.Switch ();
-            add_new_str (layout, _("Show resources Indicator:"), ind_show, top++);
+            add_new_str (_("Show resources Indicator:"), ind_show, top++);
 
             Gtk.Switch ind_title_show = new Gtk.Switch ();
-            add_new_str (layout, _("Show icons:"), ind_title_show, top++);
+            add_new_str (_("Show icons:"), ind_title_show, top++);
             Gtk.Switch ind_cpu_show = new Gtk.Switch ();
-            add_new_str (layout, _("Show CPU:"), ind_cpu_show, top++);
+            add_new_str (_("Show CPU:"), ind_cpu_show, top++);
             Gtk.Switch ind_ram_show = new Gtk.Switch ();
-            add_new_str (layout, _("Show RAM:"), ind_ram_show, top++);
+            add_new_str (_("Show RAM:"), ind_ram_show, top++);
 
             Gtk.Label network_lbl = new Gtk.Label (_("Network"));
             network_lbl.halign = Gtk.Align.CENTER;
             layout.attach (network_lbl, 0, top++);
 
             Gtk.Switch ind_net_show = new Gtk.Switch ();
-            add_new_str (layout, _("Show Network:"), ind_net_show, top++);
+            add_new_str (_("Show Network:"), ind_net_show, top++);
 
             var network_mod = new Granite.Widgets.ModeButton ();
             network_mod.hexpand = true;
@@ -119,7 +124,7 @@ namespace Monitor {
             r_settings.bind ("indicator-net", ind_net_show, "active", GLib.SettingsBindFlags.DEFAULT);
 
             mod_button.mode_changed.connect (() => {
-                r_settings.set_int ("compact-size", network_mod.selected);
+                r_settings.set_int ("compact-size", mod_button.selected);
             });
 
             network_mod.mode_changed.connect (() => {
@@ -127,23 +132,23 @@ namespace Monitor {
             });
         }
 
-        private void build_sensors (Gtk.Grid layout) {
+        private void build_sensors () {
             var s_settings = new GLib.Settings (Constants.PROJECT_NAME + ".sensors");
 
             Gtk.Switch ind_show = new Gtk.Switch ();
-            add_new_str (layout, _("Show sensors Indicator:"), ind_show, top++);
+            add_new_str (_("Show sensors Indicator:"), ind_show, top++);
 
             s_settings.bind ("indicator", ind_show, "active", GLib.SettingsBindFlags.DEFAULT);
         }
 
-        private void add_new_str (Gtk.Grid grid_widget, string label_str, Gtk.Widget value_widget, int str_top, int str_left = 0) {
+        private void add_new_str (string label_str, Gtk.Widget value_widget, int str_top, int str_left = 0) {
             var iter_label = new Gtk.Label (label_str);
             iter_label.halign = Gtk.Align.END;
 
             value_widget.halign = Gtk.Align.START;
 
-            grid_widget.attach (iter_label, str_left++, str_top);
-            grid_widget.attach (value_widget, str_left, str_top);
+            layout.attach (iter_label, str_left++, str_top);
+            layout.attach (value_widget, str_left, str_top);
         }
     }
 }
