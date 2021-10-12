@@ -17,7 +17,6 @@
  */
 
 namespace Monitor {
-
     public struct HWMonStruct {
         public string label;
         public string path;
@@ -65,7 +64,7 @@ namespace Monitor {
                 timeout_id = 0;
             }
 
-            if (visible && hw_monitor.update_sensors (extended)) {
+            if (visible && update ()) {
                 timeout_id = GLib.Timeout.add_seconds (1, update);
             }
         }
@@ -96,7 +95,7 @@ namespace Monitor {
 
         private bool update () {
             if (!hw_monitor.update_sensors (extended)) {
-                timeout_id = 0;
+                settings.set_boolean ("indicator", false);
 
                 return false;
             }
@@ -125,10 +124,6 @@ namespace Monitor {
 
         public override void opened () {
             extended = true;
-
-            if (timeout_id == 0 && hw_monitor.update_sensors (extended)) {
-                timeout_id = GLib.Timeout.add (1500, update);
-            }
         }
 
         public override void closed () {
