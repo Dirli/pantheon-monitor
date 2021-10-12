@@ -50,9 +50,22 @@ namespace Monitor {
                 }
 
                 if (schema_sources.lookup (Constants.PROJECT_NAME + ".sensors", true) != null) {
-                    add_section_header (_("Sensors"));
+                    bool exist_hwmon = false;
+                    try {
+                        GLib.Dir dir = GLib.Dir.open (Constants.HWMON_PATH, 0);
+                        while ((name = dir.read_name ()) != null) {
+                            exist_hwmon = true;
+                            break;
+                        }
+                    } catch (GLib.Error e) {
+                        warning (e.message);
+                    }
 
-                    build_sensors ();
+                    if (exist_hwmon) {
+                        add_section_header (_("Sensors"));
+
+                        build_sensors ();
+                    }
                 }
             }
 
