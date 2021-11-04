@@ -1,7 +1,7 @@
 <schemalist>
     <schema id="io.elementary.monitor.resources" path="/io/elementary/monitor/resources/">
         <key name="indicator" type="b">
-            <default>false</default>
+            <default>true</default>
             <summary>Use indicator</summary>
             <description>Mark to use app indicator and minimized to system tray.</description>
         </key>
