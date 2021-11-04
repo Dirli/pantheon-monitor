@@ -179,15 +179,17 @@ namespace Monitor {
             ctx.save ();
 
             int r_fontw, w_fontw, fonth;
-            var write_text = create_pango_layout (_("Write") + @" ($(Utils.format_bytes (last_write))) ");
+            var write_text = create_pango_layout (_("Write") + " (999 KB/s) ");
             write_text.set_font_description (description_layout);
             write_text.get_pixel_size (out w_fontw, out fonth);
+
+            write_text.set_text (_("Write") + @" ($(Utils.format_bytes (last_write))) ", -1);
 
             ctx.set_source_rgba (1.0, 0, 0, 1);
             ctx.rectangle (fields.left, bound_height - 15, 10, 10);
             ctx.fill();
 
-            draw_text (ctx, write_text, fields.left + + w_fontw / 2 + 15, bound_height - 10);
+            draw_text (ctx, write_text, fields.left + w_fontw / 2 + 15, bound_height - 10, w_fontw, fonth);
 
             var read_text = create_pango_layout (_("Read") + @" ($(Utils.format_bytes (last_read))) ");
             read_text.set_font_description (description_layout);

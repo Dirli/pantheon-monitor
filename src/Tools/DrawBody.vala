@@ -101,12 +101,17 @@ namespace Monitor {
             ctx.restore ();
         }
 
-        protected void draw_text (Cairo.Context ctx, Pango.Layout text, int x_pos, int y_pos) {
+        protected void draw_text (Cairo.Context ctx, Pango.Layout text, int x_pos, int y_pos, int custom_w = 0, int custom_h = 0) {
             ctx.save ();
             ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
 
             int fontw, fonth;
-            text.get_pixel_size (out fontw, out fonth);
+            if (custom_h == 0 || custom_w == 0) {
+                text.get_pixel_size (out fontw, out fonth);
+            } else {
+                fontw = custom_w;
+                fonth = custom_h;
+            }
 
             ctx.move_to (x_pos - (fontw / 2), y_pos - (fonth / 2));
 
