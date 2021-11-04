@@ -3,14 +3,15 @@ Section: system
 Priority: optional
 Maintainer: dirli <litandrej85@gmail.com>
 Build-Depends: debhelper-compat (= 13),
-               libgtk-3-dev,
-               libgranite-dev,
-               libwnck-3-dev,
-               libgee-0.8-dev,
-               libgtop2-dev,
                libcairo2-dev,
-               libwingpanel-dev,
+               libgee-0.8-dev,
+               libglib2.0-dev,
+               libgranite-dev,
+               libgtop2-dev,
+               libgtk-3-dev,
                libudisks2-dev,
+               libwingpanel-dev,
+               libwnck-3-dev,
                valac,
                meson
 Standards-Version: 4.5.1
@@ -20,15 +21,23 @@ Rules-Requires-Root: no
 Package: pantheon-monitor
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: wingpanel-indicator-monitor,
+            wingpanel-indicator-sensors
 Description: Manage processes, monitor of system resources and drives.
  Manage processes and monitor system resources in Pantheon DE
 
 Package: wingpanel-indicator-monitor
 Architecture: any
-Depends: pantheon-monitor,
-         ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Enhances: wingpanel
 Description: Displays on the panel used resources
  Displays on the panel used resources
  .
  This package provides indicator for Wingpanel.
+
+ Package: wingpanel-indicator-sensors
+ Architecture: any
+ Depends: ${shlibs:Depends}, ${misc:Depends}
+ Enhances: wingpanel
+ Description: Wingpanel Sensors Indicator
+  Shows hardware sensors readings
