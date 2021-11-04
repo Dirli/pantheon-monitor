@@ -217,6 +217,8 @@ namespace Monitor {
 
         public override void opened () {
             extended = true;
+            resource_manager.reset_func ();
+
             if (popover_wid != null) {
                 Structs.NetLoadData net_data = resource_manager.update_network (false);
                 popover_wid.update_total_network (Utils.format_bytes (net_data.total_in, true),

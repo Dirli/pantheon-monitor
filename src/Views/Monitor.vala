@@ -90,6 +90,8 @@ namespace Monitor {
 
         public override void start_timer () {
             if (t_id == 0) {
+                resource_manager.reset_func ();
+
                 t_id = GLib.Timeout.add_seconds (1, update);
             }
         }

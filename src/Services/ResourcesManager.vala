@@ -45,7 +45,6 @@ namespace Monitor {
             network_speed = 0;
 
             network_old_data = {0, 0};
-            update_network (false);
 
             init_memory ();
 
@@ -65,7 +64,13 @@ namespace Monitor {
                 write = 0
             };
 
+        }
+
+        public void reset_func () {
             update_diskio ();
+            update_network (false);
+
+            update_cpus ();
         }
 
         private void init_memory () {
