@@ -29,7 +29,7 @@ namespace Monitor {
             construct set;
         }
 
-        private Structs.DiskioData diskio_last;
+        private Structs.DiskioData sectors_last;
 
         private Structs.CpuLast cpu_last;
         private Structs.CpuLast[] cpus_last;
@@ -49,7 +49,10 @@ namespace Monitor {
 
             init_memory ();
 
-            cpu_last = Structs.CpuLast () {last_total = 0, last_used = 0};
+            cpu_last = Structs.CpuLast () {
+                last_total = 0,
+                last_used = 0
+            };
             cpus_last = {};
 
             int i = 0;
@@ -57,7 +60,10 @@ namespace Monitor {
                 cpus_last += Structs.CpuLast () {last_total = 0, last_used = 0};
             }
 
-            diskio_last = Structs.DiskioData () {read = 0, write = 0};
+            sectors_last = Structs.DiskioData () {
+                read = 0,
+                write = 0
+            };
 
             update_diskio ();
         }
@@ -140,42 +146,43 @@ namespace Monitor {
                 }
 
                 var cur = double.parse (cur_value);
-
-
                 max_freq = i == 0 ? cur : double.max (cur, max_freq);
             }
 
             return max_freq;
         }
 
-        public Structs.DiskioData update_diskio () {
-            GTop.MountList mount_list;
-            GTop.MountEntry[] mount_entries = GTop.get_mountlist(out mount_list, false);
+        public Structs.DiskioData? update_diskio () {
+            uint64 sectors_read = 0;
+            uint64 sectors_write = 0;
 
-            uint64 last_read = 0;
-            uint64 last_write = 0;
+            try {
+                string content = null;
+                GLib.FileUtils.get_contents ("/proc/diskstats", out content);
 
-            Structs.DiskioData diskio_diff = {};
+                foreach (var line in content.split ("\n")) {
+                    if (line == "") {
+                        break;
+                    }
 
-            for (int i = 0; i < mount_list.number; i++) {
-                if (!((string) mount_entries[i].devname).has_prefix ("/dev/")) {continue;}
-                if (((string) mount_entries[i].mountdir).has_prefix ("/media/")) {continue;}
+                    string[] fields = GLib.Regex.split_simple ("[ ]+", line);
+                    if ((fields[1] == "8" | fields[1] == "252" | fields[1] == "259") &&
+                        GLib.Regex.match_simple ("((sd|vd)[a-z]{1}|nvme[0-9]{1}n[0-9]{1})$", fields[3])) {
 
-                Posix.statvfs buf;
-                if (Posix.statvfs_exec ((string) mount_entries[i].mountdir, out buf) < 0) {continue;}
-
-                GTop.FsUsage fs_usage;
-                GTop.get_fsusage (out fs_usage, ((string) mount_entries[i].mountdir));
-
-                last_read += fs_usage.read * fs_usage.block_size;
-                last_write += fs_usage.write * fs_usage.block_size;
+                        sectors_read += uint64.parse (fields[6]);
+                        sectors_write += uint64.parse (fields[10]);
+                    }
+                }
+            } catch (Error e) {
+                return null;
             }
 
-            diskio_diff.read = last_read - diskio_last.read;
-            diskio_diff.write = last_write - diskio_last.write;
+            Structs.DiskioData diskio_diff = {};
+            diskio_diff.read = (sectors_read - sectors_last.read) * 512;
+            diskio_diff.write = (sectors_write - sectors_last.write) * 512;
 
-            diskio_last.read = last_read;
-            diskio_last.write = last_write;
+            sectors_last.read = sectors_read;
+            sectors_last.write = sectors_write;
 
             return diskio_diff;
         }

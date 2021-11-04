@@ -112,7 +112,9 @@ namespace Monitor {
             uptime_val.label = _("Uptime") + ": " + resource_manager.update_uptime ();
 
             var dio = resource_manager.update_diskio ();
-            widget_diskio.update_values (dio.read, dio.write);
+            if (dio != null) {
+                widget_diskio.update_values (dio.read, dio.write);
+            }
 
             return true;
     	}

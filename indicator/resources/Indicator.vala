@@ -126,7 +126,9 @@ namespace Monitor {
                     );
 
                     var io_data = resource_manager.update_diskio ();
-                    popover_wid.update_io (Utils.format_bytes (io_data.read), Utils.format_bytes (io_data.write));
+                    if (io_data != null) {
+                        popover_wid.update_io (Utils.format_bytes (io_data.read), Utils.format_bytes (io_data.write));
+                    }
                 }
             } else {
                 if (indicator_cpu) {
