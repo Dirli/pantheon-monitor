@@ -47,7 +47,6 @@ namespace Monitor {
 
             init_network ();
             init_disks ();
-            init_footer ();
         }
 
         private void init_network () {

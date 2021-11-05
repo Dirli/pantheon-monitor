@@ -164,13 +164,7 @@ namespace Monitor {
                 panel_wid = new Panel ();
                 settings.bind ("compact-size", panel_wid, "compact-size", SettingsBindFlags.DEFAULT);
                 settings.bind ("compact-net", panel_wid, "compact-net", SettingsBindFlags.DEFAULT);
-                if (visible) {
-                    start_watcher ();
-                    Timeout.add_seconds (1, () => {
-                        update_ui ();
-                        return false;
-                    });
-                }
+                start_watcher ();
             }
 
             return panel_wid;
@@ -179,31 +173,40 @@ namespace Monitor {
         public override Gtk.Widget? get_widget () {
             if (popover_wid == null) {
                 popover_wid = new Popover ();
-                popover_wid.open_monitor.connect (() => {
-                    close ();
 
-                    var app_info = new GLib.DesktopAppInfo (Constants.PROJECT_NAME + ".desktop");
-                    if (app_info == null) {return;}
+                if (GLib.FileUtils.test ("/usr/bin/" + Constants.PROJECT_NAME, GLib.FileTest.IS_EXECUTABLE)) {
+                    popover_wid.init_footer ();
+                    popover_wid.open_monitor.connect (() => {
+                        close ();
 
-                    try {
-                        app_info.launch (null, null);
-                    } catch (Error e) {
-                        warning ("Unable to launch io.elementary.monitor.desktop: %s", e.message);
-                    }
-                });
-                popover_wid.hide_indicator.connect (() => {
-                    settings.set_boolean ("indicator", false);
-                });
+                        var app_info = new GLib.DesktopAppInfo (Constants.PROJECT_NAME + ".desktop");
+                        if (app_info == null) {
+                            return;
+                        }
+
+                        try {
+                            app_info.launch (null, null);
+                        } catch (Error e) {
+                            warning ("Unable to launch io.elementary.monitor.desktop: %s", e.message);
+                        }
+                    });
+                    popover_wid.hide_indicator.connect (() => {
+                        settings.set_boolean ("indicator", false);
+                    });
+                }
             }
 
             return popover_wid;
         }
 
         private void start_watcher () {
-            if (timeout_id > 0) {
-                Source.remove (timeout_id);
+            stop_watcher ();
+
+            if (!visible) {
+                return;
             }
 
+            update ();
             timeout_id = GLib.Timeout.add_seconds (1, update);
         }
 
