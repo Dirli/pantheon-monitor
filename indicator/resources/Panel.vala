@@ -18,36 +18,24 @@
 
 namespace Monitor {
     public class Resources.Panel : Gtk.Box {
-        private bool _compact_net;
-        public bool compact_net {
-            get {
-                return _compact_net;
-            }
-            set {
-                net_value.label = "";
-
-                if (value) {
-                    net_value.set_width_chars (8);
-                    net_value.get_style_context ().add_class (@"small-$(_compact_size)");
-                } else {
-                    net_value.set_width_chars (-1);
-                    net_value.get_style_context ().remove_class (@"small-$(_compact_size)");
-                }
-
-                _compact_net = value;
-            }
-        }
-
         private int _compact_size = -1;
         public int compact_size {
             get {
                 return _compact_size;
             }
             set {
-                if (_compact_size >= 0 && compact_net) {
-                    unowned Gtk.StyleContext net_value_style = net_value.get_style_context ();
+                net_value.label = "";
+
+                unowned Gtk.StyleContext net_value_style = net_value.get_style_context ();
+                if (_compact_size > -1) {
                     net_value_style.remove_class (@"small-$(_compact_size)");
+                }
+
+                if (value >= 0) {
                     net_value_style.add_class (@"small-$(value)");
+                    net_value.set_width_chars (8);
+                } else {
+                    net_value.set_width_chars (-1);
                 }
 
                 _compact_size = value;
@@ -106,35 +94,22 @@ namespace Monitor {
                 net_image_name = i_name;
             }
 
-            if (compact_net) {
+            if (compact_size > -1) {
                 net_value.label = @"$(up_val != "" ? up_val : "0 B/s")\n$(down_val != "" ? down_val : "0 B/s")";
             } else {
                 net_value.label = @"$(down_val != "" ? down_val : "0 B/s") / $(up_val != "" ? up_val : "0 B/s")";
             }
         }
 
-        public void update_ui (bool cpu_flag, bool ram_flag, bool net_flag, bool titles_flag) {
-            cpu_value.set_visible (cpu_flag);
-            mem_value.set_visible (ram_flag);
-            net_value.set_visible (net_flag);
+        public void update_ui (int view_state) {
+            cpu_value.set_visible ((view_state & (1 << 1)) > 0);
+            cpu_image.set_visible ((view_state & (1 << 1)) > 0 ? (view_state & 1) == 1 : false);
 
-            if (ram_flag) {
-                mem_image.set_visible (titles_flag);
-            } else {
-                mem_image.set_visible (false);
-            }
+            mem_value.set_visible ((view_state & (1 << 2)) > 0);
+            mem_image.set_visible ((view_state & (1 << 2)) > 0 ? (view_state & 1) == 1 : false);
 
-            if (cpu_flag) {
-                cpu_image.set_visible (titles_flag);
-            } else {
-                cpu_image.set_visible (false);
-            }
-
-            if (net_flag) {
-                net_image.set_visible (titles_flag);
-            } else {
-                net_image.set_visible (false);
-            }
+            net_value.set_visible ((view_state & (1 << 3)) > 0);
+            net_image.set_visible ((view_state & (1 << 3)) > 0 ? (view_state & 1) == 1 : false);
         }
     }
 }

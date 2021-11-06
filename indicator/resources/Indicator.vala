@@ -20,58 +20,7 @@ namespace Monitor {
     public class Resources.Indicator : Wingpanel.Indicator {
         private GLib.Settings settings;
 
-        private bool? _indicator_ram = null;
-        public bool indicator_ram {
-            get {
-                return _indicator_ram;
-            }
-            set {
-                bool update_ui_flag = _indicator_ram != null;
-                _indicator_ram = value;
-                if (update_ui_flag) {
-                    update_ui ();
-                }
-            }
-        }
-        private bool? _indicator_cpu = null;
-        public bool indicator_cpu {
-            get {
-                return _indicator_cpu;
-            }
-            set {
-                bool update_ui_flag = _indicator_cpu != null;
-                _indicator_cpu = value;
-                if (update_ui_flag) {
-                    update_ui ();
-                }
-            }
-        }
-        private bool? _indicator_net = null;
-        public bool indicator_net {
-            get {
-                return _indicator_net;
-            }
-            set {
-                bool update_ui_flag = _indicator_net != null;
-                _indicator_net = value;
-                if (update_ui_flag) {
-                    update_ui ();
-                }
-            }
-        }
-        private bool? _indicator_titles = null;
-        public bool indicator_titles {
-            get {
-                return _indicator_titles;
-            }
-            set {
-                bool update_ui_flag = _indicator_titles != null;
-                _indicator_titles = value;
-                if (update_ui_flag) {
-                    update_ui ();
-                }
-            }
-        }
+        private int view_state = 15;
 
         private Popover popover_wid = null;
         private Panel panel_wid;
@@ -97,21 +46,16 @@ namespace Monitor {
 
             resource_manager = new Services.ResourcesManager ();
 
-            settings.bind ("indicator-ram", this, "indicator-ram", SettingsBindFlags.DEFAULT);
-            settings.bind ("indicator-net", this, "indicator-net", SettingsBindFlags.DEFAULT);
-            settings.bind ("indicator-titles", this, "indicator-titles", SettingsBindFlags.DEFAULT);
-            settings.bind ("indicator-cpu", this, "indicator-cpu", SettingsBindFlags.DEFAULT);
-
+            settings.changed["view-state"].connect (on_view_change);
             settings.changed["indicator"].connect (on_indicator_change);
         }
 
-        protected void update_ui () {
-            panel_wid.update_ui (
-                indicator_cpu,
-                indicator_ram,
-                indicator_net,
-                indicator_titles
-            );
+        protected void on_view_change () {
+            var view_state = settings.get_int ("view-state");
+
+            if (panel_wid != null) {
+                panel_wid.update_ui (view_state);
+            }
         }
 
         private unowned bool update() {
@@ -131,14 +75,14 @@ namespace Monitor {
                     }
                 }
             } else {
-                if (indicator_cpu) {
+                if ((view_state & (1 << 1)) > 0) {
                     panel_wid.update_cpu ("%.2d%%".printf (resource_manager.update_cpu ()));
                 }
-                if (indicator_ram) {
+                if ((view_state & (1 << 2)) > 0) {
                     var m = resource_manager.update_memory (false);
                     panel_wid.update_mem ("%.2d%%".printf (m.percent_memory));
                 }
-                if (indicator_net) {
+                if ((view_state & (1 << 3)) > 0) {
                     Structs.NetLoadData net_data = resource_manager.update_network (false);
                     string down_val = net_data.bytes_in > 0 ? Utils.format_bytes (net_data.bytes_in) : "";
                     string up_val = net_data.bytes_out > 0 ? Utils.format_bytes (net_data.bytes_out) : "";
@@ -150,20 +94,16 @@ namespace Monitor {
         }
 
         protected void on_indicator_change () {
-            if (settings.get_boolean ("indicator")) {
-                visible = true;
-                start_watcher ();
-            } else {
-                visible = false;
-                stop_watcher ();
-            }
+            visible = settings.get_boolean ("indicator");
+            start_watcher ();
         }
 
         public override Gtk.Widget get_display_widget () {
             if (panel_wid == null) {
                 panel_wid = new Panel ();
-                settings.bind ("compact-size", panel_wid, "compact-size", SettingsBindFlags.DEFAULT);
-                settings.bind ("compact-net", panel_wid, "compact-net", SettingsBindFlags.DEFAULT);
+
+                settings.bind ("compact-size", panel_wid, "compact-size", GLib.SettingsBindFlags.GET);
+
                 start_watcher ();
             }
 

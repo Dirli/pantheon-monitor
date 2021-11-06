@@ -6,34 +6,17 @@
             <description>Mark to use app indicator and minimized to system tray.</description>
         </key>
 
-        <key name="indicator-titles" type="b">
-            <default>true</default>
-            <summary>Show titles</summary>
-            <description>Show titles to system tray.</description>
-        </key>
-
-        <key name="indicator-cpu" type="b">
-            <default>true</default>
-            <summary>Show cpu</summary>
-            <description>Show cpu state to system tray.</description>
-        </key>
-
-        <key name="indicator-ram" type="b">
-            <default>true</default>
-            <summary>Show RAM</summary>
-            <description>Show memory state to system tray.</description>
-        </key>
-
-        <key name="indicator-net" type="b">
-            <default>true</default>
-            <summary>Show Network</summary>
-            <description>Show network state to system tray.</description>
-        </key>
-
-        <key name="compact-net" type="b">
-            <default>true</default>
-            <summary>Show compact network data</summary>
-            <description>Show compact network data to system tray.</description>
+        <!--
+         binary position
+         * 0 - titles
+         * 1 - cpu
+         * 2 - memory
+         * 3 - network
+        -->
+        <key name="view-state" type="i">
+            <default>15</default>
+            <summary>View state for indicator</summary>
+            <description>View state for indicator.</description>
         </key>
 
         <key name="compact-size" type="i">

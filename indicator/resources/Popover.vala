@@ -33,11 +33,13 @@ namespace Monitor {
         private Gtk.Box volumes_box;
 
         public Popover () {
-            orientation = Gtk.Orientation.HORIZONTAL;
-            hexpand = true;
-            row_spacing = 8;
-            margin_top = 10;
+            Object (orientation: Gtk.Orientation.HORIZONTAL,
+                    hexpand: true,
+                    row_spacing: 8,
+                    margin_top: 10);
+        }
 
+        construct {
             freq_value = add_new_str (_("Frequency"), 0);
             ram_value = add_new_str (_("Memory"), 1);
             swap_value = add_new_str (_("Swap"), 2);

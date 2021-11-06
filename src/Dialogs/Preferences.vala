@@ -92,15 +92,19 @@ namespace Monitor {
 
         private void build_resources () {
             var r_settings = new GLib.Settings (Constants.PROJECT_NAME + ".resources");
+            var view_state = r_settings.get_int ("view-state");
 
             Gtk.Switch ind_show = new Gtk.Switch ();
             add_new_str (_("Show resources Indicator:"), ind_show, top++);
 
             Gtk.Switch ind_title_show = new Gtk.Switch ();
+            ind_title_show.active = (view_state & 1) > 0;
             add_new_str (_("Show icons:"), ind_title_show, top++);
             Gtk.Switch ind_cpu_show = new Gtk.Switch ();
+            ind_cpu_show.active = (view_state & (1 << 1)) > 0;
             add_new_str (_("Show CPU:"), ind_cpu_show, top++);
             Gtk.Switch ind_ram_show = new Gtk.Switch ();
+            ind_ram_show.active = (view_state & (1 << 2)) > 0;
             add_new_str (_("Show RAM:"), ind_ram_show, top++);
 
             Gtk.Label network_lbl = new Gtk.Label (_("Network"));
@@ -108,13 +112,14 @@ namespace Monitor {
             layout.attach (network_lbl, 0, top++);
 
             Gtk.Switch ind_net_show = new Gtk.Switch ();
+            ind_net_show.active = (view_state & (1 << 3)) > 0;
             add_new_str (_("Show Network:"), ind_net_show, top++);
 
             var network_mod = new Granite.Widgets.ModeButton ();
             network_mod.hexpand = true;
             network_mod.append (new Gtk.Label (_("Full")));
             network_mod.append (new Gtk.Label (_("Compact")));
-            network_mod.selected = r_settings.get_boolean ("compact-net") ? 1 : 0;
+            network_mod.selected = r_settings.get_int ("compact-size") > -1 ? 1 : 0;
 
             layout.attach (network_mod, 0, top++, 2);
 
@@ -123,22 +128,43 @@ namespace Monitor {
             mod_button.append (new Gtk.Label ("8px"));
             mod_button.append (new Gtk.Label ("9px"));
             mod_button.append (new Gtk.Label ("10px"));
-            mod_button.selected = r_settings.get_int ("compact-size");
 
             layout.attach (mod_button, 0, top++, 2);
 
             r_settings.bind ("indicator", ind_show, "active", GLib.SettingsBindFlags.DEFAULT);
-            r_settings.bind ("indicator-titles", ind_title_show, "active", GLib.SettingsBindFlags.DEFAULT);
-            r_settings.bind ("indicator-cpu", ind_cpu_show, "active", GLib.SettingsBindFlags.DEFAULT);
-            r_settings.bind ("indicator-ram", ind_ram_show, "active", GLib.SettingsBindFlags.DEFAULT);
-            r_settings.bind ("indicator-net", ind_net_show, "active", GLib.SettingsBindFlags.DEFAULT);
 
-            mod_button.mode_changed.connect (() => {
-                r_settings.set_int ("compact-size", mod_button.selected);
+            ind_title_show.notify["active"].connect (() => {
+                r_settings.set_int ("view-state", r_settings.get_int ("view-state") ^ 1);
+            });
+            ind_cpu_show.notify["active"].connect (() => {
+                r_settings.set_int ("view-state", r_settings.get_int ("view-state") ^ (1 << 1));
+            });
+            ind_ram_show.notify["active"].connect (() => {
+                r_settings.set_int ("view-state", r_settings.get_int ("view-state") ^ (1 << 2));
+            });
+            ind_net_show.notify["active"].connect (() => {
+                r_settings.set_int ("view-state", r_settings.get_int ("view-state") ^ (1 << 3));
+            });
+
+            GLib.Idle.add (() => {
+                var compact_size = r_settings.get_int ("compact-size");
+                if (compact_size > -1) {
+                    mod_button.selected = compact_size;
+                } else {
+                    mod_button.selected = 1;
+                    mod_button.sensitive = false;
+                }
+
+                mod_button.mode_changed.connect (() => {
+                    r_settings.set_int ("compact-size", mod_button.selected);
+                });
+
+                return false;
             });
 
             network_mod.mode_changed.connect (() => {
-                r_settings.set_boolean ("compact-net", network_mod.selected == 0 ? false : true);
+                mod_button.sensitive = network_mod.selected == 1;
+                r_settings.set_int ("compact-size", network_mod.selected == 0 ? -1 : mod_button.selected);
             });
         }
 
