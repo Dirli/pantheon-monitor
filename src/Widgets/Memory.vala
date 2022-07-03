@@ -18,26 +18,33 @@
 
 namespace Monitor {
     public class Widgets.Memory : Gtk.Grid {
-        private Tools.DrawRAM draw_ram;
-        private Tools.DrawRAM draw_swap;
+        private Gtk.ProgressBar memory_bar;
+        private Gtk.ProgressBar swap_bar;
 
         private Gtk.Label swap_val;
         private Gtk.Label memory_val;
 
-        private bool swap_on;
+        public bool swap_on {construct set; get;}
 
-        private Structs.MemoryTotal memory_total;
+        public Structs.MemoryTotal memory_total {construct set; get;}
 
-        public Memory (Structs.MemoryTotal memory_total) {
-            margin_start = 12;
-            margin_end = 12;
-            hexpand = true;
-            row_spacing = 8;
-            column_spacing = 8;
-            halign = Gtk.Align.FILL;
-            valign = Gtk.Align.CENTER;
+        public Memory (Structs.MemoryTotal m_total) {
+            Object (margin_start: 12,
+                    margin_end: 12,
+                    hexpand: true,
+                    row_spacing: 8,
+                    column_spacing: 8,
+                    halign: Gtk.Align.FILL,
+                    valign: Gtk.Align.CENTER,
+                    memory_total: m_total);
+        }
 
-            this.memory_total = memory_total;
+        construct {
+            unowned Gtk.StyleContext style_context = get_style_context ();
+            style_context.add_class (Granite.STYLE_CLASS_CARD);
+            style_context.add_class (Granite.STYLE_CLASS_ROUNDED);
+            style_context.add_class ("res-card");
+
             swap_on = memory_total.swap != null;
 
             var total_label = new Gtk.Label (_("Memory") + ": ");
@@ -45,12 +52,13 @@ namespace Monitor {
             memory_val = new Gtk.Label (Utils.format_bytes (memory_total.memory));
             memory_val.halign = Gtk.Align.CENTER;
 
-            draw_ram = new Tools.DrawRAM ();
-            draw_ram.hexpand = true;
+            memory_bar = new Gtk.ProgressBar ();
+            memory_bar.valign = Gtk.Align.CENTER;
+            memory_bar.hexpand = true;
 
-            attach (total_label, 0, 0);
-            attach (draw_ram,    1, 0);
-            attach (memory_val,  0, 1, 2, 1);
+            attach (total_label, 0, 0, 1, 2);
+            attach (memory_val,  1, 0);
+            attach (memory_bar,  1, 1);
 
             if (swap_on) {
                 var swap_label = new Gtk.Label (_("Swap") + ": ");
@@ -58,22 +66,26 @@ namespace Monitor {
                 swap_val = new Gtk.Label (Utils.format_bytes (memory_total.swap));
                 swap_val.halign = Gtk.Align.CENTER;
 
-                draw_swap = new Tools.DrawRAM ();
-                draw_swap.hexpand = true;
+                swap_bar = new Gtk.ProgressBar ();
+                swap_bar.valign = Gtk.Align.CENTER;
+                swap_bar.hexpand = true;
 
-                attach (swap_label,  0, 2);
-                attach (draw_swap,   1, 2);
-                attach (swap_val,    0, 3, 2, 1);
+                attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 0, 2, 2);
+                attach (swap_label, 0, 3, 1, 2);
+                attach (swap_val,   1, 3);
+                attach (swap_bar,   1, 4);
             }
         }
 
         public void update_values (Structs.MemoryData memory_data) {
-            draw_ram.update_used (memory_data.percent_memory);
+            memory_bar.set_fraction (memory_data.percent_memory / 100.0);
+            memory_bar.tooltip_text = @"$(memory_data.percent_memory)%";
             memory_val.label = "%s / %s".printf (Utils.format_bytes (memory_data.used_memory, true),
                                                  Utils.format_bytes (memory_total.memory, true));
 
             if (swap_on) {
-                draw_swap.update_used (memory_data.percent_swap);
+                swap_bar.set_fraction (memory_data.percent_swap / 100.0);
+                swap_bar.tooltip_text = @"$(memory_data.percent_swap)%";
                 swap_val.label = "%s / %s".printf (Utils.format_bytes (memory_data.used_swap, true),
                                                    Utils.format_bytes (memory_total.swap, true));
             }

@@ -17,7 +17,6 @@ executable(
     'Tools/DrawCpu.vala',
     'Tools/DrawDiskIO.vala',
     'Tools/DrawNetCircle.vala',
-    'Tools/DrawRAM.vala',
     'Tools/DrawSmart.vala',
     'Tools/DrawVolume.vala',
     'Utils/Circle.vala',
