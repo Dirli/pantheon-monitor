@@ -86,7 +86,6 @@ namespace Monitor {
 
             ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
 
-            draw_background (ctx);
             draw_axes (ctx);
             draw_horizontal_grid (ctx, 20);
             draw_vertical_grid (ctx, 20);

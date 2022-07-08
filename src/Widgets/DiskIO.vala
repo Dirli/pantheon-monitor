@@ -17,37 +17,42 @@
  */
 
 namespace Monitor {
-    public class Widgets.DiskIO : Gtk.Box {
+    public class Widgets.DiskIO : Gtk.Grid {
         private Tools.DrawDiskIO draw_diskio;
 
         public DiskIO () {
             Object (orientation: Gtk.Orientation.VERTICAL,
-                    margin_start: 12,
-                    margin_end: 12,
-                    spacing: 8,
+                    row_spacing: 8,
+                    column_spacing: 8,
                     hexpand: true,
                     halign: Gtk.Align.FILL,
                     valign: Gtk.Align.CENTER);
         }
 
         construct {
+            unowned Gtk.StyleContext style_context = get_style_context ();
+            style_context.add_class (Granite.STYLE_CLASS_CARD);
+            style_context.add_class (Granite.STYLE_CLASS_ROUNDED);
+            style_context.add_class ("res-card");
+
             var diskio_label = new Gtk.Label (_("Disk read/write"));
+            diskio_label.halign = Gtk.Align.START;
 
             draw_diskio = new Tools.DrawDiskIO ();
             draw_diskio.hexpand = true;
 
             var view_btns = new Granite.Widgets.ModeButton ();
             view_btns.homogeneous = false;
-            view_btns.halign = Gtk.Align.CENTER;
+            view_btns.halign = Gtk.Align.END;
 
             view_btns.append (new Gtk.Label (_("All")));
             view_btns.append (new Gtk.Label (_("Write")));
             view_btns.append (new Gtk.Label (_("Read")));
 
 
-            add (diskio_label);
-            add (view_btns);
-            add (draw_diskio);
+            attach (diskio_label, 0, 0);
+            attach (view_btns, 1, 0);
+            attach (draw_diskio, 0, 1, 2);
 
             view_btns.selected = 0;
             view_btns.mode_changed.connect (() => {

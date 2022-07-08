@@ -29,9 +29,7 @@ namespace Monitor {
         public Structs.MemoryTotal memory_total {construct set; get;}
 
         public Memory (Structs.MemoryTotal m_total) {
-            Object (margin_start: 12,
-                    margin_end: 12,
-                    hexpand: true,
+            Object (hexpand: true,
                     row_spacing: 8,
                     column_spacing: 8,
                     halign: Gtk.Align.FILL,
