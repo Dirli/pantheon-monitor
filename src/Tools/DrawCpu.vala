@@ -43,8 +43,6 @@ namespace Monitor {
         }
 
         private bool on_draw (Cairo.Context ctx) {
-            draw_background (ctx);
-
             draw_axes (ctx);
             draw_horizontal_grid (ctx, 25);
 

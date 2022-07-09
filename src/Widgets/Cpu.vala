@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020 Dirli <litandrej85@gmail.com>
+ * Copyright (c) 2018-2022 Dirli <litandrej85@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,31 +21,50 @@ namespace Monitor {
         private Gtk.Label freq_val;
 
         private Tools.DrawCpu draw_cpu;
+        public int cores {
+            get;
+            construct set;
+        }
 
         public Cpu (int cores) {
-            orientation = Gtk.Orientation.HORIZONTAL;
-            hexpand = true;
-            halign = Gtk.Align.CENTER;
-            valign = Gtk.Align.CENTER;
-            spacing = 8;
+            Object (orientation: Gtk.Orientation.VERTICAL,
+                    hexpand: true,
+                    spacing: 8,
+                    halign: Gtk.Align.FILL,
+                    valign: Gtk.Align.CENTER,
+                    cores: cores);
+        }
+
+        construct {
+            unowned Gtk.StyleContext style_context = get_style_context ();
+            style_context.add_class (Granite.STYLE_CLASS_CARD);
+            style_context.add_class (Granite.STYLE_CLASS_ROUNDED);
+            style_context.add_class ("res-card");
+
+            var cpu_label = new Gtk.Label (_("CPU"));
+            cpu_label.halign = Gtk.Align.START;
+            cpu_label.get_style_context ().add_class ("section");
+
+            freq_val = new Gtk.Label ("");
+            freq_val.set_width_chars (8);
 
             var info_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 5);
             info_box.valign = Gtk.Align.CENTER;
-            var cpu_label = new Gtk.Label (_("CPU"));
-            cpu_label.get_style_context ().add_class ("section");
-            freq_val = new Gtk.Label ("");
-            freq_val.set_width_chars (8);
-            var cores_label = new Gtk.Label ("%d %s".printf (cores, _("cores")));
-
-            info_box.add (cpu_label);
             info_box.add (freq_val);
-            info_box.add (cores_label);
+            info_box.add (new Gtk.Label ("%d %s".printf (cores, _("cores"))));
 
             draw_cpu = new Tools.DrawCpu (cores);
-            draw_cpu.hexpand = true;
 
-            add (info_box);
-            add (draw_cpu);
+            var cpu_wrapper = new Gtk.Grid ();
+            cpu_wrapper.halign = Gtk.Align.CENTER;
+            cpu_wrapper.row_spacing = 8;
+            cpu_wrapper.column_spacing = 8;
+
+            cpu_wrapper.attach (cpu_label, 0, 0);
+            cpu_wrapper.attach (info_box, 0, 1);
+            cpu_wrapper.attach (draw_cpu, 1, 1);
+
+            add (cpu_wrapper);
         }
 
         public void update_values (string new_freq, int[] cpus_percentage) {
