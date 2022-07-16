@@ -53,6 +53,13 @@ namespace Monitor {
             info_box.add (freq_val);
             info_box.add (new Gtk.Label ("%d %s".printf (cores, _("cores"))));
 
+            var view_btns = new Granite.Widgets.ModeButton ();
+            view_btns.homogeneous = false;
+            view_btns.halign = Gtk.Align.END;
+
+            view_btns.append (new Gtk.Label (_("diagram")));
+            view_btns.append (new Gtk.Label (_("graph")));
+
             draw_cpu = new Tools.DrawCpu (cores);
 
             var cpu_wrapper = new Gtk.Grid ();
@@ -61,10 +68,17 @@ namespace Monitor {
             cpu_wrapper.column_spacing = 8;
 
             cpu_wrapper.attach (cpu_label, 0, 0);
+            cpu_wrapper.attach (view_btns, 1, 0);
             cpu_wrapper.attach (info_box, 0, 1);
             cpu_wrapper.attach (draw_cpu, 1, 1);
 
             add (cpu_wrapper);
+
+            view_btns.mode_changed.connect (() => {
+                cpu_wrapper.halign = view_btns.selected == Enums.ViewCPU.DIAGRAM ? Gtk.Align.CENTER : Gtk.Align.FILL;
+                draw_cpu.view_type = (Enums.ViewCPU) view_btns.selected;
+            });
+            view_btns.selected = 0;
         }
 
         public void update_values (string new_freq, int[] cpus_percentage) {

@@ -31,6 +31,11 @@ namespace Monitor.Enums {
         READ,
     }
 
+    public enum ViewCPU {
+        DIAGRAM,
+        GRAPH
+    }
+
     public enum Attr {
         ID,
         NAME,
