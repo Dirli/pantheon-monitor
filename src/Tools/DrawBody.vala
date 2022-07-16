@@ -23,6 +23,8 @@ namespace Monitor {
 
         protected int text_size = 0;
 
+        public Gdk.RGBA? t_color = null;
+
         protected Structs.DrawFields fields;
 
         protected Pango.FontDescription description_layout;
@@ -48,7 +50,12 @@ namespace Monitor {
         protected void draw_axes (Cairo.Context ctx) {
             ctx.save ();
 
-            ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
+            if (t_color != null) {
+                ctx.set_source_rgba (t_color.red, t_color.green, t_color.blue, 1);
+            } else {
+                ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
+            }
+
             ctx.move_to (fields.left, fields.top);
             ctx.line_to (fields.left, bound_height - fields.bottom);
             ctx.line_to (bound_width - fields.right, bound_height - fields.bottom);
@@ -60,11 +67,16 @@ namespace Monitor {
         protected void draw_horizontal_grid (Cairo.Context ctx, int grid_size) {
             ctx.save ();
 
+            if (t_color != null) {
+                ctx.set_source_rgba (t_color.red, t_color.green, t_color.blue, 1);
+            } else {
+                ctx.set_source_rgba (1.0, 0.92, 0.80, 0.5);
+            }
+
             int inc = grid_size;
             int bottom_grid = bound_height - fields.bottom;
             int right_grid = bound_width - fields.right;
 
-            ctx.set_source_rgba (1.0, 0.92, 0.80, 0.5);
             ctx.set_line_width (0.5);
 
             while ((bottom_grid - inc) >= fields.top) {
@@ -82,11 +94,16 @@ namespace Monitor {
         protected void draw_vertical_grid (Cairo.Context ctx, int grid_size) {
             ctx.save ();
 
+            if (t_color != null) {
+                ctx.set_source_rgba (t_color.red, t_color.green, t_color.blue, 1);
+            } else {
+                ctx.set_source_rgba (1.0, 0.92, 0.80, 0.5);
+            }
+
             int bottom_grid = bound_height - fields.bottom;
             int right_grid = bound_width - fields.right;
             int inc = right_grid - fields.left;
 
-            ctx.set_source_rgba (1.0, 0.92, 0.80, 0.5);
             ctx.set_line_width (0.5);
 
             while (inc > 0) {
@@ -103,7 +120,11 @@ namespace Monitor {
 
         protected void draw_text (Cairo.Context ctx, Pango.Layout text, int x_pos, int y_pos, int custom_w = 0, int custom_h = 0) {
             ctx.save ();
-            ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
+            if (t_color != null) {
+                ctx.set_source_rgba (t_color.red, t_color.green, t_color.blue, 1);
+            } else {
+                ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
+            }
 
             int fontw, fonth;
             if (custom_h == 0 || custom_w == 0) {

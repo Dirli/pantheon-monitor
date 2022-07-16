@@ -50,7 +50,7 @@ namespace Monitor {
             resource_manager = new Services.ResourcesManager ();
             extended_window = new Gtk.Popover (null);
 
-            widget_cpu = new Widgets.Cpu (resource_manager.quantity_cores);
+            widget_cpu = new Widgets.Cpu (current_color, resource_manager.quantity_cores);
 
             inner_box.add (widget_cpu);
 
@@ -61,7 +61,7 @@ namespace Monitor {
 
             inner_box.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
-            widget_diskio = new Widgets.DiskIO ();
+            widget_diskio = new Widgets.DiskIO (current_color);
             inner_box.add (widget_diskio);
 
             inner_box.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));

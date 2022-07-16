@@ -20,18 +20,24 @@ namespace Monitor {
     public class Widgets.Cpu : Gtk.Box {
         private Gtk.Label freq_val;
 
+        public Gdk.RGBA f_color {
+            get;
+            construct set;
+        }
+
         private Tools.DrawCpu draw_cpu;
         public int cores {
             get;
             construct set;
         }
 
-        public Cpu (int cores) {
+        public Cpu (Gdk.RGBA current_color, int cores) {
             Object (orientation: Gtk.Orientation.VERTICAL,
                     hexpand: true,
                     spacing: 8,
                     halign: Gtk.Align.FILL,
                     valign: Gtk.Align.CENTER,
+                    f_color: current_color,
                     cores: cores);
         }
 
@@ -61,6 +67,7 @@ namespace Monitor {
             view_btns.append (new Gtk.Label (_("graph")));
 
             draw_cpu = new Tools.DrawCpu (cores);
+            draw_cpu.t_color = f_color;
 
             var cpu_wrapper = new Gtk.Grid ();
             cpu_wrapper.halign = Gtk.Align.CENTER;

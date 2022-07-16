@@ -49,6 +49,10 @@ namespace Monitor {
         private uint64[] write_points;
 
         public DrawDiskIO () {
+            Object (hexpand: true);
+        }
+
+        construct {
             fields = Structs.DrawFields () {left = 60, bottom = 35, top = 5, right = 5};
             read_points = {};
             write_points = {};
@@ -83,8 +87,6 @@ namespace Monitor {
 
         private bool on_draw (Cairo.Context ctx) {
             int right_grid = bound_width - fields.right;
-
-            ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
 
             draw_axes (ctx);
             draw_horizontal_grid (ctx, 20);

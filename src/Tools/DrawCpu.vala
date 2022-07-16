@@ -105,6 +105,7 @@ namespace Monitor {
             bottom_text.set_font_description (description_layout);
             draw_text (ctx, bottom_text, fields.left / 2, bound_height - fields.bottom);
 
+
             if (view_type == Enums.ViewCPU.DIAGRAM) {
                 draw_diagram (ctx);
             } else {
