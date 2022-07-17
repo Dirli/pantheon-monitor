@@ -25,25 +25,6 @@ namespace Monitor {
             construct set;
         }
 
-        private Gdk.RGBA[] g_colors = {
-            {red: 1.0, green: 0, blue: 0, alpha: 0.8},
-            {red: 0, green: 1.0, blue: 0, alpha: 0.8},
-            {red: 0, green: 0, blue: 1.0, alpha: 0.8},
-            {red: 1.0, green: 1.0, blue: 0, alpha: 0.8},
-            {red: 0, green: 0.5, blue: 0.5, alpha: 0.8},
-            {red: 0, green: 0.5, blue: 0, alpha: 0.8},
-            {red: 1.0, green: 0, blue: 1.0, alpha: 0.8},
-            {red: 1.0, green: 0.65, blue: 0, alpha: 0.8},
-            {red: 0, green: 1.0, blue: 1.0, alpha: 0.8},
-            {red: 0.5, green: 0.5, blue: 0, alpha: 0.8},
-            {red: 0.5, green: 0.5, blue: 0.5, alpha: 0.8},
-            {red: 0.5, green: 0, blue: 0, alpha: 0.8},
-            {red: 0.5, green: 0, blue: 0.5, alpha: 0.8},
-            {red: 1.0, green: 0.39, blue: 0.28, alpha: 0.8},
-            {red: 0.27, green: 0.65, blue: 0.82, alpha: 0.8},
-            {red: 0.75, green: 0.75, blue: 0.75, alpha: 0.8}
-        };
-
         private int column_width = 30;
 
         private int[] d_percent = {};
@@ -141,7 +122,9 @@ namespace Monitor {
             int x_point = bound_width - fields.right - iter_count * 2;
 
             for (int i = 0; i < cores; i++) {
-                var cur_color = g_colors[int.min (i, g_colors.length - 1)];
+                var color_index = int.min (i, Enums.PresetColors.N_PRESETS);
+                var cur_color = ((Enums.PresetColors) color_index).get_rgba ();
+
                 ctx.set_source_rgba (cur_color.red, cur_color.green, cur_color.blue, cur_color.alpha);
 
                 var _arr = g_percent.index (i);

@@ -121,14 +121,17 @@ namespace Monitor {
                 int x_point = right_grid - iter_count * 2;
 
                 uint64 new_max_read = 0;
+                Gdk.RGBA sel_color;
                 if (view_io != Enums.ViewIO.WRITE) {
-                    ctx.set_source_rgba (0, 1.0, 0, 1);
+                    sel_color = Enums.PresetColors.LIME.get_rgba ();
+                    ctx.set_source_rgba (sel_color.red, sel_color.green, sel_color.blue, sel_color.alpha);
                     new_max_read = draw_points (ctx, read_points, x_point, iter_count);
                 }
 
                 uint64 new_max_write = 0;
                 if (view_io != Enums.ViewIO.READ) {
-                    ctx.set_source_rgba (1.0, 0, 0, 1);
+                    sel_color = Enums.PresetColors.RED.get_rgba ();
+                    ctx.set_source_rgba (sel_color.red, sel_color.green, sel_color.blue, sel_color.alpha);
                     new_max_write = draw_points (ctx, write_points, x_point, iter_count);
                 }
 
@@ -170,7 +173,9 @@ namespace Monitor {
 
             write_text.set_text (_("Write") + @" ($(Utils.format_bytes (last_write))) ", -1);
 
-            ctx.set_source_rgba (1.0, 0, 0, 1);
+            Gdk.RGBA sel_color = Enums.PresetColors.RED.get_rgba ();
+
+            ctx.set_source_rgba (sel_color.red, sel_color.green, sel_color.blue, 1.0);
             ctx.rectangle (fields.left, bound_height - 15, 10, 10);
             ctx.fill();
 
@@ -179,7 +184,8 @@ namespace Monitor {
             var read_text = create_pango_layout (_("Read") + @" ($(Utils.format_bytes (last_read))) ");
             read_text.get_pixel_size (out r_fontw, out fonth);
 
-            ctx.set_source_rgba (0, 1.0, 0, 1);
+            sel_color = Enums.PresetColors.LIME.get_rgba ();
+            ctx.set_source_rgba (sel_color.red, sel_color.green, sel_color.blue, 1.0);
             ctx.rectangle (fields.left + 20 + w_fontw, bound_height - 15, 10, 10);
             ctx.fill();
 
