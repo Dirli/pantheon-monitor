@@ -22,6 +22,7 @@ namespace Monitor {
         protected int bound_height;
 
         protected int text_size = 0;
+        protected int chart_size = 0;
 
         public Gdk.RGBA? t_color = null;
 
@@ -47,7 +48,7 @@ namespace Monitor {
             ctx.restore ();
         }
 
-        protected void draw_axes (Cairo.Context ctx) {
+        protected void draw_axes (Cairo.Context ctx, bool add_timeline = false) {
             ctx.save ();
 
             if (t_color != null) {
@@ -61,7 +62,28 @@ namespace Monitor {
             ctx.line_to (bound_width - fields.right, bound_height - fields.bottom);
             ctx.stroke ();
 
+            if (add_timeline) {
+                draw_timeline (ctx);
+            }
+
             ctx.restore ();
+        }
+
+        protected void draw_timeline (Cairo.Context ctx) {
+            int inc = chart_size * 2;
+
+            draw_text (ctx, create_pango_layout ("0"), inc + fields.left, bound_height - fields.bottom + 10);
+            inc -= 20;
+            int sec_label = 0;
+            while (inc > 0) {
+                sec_label += 10;
+
+                if (sec_label % 60 == 0) {
+                    draw_text (ctx, create_pango_layout (@"$(sec_label / 60)m"), inc + fields.left, bound_height - fields.bottom + 10);
+                }
+
+                inc -= 20;
+            }
         }
 
         protected void draw_horizontal_grid (Cairo.Context ctx, int grid_size) {
@@ -119,6 +141,8 @@ namespace Monitor {
         }
 
         protected void draw_text (Cairo.Context ctx, Pango.Layout text, int x_pos, int y_pos, int custom_w = 0, int custom_h = 0) {
+            text.set_font_description (description_layout);
+
             ctx.save ();
             if (t_color != null) {
                 ctx.set_source_rgba (t_color.red, t_color.green, t_color.blue, 1);
@@ -145,6 +169,11 @@ namespace Monitor {
         public override void get_preferred_height (out int minimum_height, out int natural_height) {
             minimum_height = bound_height;
             natural_height = bound_height;
+        }
+
+        public override void get_preferred_width (out int minimum_width, out int natural_width) {
+            minimum_width = bound_width;
+            natural_width = bound_width;
         }
     }
 }

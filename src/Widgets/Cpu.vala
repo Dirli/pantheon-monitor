@@ -70,7 +70,6 @@ namespace Monitor {
             draw_cpu.t_color = f_color;
 
             var cpu_wrapper = new Gtk.Grid ();
-            cpu_wrapper.halign = Gtk.Align.CENTER;
             cpu_wrapper.row_spacing = 8;
             cpu_wrapper.column_spacing = 8;
 

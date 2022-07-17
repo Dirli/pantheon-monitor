@@ -18,6 +18,8 @@
 
 namespace Monitor {
     public class Tools.DrawCpu : Tools.DrawBody {
+        private bool need_draw = false;
+
         public int cores {
             get;
             construct set;
@@ -43,7 +45,6 @@ namespace Monitor {
         };
 
         private int column_width = 30;
-        private int chart_size = 0;
 
         private int[] d_percent = {};
         private GLib.Array<GLib.Array> g_percent;
@@ -58,6 +59,7 @@ namespace Monitor {
                     fields = Structs.DrawFields () {left = 35, bottom = 25, top = 5, right = 5};
                     bound_width = cores * column_width + fields.left + fields.right;
                     size_allocate.disconnect (on_size_allocate);
+                    need_draw = true;
                     clear_cache ();
                 } else {
                     fields = Structs.DrawFields () {left = 60, bottom = 25, top = 5, right = 5};
@@ -89,22 +91,16 @@ namespace Monitor {
         private void on_size_allocate (Gtk.Allocation allocation) {
             bound_width = allocation.width;
             chart_size = (bound_width - fields.right - fields.left) / 2;
+            need_draw = false;
         }
 
         private bool on_draw (Cairo.Context ctx) {
-            draw_axes (ctx);
+            draw_axes (ctx, view_type == Enums.ViewCPU.GRAPH);
             draw_horizontal_grid (ctx, 25);
 
-            var top_text = create_pango_layout ("100");
-            top_text.set_font_description (description_layout);
-            draw_text (ctx, top_text, fields.left / 2, fields.top);
-            var middle_text = create_pango_layout ("50");
-            middle_text.set_font_description (description_layout);
-            draw_text (ctx, middle_text, fields.left / 2, (bound_height - ( +(fields.bottom - fields.top))) / 2);
-            var bottom_text = create_pango_layout ("0");
-            bottom_text.set_font_description (description_layout);
-            draw_text (ctx, bottom_text, fields.left / 2, bound_height - fields.bottom);
-
+            draw_text (ctx, create_pango_layout ("100"), fields.left / 2, fields.top);
+            draw_text (ctx, create_pango_layout ("50"), fields.left / 2, (bound_height - ( +(fields.bottom - fields.top))) / 2);
+            draw_text (ctx, create_pango_layout ("0"), fields.left / 2, bound_height - fields.bottom);
 
             if (view_type == Enums.ViewCPU.DIAGRAM) {
                 draw_diagram (ctx);
@@ -130,25 +126,16 @@ namespace Monitor {
         }
 
         private void draw_graphic (Cairo.Context ctx) {
+            if (!need_draw) {
+                return;
+            }
+
+            need_draw = false;
             ctx.save ();
 
             int iter_count = int.min ((int) g_percent.index (0).length, chart_size);
             if (iter_count < 2) {
                 return;
-            }
-
-            int inc = chart_size * 2;
-
-            int sec_label = 0;
-            while (inc > 0) {
-                if (sec_label == 0 || sec_label % 60 == 0) {
-                    var v_text = create_pango_layout ("%d m".printf (sec_label / 60));
-                    v_text.set_font_description (description_layout);
-                    draw_text (ctx, v_text, inc + fields.left, bound_height - 10);
-                }
-
-                sec_label += 10;
-                inc -= 20;
             }
 
             int x_point = bound_width - fields.right - iter_count * 2;
@@ -218,6 +205,8 @@ namespace Monitor {
 
                     _arr.append_val (cores_percent[i]);
                 }
+
+                need_draw = true;
             }
 
             queue_draw ();
@@ -227,11 +216,6 @@ namespace Monitor {
             for (int i = 0; i < cores; i++) {
                 g_percent.index (i).steal ();
             }
-        }
-
-        public override void get_preferred_width (out int minimum_width, out int natural_width) {
-            minimum_width = bound_width;
-            natural_width = bound_width;
         }
     }
 }

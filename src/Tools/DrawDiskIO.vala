@@ -64,6 +64,7 @@ namespace Monitor {
 
             size_allocate.connect ((allocation) => {
                 bound_width = allocation.width;
+                chart_size = (bound_width - fields.right - fields.left) / 2;
                 draw_graphic = false;
             });
             draw.connect (on_draw);
@@ -88,32 +89,16 @@ namespace Monitor {
         private bool on_draw (Cairo.Context ctx) {
             int right_grid = bound_width - fields.right;
 
-            draw_axes (ctx);
+            draw_axes (ctx, true);
             draw_horizontal_grid (ctx, 20);
             draw_vertical_grid (ctx, 20);
 
             int y_title = fields.top;
             if (scale_titles.length == 3) {
                 foreach (string title in scale_titles) {
-                    var h_text = create_pango_layout (title);
-                    h_text.set_font_description (description_layout);
-                    draw_text (ctx, h_text, fields.left / 2, y_title);
+                    draw_text (ctx, create_pango_layout (title), fields.left / 2, y_title);
                     y_title += 40;
                 }
-            }
-
-            int inc = right_grid - fields.left;
-
-            int sec_label = 0;
-            while (inc > 0) {
-                if (sec_label == 0 || sec_label % 60 == 0) {
-                    var v_text = create_pango_layout ("%d m".printf (sec_label / 60));
-                    v_text.set_font_description (description_layout);
-                    draw_text (ctx, v_text, inc + fields.left, bound_height - 25);
-                }
-
-                sec_label += 10;
-                inc -= 20;
             }
 
             draw_legend (ctx);
@@ -181,7 +166,6 @@ namespace Monitor {
 
             int r_fontw, w_fontw, fonth;
             var write_text = create_pango_layout (_("Write") + " (999 KB/s) ");
-            write_text.set_font_description (description_layout);
             write_text.get_pixel_size (out w_fontw, out fonth);
 
             write_text.set_text (_("Write") + @" ($(Utils.format_bytes (last_write))) ", -1);
@@ -193,7 +177,6 @@ namespace Monitor {
             draw_text (ctx, write_text, fields.left + w_fontw / 2 + 15, bound_height - 10, w_fontw, fonth);
 
             var read_text = create_pango_layout (_("Read") + @" ($(Utils.format_bytes (last_read))) ");
-            read_text.set_font_description (description_layout);
             read_text.get_pixel_size (out r_fontw, out fonth);
 
             ctx.set_source_rgba (0, 1.0, 0, 1);
@@ -239,11 +222,6 @@ namespace Monitor {
 
             write_points = {};
             read_points = {};
-        }
-
-        public override void get_preferred_width (out int minimum_width, out int natural_width) {
-            minimum_width = bound_width;
-            natural_width = bound_width;
         }
     }
 }
