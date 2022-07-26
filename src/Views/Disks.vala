@@ -95,13 +95,16 @@ namespace Monitor {
             volumes_box.changed_box_size.connect (on_changed_box_size);
 
             Gtk.Box drive_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 15);
-            drive_box.get_style_context ().add_class ("block");
-            drive_box.expand = false;
+            drive_box.margin = 12;
+            drive_box.vexpand = false;
 
             drive_box.add (info_box);
             drive_box.add (volumes_box);
 
-            inner_widget.add (drive_box);
+            var wrap_box = get_wrap_box ();
+            wrap_box.add (drive_box);
+
+            inner_widget.add (wrap_box);
 
             return true;
         }
