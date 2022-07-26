@@ -32,17 +32,13 @@ namespace Monitor {
             Object (hexpand: true,
                     row_spacing: 8,
                     column_spacing: 8,
+                    margin: 12,
                     halign: Gtk.Align.FILL,
-                    valign: Gtk.Align.CENTER,
+                    // valign: Gtk.Align.CENTER,
                     memory_total: m_total);
         }
 
         construct {
-            unowned Gtk.StyleContext style_context = get_style_context ();
-            style_context.add_class (Granite.STYLE_CLASS_CARD);
-            style_context.add_class (Granite.STYLE_CLASS_ROUNDED);
-            style_context.add_class ("res-card");
-
             swap_on = memory_total.swap != null;
 
             var total_label = new Gtk.Label (_("Memory") + ": ");

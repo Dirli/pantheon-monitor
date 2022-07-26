@@ -41,30 +41,30 @@ namespace Monitor {
         }
 
         construct {
-            var inner_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 15);
-            inner_box.valign = Gtk.Align.CENTER;
-            inner_box.margin = 15;
-            inner_box.spacing = 15;
-            inner_box.expand = true;
+            var inner_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 15) {
+                valign = Gtk.Align.CENTER,
+                margin = 15,
+                spacing = 25,
+                expand = true
+            };
 
             resource_manager = new Services.ResourcesManager ();
             extended_window = new Gtk.Popover (null);
 
             widget_cpu = new Widgets.Cpu (current_color, resource_manager.quantity_cores);
-
-            inner_box.add (widget_cpu);
-
-            inner_box.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+            var cpu_box = get_wrap_box ();
+            cpu_box .add (widget_cpu);
+            inner_box.add (cpu_box);
 
             widget_memory = new Widgets.Memory (resource_manager.memory_total);
-            inner_box.add (widget_memory);
-
-            inner_box.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+            var ram_box = get_wrap_box ();
+            ram_box.add (widget_memory);
+            inner_box.add (ram_box);
 
             widget_diskio = new Widgets.DiskIO (current_color);
-            inner_box.add (widget_diskio);
-
-            inner_box.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+            var diskio_box = get_wrap_box ();
+            diskio_box.add (widget_diskio);
+            inner_box.add (diskio_box);
 
             widget_net = new Widgets.Network (current_color);
             widget_net.show_popover.connect ((w) => {
@@ -72,7 +72,9 @@ namespace Monitor {
 
                 open_popover (w, popover_grid);
             });
-            inner_box.add (widget_net);
+            var net_box = get_wrap_box ();
+            net_box .add (widget_net);
+            inner_box.add (net_box);
 
             resource_manager.notify["network-speed"].connect (() => {
                 widget_net.set_new_max (resource_manager.network_speed);

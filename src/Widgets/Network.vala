@@ -26,16 +26,28 @@ namespace Monitor {
         private Gtk.Label net_d_val;
         private Gtk.Label net_u_val;
 
-        public Network (Gdk.RGBA font_color) {
-            orientation = Gtk.Orientation.HORIZONTAL;
-            spacing = 12;
-            hexpand = true;
-            halign = Gtk.Align.CENTER;
+        public Gdk.RGBA f_color {
+            get;
+            construct set;
+        }
 
-            widget_down = new Tools.DrawNetCircle ("▼ (MB)", font_color);
+        public Network (Gdk.RGBA font_color) {
+            Object (orientation: Gtk.Orientation.HORIZONTAL,
+                    halign: Gtk.Align.CENTER,
+                    spacing: 12,
+                    hexpand: true,
+                    margin_start: 12,
+                    margin_end: 12,
+                    margin_top: 12,
+                    margin_bottom: 12,
+                    f_color: font_color);
+        }
+
+        construct {
+            widget_down = new Tools.DrawNetCircle ("▼ (MB)", f_color);
             widget_down.halign = Gtk.Align.CENTER;
             widget_down.tooltip_text = _("Download");
-            widget_up = new Tools.DrawNetCircle ("▲ (MB)", font_color);
+            widget_up = new Tools.DrawNetCircle ("▲ (MB)", f_color);
             widget_up.halign = Gtk.Align.CENTER;
             widget_up.tooltip_text = _("Upload");
 

@@ -51,7 +51,7 @@ namespace Monitor {
             actions.add_action_entries (ACTION_ENTRIES, this);
             insert_action_group ("win", actions);
 
-            set_default_size (700, 760);
+            set_default_size (700, 850);
 
             var provider = new Gtk.CssProvider ();
             provider.load_from_resource ("/io/elementary/monitor/style/application.css");

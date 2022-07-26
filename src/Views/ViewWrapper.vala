@@ -33,5 +33,17 @@ namespace Monitor {
             add (main_widget);
         }
 
+        protected Gtk.Box get_wrap_box () {
+            var wrap_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0) {
+                hexpand = true,
+                halign = Gtk.Align.FILL
+            };
+            unowned Gtk.StyleContext box_style_context = wrap_box.get_style_context ();
+            box_style_context.add_class (Granite.STYLE_CLASS_CARD);
+            box_style_context.add_class (Granite.STYLE_CLASS_ROUNDED);
+
+            return wrap_box;
+        }
+
     }
 }

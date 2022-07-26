@@ -17,7 +17,7 @@
  */
 
 namespace Monitor {
-    public class Widgets.Cpu : Gtk.Box {
+    public class Widgets.Cpu : Gtk.Grid {
         private Gtk.Label freq_val;
 
         public Gdk.RGBA f_color {
@@ -32,21 +32,20 @@ namespace Monitor {
         }
 
         public Cpu (Gdk.RGBA current_color, int cores) {
-            Object (orientation: Gtk.Orientation.VERTICAL,
-                    hexpand: true,
-                    spacing: 8,
-                    halign: Gtk.Align.FILL,
+            Object (hexpand: true,
+                    halign: Gtk.Align.CENTER,
                     valign: Gtk.Align.CENTER,
+                    margin_start: 12,
+                    margin_end: 12,
+                    margin_top: 12,
+                    margin_bottom: 12,
+                    row_spacing: 8,
+                    column_spacing: 8,
                     f_color: current_color,
                     cores: cores);
         }
 
         construct {
-            unowned Gtk.StyleContext style_context = get_style_context ();
-            style_context.add_class (Granite.STYLE_CLASS_CARD);
-            style_context.add_class (Granite.STYLE_CLASS_ROUNDED);
-            style_context.add_class ("res-card");
-
             var cpu_label = new Gtk.Label (_("CPU"));
             cpu_label.halign = Gtk.Align.START;
             cpu_label.get_style_context ().add_class ("section");
@@ -69,19 +68,13 @@ namespace Monitor {
             draw_cpu = new Tools.DrawCpu (cores);
             draw_cpu.t_color = f_color;
 
-            var cpu_wrapper = new Gtk.Grid ();
-            cpu_wrapper.row_spacing = 8;
-            cpu_wrapper.column_spacing = 8;
-
-            cpu_wrapper.attach (cpu_label, 0, 0);
-            cpu_wrapper.attach (view_btns, 1, 0);
-            cpu_wrapper.attach (info_box, 0, 1);
-            cpu_wrapper.attach (draw_cpu, 1, 1);
-
-            add (cpu_wrapper);
+            attach (cpu_label, 0, 0);
+            attach (view_btns, 1, 0);
+            attach (info_box, 0, 1);
+            attach (draw_cpu, 1, 1);
 
             view_btns.mode_changed.connect (() => {
-                cpu_wrapper.halign = view_btns.selected == Enums.ViewCPU.DIAGRAM ? Gtk.Align.CENTER : Gtk.Align.FILL;
+                halign = view_btns.selected == Enums.ViewCPU.DIAGRAM ? Gtk.Align.CENTER : Gtk.Align.FILL;
                 draw_cpu.view_type = (Enums.ViewCPU) view_btns.selected;
             });
             view_btns.selected = 0;

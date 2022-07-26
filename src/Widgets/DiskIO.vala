@@ -30,17 +30,15 @@ namespace Monitor {
                     row_spacing: 8,
                     column_spacing: 8,
                     hexpand: true,
+                    margin_start: 12,
+                    margin_end: 12,
+                    margin_top: 12,
+                    margin_bottom: 12,
                     f_color: current_color,
-                    halign: Gtk.Align.FILL,
-                    valign: Gtk.Align.CENTER);
+                    halign: Gtk.Align.FILL);
         }
 
         construct {
-            unowned Gtk.StyleContext style_context = get_style_context ();
-            style_context.add_class (Granite.STYLE_CLASS_CARD);
-            style_context.add_class (Granite.STYLE_CLASS_ROUNDED);
-            style_context.add_class ("res-card");
-
             var diskio_label = new Gtk.Label (_("Disk read/write"));
             diskio_label.halign = Gtk.Align.START;
 
