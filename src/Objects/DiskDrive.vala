@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Dirli <litandrej85@gmail.com>
+ * Copyright (c) 2021-2022 Dirli <litandrej85@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ namespace Monitor {
         public string id;
         public string device;
         public string partition;
+        public string pretty_size;
         public GLib.Icon drive_icon;
 
         private Gee.ArrayList<Structs.MonitorVolume?> volumes;

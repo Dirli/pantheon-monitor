@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Dirli <litandrej85@gmail.com>
+ * Copyright (c) 2020-2022 Dirli <litandrej85@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,6 +72,7 @@ namespace Monitor.Structs {
         public string type;
         public string uuid;
         public string mount_point;
+        public string pretty_size;
         public uint64 size;
         public uint64 free;
         public uint64 offset;

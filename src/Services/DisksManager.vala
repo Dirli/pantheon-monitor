@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Dirli <litandrej85@gmail.com>
+ * Copyright (c) 2020-2022 Dirli <litandrej85@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,6 +65,7 @@ namespace Monitor {
 
                                 current_drive.model = drive_dev.model;
                                 current_drive.size = drive_dev.size;
+                                current_drive.pretty_size = size_to_display (drive_dev.size);
                                 current_drive.revision = drive_dev.revision;
                                 current_drive.serial = drive_dev.serial;
 
@@ -104,6 +105,7 @@ namespace Monitor {
                         current_volume.label = block_dev.id_label;
                         current_volume.type = block_dev.id_type;
                         current_volume.size = block_dev.size;
+                        current_volume.pretty_size = size_to_display (block_dev.size);
                         current_volume.uuid = block_dev.id_uuid;
                         var partition = udisks_obj.get_partition ();
                         if (partition != null) {

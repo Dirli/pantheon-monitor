@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Dirli <litandrej85@gmail.com>
+ * Copyright (c) 2020-2022 Dirli <litandrej85@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ namespace Monitor {
 
         protected Gtk.Box get_wrap_box () {
             var wrap_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0) {
-                hexpand = true,
+                // hexpand = true,
                 halign = Gtk.Align.FILL
             };
             unowned Gtk.StyleContext box_style_context = wrap_box.get_style_context ();
