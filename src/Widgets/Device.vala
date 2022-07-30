@@ -2,6 +2,7 @@ namespace Monitor {
     public class Widgets.Device : Gtk.Box {
         public signal void changed_box_size (string did, int new_width);
         public signal void show_volumes (string did);
+        public signal void show_smart_page ();
 
         private Gtk.Box volumes_box;
         private int c_width = 0;
@@ -58,6 +59,9 @@ namespace Monitor {
                 };
 
                 var smart_btn = new Gtk.Button.with_label ("S.M.A.R.T...");
+                smart_btn.clicked.connect (() => {
+                    show_smart_page ();
+                });
                 int s_top = 0;
                 smart_grid.attach (smart_btn, 0, s_top++, 2);
 

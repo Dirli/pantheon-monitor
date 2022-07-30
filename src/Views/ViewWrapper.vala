@@ -21,16 +21,32 @@ namespace Monitor {
         public abstract void start_timer ();
         public abstract void stop_timer ();
 
-        public Gtk.ScrolledWindow main_widget;
+        public Gtk.ScrolledWindow s_window;
+        protected Gtk.Stack widget_stack;
+        protected Gtk.Container main_widget;
 
         construct {
-            main_widget = new Gtk.ScrolledWindow (null, null);
+            s_window = new Gtk.ScrolledWindow (null, null);
 
-            main_widget.expand = true;
-            main_widget.margin_start = main_widget.margin_end = 15;
-            main_widget.margin_top = main_widget.margin_bottom = 10;
+            s_window.expand = true;
+            s_window.margin_start = s_window.margin_end = 15;
+            s_window.margin_top = s_window.margin_bottom = 10;
 
-            add (main_widget);
+            widget_stack = new Gtk.Stack ();
+            widget_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
+            s_window.add (widget_stack);
+
+            add (s_window);
+        }
+
+        protected bool init_main_widget () {
+            if (main_widget == null) {
+                return false;
+            }
+
+            widget_stack.add_named (main_widget, "main");
+
+            return true;
         }
 
         protected Gtk.Box get_wrap_box () {

@@ -17,55 +17,106 @@
  */
 
 namespace Monitor {
-    public class Dialogs.Smart : Gtk.Dialog {
-        public Objects.DiskDrive drive { get; construct set; }
-        public string did { get; construct set; }
+    public class Widgets.Smart : Gtk.Box {
+        public signal void show_main_page ();
 
-        public Smart (Objects.DiskDrive d) {
-            Object (modal: true,
-                    deletable: false,
-                    resizable: false,
-                    destroy_with_parent: true,
-                    drive: d);
+        private Gtk.Label label_val;
+        private Gtk.Label firmvare_val;
+        private Gtk.Label serial_val;
+        private Gtk.Label hours_val;
+        private Gtk.Label starts_val;
+        private Gtk.Label writes_val;
+
+        private Gtk.TreeView smart_tree_view;
+
+        public Smart () {
+            Object (orientation: Gtk.Orientation.VERTICAL,
+                    margin: 10,
+                    spacing: 8);
         }
 
         construct {
-            set_default_response (Gtk.ResponseType.CANCEL);
+            var back_btn = new Gtk.Button.with_label (_("Back"));
+            back_btn.get_style_context ().add_class (Granite.STYLE_CLASS_BACK_BUTTON);
+            back_btn.clicked.connect (() => {
+                clear_cache ();
+                show_main_page ();
+            });
 
-            title = drive.model;
+            label_val = new Gtk.Label (null);
+            label_val.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
 
-            var smart_grid = new Gtk.Grid ();
-            smart_grid.halign = Gtk.Align.START;
-            smart_grid.row_spacing = 8;
-            smart_grid.column_spacing = 8;
-            smart_grid.margin = 12;
+            firmvare_val = new Gtk.Label (null);
+            serial_val = new Gtk.Label (null);
 
-            var top = 0;
+            var smart_head_l = new Gtk.Grid () {
+                halign = Gtk.Align.START,
+                row_spacing = 8,
+                column_spacing = 8,
+                hexpand = true,
+                margin = 12
+            };
 
-            add_new_str (ref smart_grid, _("Firmware:"), drive.revision, top++);
-            add_new_str (ref smart_grid, _("Serial number:"), drive.serial, top++);
+            smart_head_l.attach (create_label (_("Firmware:")), 0, 0);
+            smart_head_l.attach (firmvare_val, 1, 0);
+            smart_head_l.attach (create_label (_("Serial number:")), 0, 1);
+            smart_head_l.attach (serial_val, 1, 1);
 
-            var smart_layout = new Gtk.Box (Gtk.Orientation.VERTICAL, 8);
-            smart_layout.add (smart_grid);
+            writes_val = new Gtk.Label (null);
+            hours_val = new Gtk.Label (null);
+            starts_val = new Gtk.Label (null);
+
+            var smart_head_r = new Gtk.Grid () {
+                halign = Gtk.Align.END,
+                row_spacing = 8,
+                column_spacing = 8,
+                hexpand = true,
+                margin = 12
+            };
+
+            smart_head_r.attach (create_label (_("Number of starts:")), 0, 0);
+            smart_head_r.attach (starts_val, 1, 0);
+            smart_head_r.attach (create_label (_("Worked hours:")), 0, 1);
+            smart_head_r.attach (hours_val, 1, 1);
+            smart_head_r.attach (create_label (_("Total writes:")), 0, 2);
+            smart_head_r.attach (writes_val, 1, 2);
+
+            var smart_head  = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+            smart_head.add (smart_head_l);
+            smart_head.add (smart_head_r);
+
+            smart_tree_view = create_smart_view ();
+
+            add (back_btn);
+            add (label_val);
+            add (smart_head);
+            add (smart_tree_view);
+        }
+
+        public void show_smart (Objects.DiskDrive drive) {
+            label_val.set_label (drive.model);
+            firmvare_val.set_label (drive.revision);
+            serial_val.set_label (drive.serial);
 
             var smart = drive.get_smart ();
             if (smart != null) {
-                var smart_store = drive.get_smart_store ();
-
-                var smart_tree_view = create_smart_view ();
                 smart_tree_view.set_model (smart.smart_store);
 
-                smart_layout.add (smart_tree_view);
+                hours_val.set_label (@"$(smart.power_seconds / 3600) h.");
+                starts_val.set_label (@"$(smart.power_counts)");
+                writes_val.set_label (@"$(smart.total_write != 0 ? Utils.format_bytes (smart.total_write, true) : "--")");
             }
+        }
 
-            Gtk.Box content = this.get_content_area () as Gtk.Box;
-            content.valign = Gtk.Align.START;
-            content.border_width = 6;
-            content.add (smart_layout);
+        public void clear_cache () {
+            smart_tree_view.set_model (null);
 
-            add_button (_("Close"), Gtk.ResponseType.CANCEL);
-
-            response.connect (() => {destroy ();});
+            label_val.set_label ("");
+            firmvare_val.set_label ("");
+            serial_val.set_label ("");
+            hours_val.set_label ("");
+            starts_val.set_label ("");
+            writes_val.set_label ("");
         }
 
         private Gtk.TreeView create_smart_view () {
@@ -139,15 +190,11 @@ namespace Monitor {
             cell_text.text = layout_text;
         }
 
-        private void add_new_str (ref Gtk.Grid w, string label_str, string value_str, int str_top, int str_left = 0) {
+        private Gtk.Label create_label (string label_str) {
             var iter_label = new Gtk.Label (label_str);
             iter_label.halign = Gtk.Align.END;
 
-            var iter_value = new Gtk.Label (value_str);
-            iter_value.halign = Gtk.Align.START;
-
-            w.attach (iter_label, str_left++, str_top);
-            w.attach (iter_value, str_left, str_top);
+            return iter_label;
         }
     }
 }

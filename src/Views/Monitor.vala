@@ -41,7 +41,7 @@ namespace Monitor {
         }
 
         construct {
-            var inner_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 15) {
+            main_widget = new Gtk.Box (Gtk.Orientation.VERTICAL, 15) {
                 valign = Gtk.Align.CENTER,
                 margin = 15,
                 spacing = 25,
@@ -54,17 +54,17 @@ namespace Monitor {
             widget_cpu = new Widgets.Cpu (current_color, resource_manager.quantity_cores);
             var cpu_box = get_wrap_box ();
             cpu_box .add (widget_cpu);
-            inner_box.add (cpu_box);
+            main_widget.add (cpu_box);
 
             widget_memory = new Widgets.Memory (resource_manager.memory_total);
             var ram_box = get_wrap_box ();
             ram_box.add (widget_memory);
-            inner_box.add (ram_box);
+            main_widget.add (ram_box);
 
             widget_diskio = new Widgets.DiskIO (current_color);
             var diskio_box = get_wrap_box ();
             diskio_box.add (widget_diskio);
-            inner_box.add (diskio_box);
+            main_widget.add (diskio_box);
 
             widget_net = new Widgets.Network (current_color);
             widget_net.show_popover.connect ((w) => {
@@ -74,7 +74,7 @@ namespace Monitor {
             });
             var net_box = get_wrap_box ();
             net_box .add (widget_net);
-            inner_box.add (net_box);
+            main_widget.add (net_box);
 
             resource_manager.notify["network-speed"].connect (() => {
                 widget_net.set_new_max (resource_manager.network_speed);
@@ -83,11 +83,11 @@ namespace Monitor {
             uptime_val = new Gtk.Label ("-");
             uptime_val.halign = Gtk.Align.CENTER;
 
-            inner_box.add (uptime_val);
+            main_widget.add (uptime_val);
 
             border_width = 0;
 
-            main_widget.add (inner_box);
+            init_main_widget ();
         }
 
         public override void start_timer () {

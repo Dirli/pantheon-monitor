@@ -23,7 +23,6 @@ namespace Monitor {
         private Gtk.Popover menu_popover;
 
         private Services.ProcessManager process_manager;
-        private Widgets.ProcessList process_list;
         private Gtk.TreeModelFilter proc_filter;
 
         private Gtk.TreeSelection tree_selection;
@@ -44,15 +43,15 @@ namespace Monitor {
         construct {
             process_manager = new Services.ProcessManager ();
 
-            process_list = new Widgets.ProcessList ();
+            main_widget = new Widgets.ProcessList ();
 
-            tree_selection = process_list.get_selection ();
+            tree_selection = ((Widgets.ProcessList) main_widget).get_selection ();
             tree_selection.set_mode (Gtk.SelectionMode.SINGLE);
 
             create_popover_menu ();
 
-            process_list.button_press_event.connect ((event) => {
-                if (event.window != process_list.get_bin_window ()) {
+            main_widget.button_press_event.connect ((event) => {
+                if (event.window != ((Widgets.ProcessList) main_widget).get_bin_window ()) {
                     return base.button_press_event (event);
                 }
 
@@ -67,16 +66,16 @@ namespace Monitor {
             proc_filter.set_visible_func (row_visible);
 
             var sort_model = new Gtk.TreeModelSort.with_model (proc_filter);
-            process_list.set_model (sort_model);
+            ((Widgets.ProcessList) main_widget).set_model (sort_model);
 
-            main_widget.add (process_list);
+            init_main_widget ();
         }
 
         private bool on_button_press (Gdk.EventButton event) {
             int cell_x, cell_y;
             Gtk.TreePath? cursor_path;
             Gtk.TreeViewColumn? cursor_column;
-            process_list.get_path_at_pos ((int) event.x, (int) event.y, out cursor_path, out cursor_column, out cell_x, out cell_y);
+            ((Widgets.ProcessList) main_widget).get_path_at_pos ((int) event.x, (int) event.y, out cursor_path, out cursor_column, out cell_x, out cell_y);
 
             unowned Gtk.TreeModel mod;
             var paths_list = tree_selection.get_selected_rows (out mod);
@@ -137,7 +136,7 @@ namespace Monitor {
             menu_box.add (end_button);
             menu_box.add (kill_button);
 
-            menu_popover = new Gtk.Popover (process_list);
+            menu_popover = new Gtk.Popover (main_widget);
             menu_popover.add (menu_box);
             menu_popover.show_all ();
 

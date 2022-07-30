@@ -20,7 +20,8 @@ namespace Monitor {
     public class Views.Disks : Views.ViewWrapper {
         private Services.DisksManager disks_manager;
 
-        private Gtk.Box inner_widget;
+        private Widgets.Smart smart_widget;
+
         private Gtk.Popover popover;
 
         public Disks () {
@@ -29,8 +30,8 @@ namespace Monitor {
         }
 
         construct {
-            inner_widget = new Gtk.Box (Gtk.Orientation.VERTICAL, 15);
-            inner_widget.hexpand = true;
+            main_widget = new Gtk.Box (Gtk.Orientation.VERTICAL, 15);
+            // main_widget.hexpand = true;
 
             popover = new Gtk.Popover (null);
             popover.closed.connect (() => {
@@ -47,7 +48,15 @@ namespace Monitor {
                 disks_manager.get_drives ().foreach (add_drive);
             }
 
-            main_widget.add (inner_widget);
+            init_main_widget ();
+
+            smart_widget = new Widgets.Smart ();
+            smart_widget.show_main_page.connect (() => {
+                widget_stack.set_visible_child_name ("main");
+            });
+            widget_stack.add_named (smart_widget, "smart");
+
+            widget_stack.set_visible_child_name ("main");
         }
 
         private bool add_drive (owned Objects.DiskDrive? drive) {
@@ -58,11 +67,15 @@ namespace Monitor {
             device_widget.show_volumes.connect ((did) => {
                 //
             });
+            device_widget.show_smart_page.connect (() => {
+                smart_widget.show_smart (drive);
+                widget_stack.set_visible_child_name ("smart");
+            });
 
             var wrap_box = get_wrap_box ();
             wrap_box.add (device_widget);
 
-            inner_widget.add (wrap_box);
+            main_widget.add (wrap_box);
 
             return true;
         }
