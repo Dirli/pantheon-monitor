@@ -33,7 +33,7 @@ namespace Monitor {
             disks_manager = new Services.DisksManager ();
 
             if (!disks_manager.init ()) {
-                //
+                // gotta do something
             } else {
                 disks_manager.get_drives ().foreach (add_drive);
             }
@@ -55,6 +55,11 @@ namespace Monitor {
                 on_changed_box_size (device_widget, did, w);
             });
             device_widget.show_smart_page.connect (() => {
+                main_widget.@foreach ((w) => {
+                    var device = (Widgets.Device) ((Gtk.Container) w).get_children ().nth_data (0);
+                    device.clear_revealer ();
+                });
+
                 smart_widget.show_smart (drive);
                 widget_stack.set_visible_child_name ("smart");
             });
@@ -152,7 +157,16 @@ namespace Monitor {
             });
         }
 
-        public override void stop_timer () {}
+        public override void stop_timer () {
+            main_widget.@foreach ((w) => {
+                var device = (Widgets.Device) ((Gtk.Container) w).get_children ().nth_data (0);
+                device.clear_revealer ();
+            });
+
+            smart_widget.clear_cache ();
+            widget_stack.set_visible_child_name ("main");
+
+        }
         public override void start_timer () {}
     }
 }

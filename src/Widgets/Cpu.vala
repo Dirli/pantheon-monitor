@@ -46,21 +46,24 @@ namespace Monitor {
         }
 
         construct {
-            var cpu_label = new Gtk.Label (_("CPU"));
-            cpu_label.halign = Gtk.Align.START;
-            cpu_label.get_style_context ().add_class ("section");
+            var cpu_label = new Gtk.Label (_("CPU")) {
+                halign = Gtk.Align.START
+            };
+            cpu_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
 
             freq_val = new Gtk.Label ("");
             freq_val.set_width_chars (8);
 
-            var info_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 5);
-            info_box.valign = Gtk.Align.CENTER;
+            var info_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 5) {
+                valign = Gtk.Align.CENTER
+            };
             info_box.add (freq_val);
             info_box.add (new Gtk.Label ("%d %s".printf (cores, _("cores"))));
 
-            var view_btns = new Granite.Widgets.ModeButton ();
-            view_btns.homogeneous = false;
-            view_btns.halign = Gtk.Align.END;
+            var view_btns = new Granite.Widgets.ModeButton () {
+                homogeneous = false,
+                halign = Gtk.Align.END
+            };
 
             view_btns.append (new Gtk.Label (_("diagram")));
             view_btns.append (new Gtk.Label (_("graph")));

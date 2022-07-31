@@ -26,14 +26,18 @@ namespace Monitor {
         protected Gtk.Container main_widget;
 
         construct {
-            s_window = new Gtk.ScrolledWindow (null, null);
+            s_window = new Gtk.ScrolledWindow (null, null) {
+                expand = true,
+                margin_start = 15,
+                margin_end = 15,
+                margin_top = 10,
+                margin_bottom = 10
+            };
 
-            s_window.expand = true;
-            s_window.margin_start = s_window.margin_end = 15;
-            s_window.margin_top = s_window.margin_bottom = 10;
+            widget_stack = new Gtk.Stack () {
+                transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT
+            };
 
-            widget_stack = new Gtk.Stack ();
-            widget_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
             s_window.add (widget_stack);
 
             add (s_window);
@@ -60,6 +64,5 @@ namespace Monitor {
 
             return wrap_box;
         }
-
     }
 }

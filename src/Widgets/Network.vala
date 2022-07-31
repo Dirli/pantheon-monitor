@@ -53,7 +53,7 @@ namespace Monitor {
 
             Gtk.Label net_label = new Gtk.Label (_("Network"));
             net_label.halign = Gtk.Align.CENTER;
-            net_label.get_style_context ().add_class ("section");
+            net_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
 
             Gtk.Label net_d_label = new Gtk.Label (_("Downloaded") + ": ");
             net_d_val = new Gtk.Label ("-");

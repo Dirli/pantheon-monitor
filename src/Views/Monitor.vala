@@ -43,7 +43,6 @@ namespace Monitor {
         construct {
             main_widget = new Gtk.Box (Gtk.Orientation.VERTICAL, 15) {
                 valign = Gtk.Align.CENTER,
-                margin = 15,
                 spacing = 25,
                 expand = true
             };

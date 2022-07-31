@@ -30,11 +30,13 @@ namespace Monitor {
                 expand = true
             };
 
-            Gtk.Label drive_model_val = new Gtk.Label (device.model);
-            drive_model_val.halign = Gtk.Align.START;
-            drive_model_val.set_ellipsize (Pango.EllipsizeMode.END);
+            Gtk.Label device_model = new Gtk.Label (device.model);
+            device_model.halign = Gtk.Align.START;
+            device_model.set_ellipsize (Pango.EllipsizeMode.END);
+            device_model.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
+
             var top = 0;
-            device_grid.attach (drive_model_val, 0, top++, 3, 1);
+            device_grid.attach (device_model, 0, top++, 3, 1);
 
             Gtk.Image d_icon = device.drive_icon != null
                                ? new Gtk.Image.from_gicon (device.drive_icon, Gtk.IconSize.DIALOG)
@@ -104,6 +106,7 @@ namespace Monitor {
 
             vol_revealer = new Gtk.Revealer ();
             vol_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
+            vol_revealer.reveal_child = false;
 
             add (head_box);
             add (volumes_box);
@@ -117,33 +120,33 @@ namespace Monitor {
                 row_spacing = 6,
                 column_spacing = 6
             };
-            var l_top = 0;
-            add_str (l_grid, _("Device:"), v.device, l_top++);
-
-            if (v.label != "") {
-                add_str (l_grid, _("Label:"), v.label, l_top++);
-            }
+            var top = 0;
+            add_str (l_grid, _("Partition:"), v.device, top++);
 
             if (v.uuid != "") {
-                add_str (l_grid, "UUID:", v.uuid, l_top);
+                add_str (l_grid, "UUID:", v.uuid, top++);
+            }
+
+            if (v.label != "") {
+                add_str (l_grid, _("Label:"), v.label, top++);
             }
 
             var r_grid = new Gtk.Grid () {
                 row_spacing = 6,
                 column_spacing = 6
             };
-            var r_top = 0;
-            add_str (r_grid, _("Filesystem:"), v.type != "" ? v.type : _("Unallocated Space"), r_top++);
+            top = 0;
+            add_str (r_grid, _("Filesystem:"), v.type != "" ? v.type : _("Unallocated Space"), top++);
 
             var cust_size = "";
             if (v.mount_point != null) {
-                add_str (r_grid, _("Mount point:"), v.mount_point, r_top++);
+                add_str (r_grid, _("Mount point:"), v.mount_point, top++);
 
                 cust_size = v.pretty_free + " / ";
             }
             cust_size += v.pretty_size;
 
-            add_str (r_grid, v.mount_point != null ? _("Size (free / total):") : _("Size:"), cust_size, r_top++);
+            add_str (r_grid, v.mount_point != null ? _("Size (free / total):") : _("Size:"), cust_size, top++);
 
             extended_volume_box.add (l_grid);
             extended_volume_box.add (r_grid);
@@ -156,7 +159,7 @@ namespace Monitor {
             vol_revealer.reveal_child = true;
         }
 
-        public bool clear_revealer (string v_device) {
+        public bool clear_revealer (string v_device = "") {
             if (vol_revealer.reveal_child) {
                 vol_revealer.reveal_child = false;
             }

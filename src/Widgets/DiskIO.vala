@@ -41,6 +41,7 @@ namespace Monitor {
         construct {
             var diskio_label = new Gtk.Label (_("Disk read/write"));
             diskio_label.halign = Gtk.Align.START;
+            diskio_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
 
             draw_diskio = new Tools.DrawDiskIO ();
             draw_diskio.t_color = f_color;
