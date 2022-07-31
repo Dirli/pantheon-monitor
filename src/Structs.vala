@@ -73,6 +73,7 @@ namespace Monitor.Structs {
         public string uuid;
         public string mount_point;
         public string pretty_size;
+        public string pretty_free;
         public uint64 size;
         public uint64 free;
         public uint64 offset;

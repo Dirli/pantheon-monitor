@@ -53,7 +53,7 @@ namespace Monitor {
 
             widget_cpu = new Widgets.Cpu (current_color, resource_manager.quantity_cores);
             var cpu_box = get_wrap_box ();
-            cpu_box .add (widget_cpu);
+            cpu_box.add (widget_cpu);
             main_widget.add (cpu_box);
 
             widget_memory = new Widgets.Memory (resource_manager.memory_total);
@@ -73,7 +73,7 @@ namespace Monitor {
                 open_popover (w, popover_grid);
             });
             var net_box = get_wrap_box ();
-            net_box .add (widget_net);
+            net_box.add (widget_net);
             main_widget.add (net_box);
 
             resource_manager.notify["network-speed"].connect (() => {

@@ -1,11 +1,14 @@
 namespace Monitor {
     public class Widgets.Device : Gtk.Box {
         public signal void changed_box_size (string did, int new_width);
-        public signal void show_volumes (string did);
         public signal void show_smart_page ();
+
+        private Gtk.Revealer vol_revealer;
 
         private Gtk.Box volumes_box;
         private int c_width = 0;
+
+        private string ex_device = "";
 
         public Objects.DiskDrive device {
             get;
@@ -85,7 +88,6 @@ namespace Monitor {
                 head_box.add (smart_grid);
             }
 
-
             volumes_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0) {
                 vexpand = false
             };
@@ -100,25 +102,73 @@ namespace Monitor {
                 }
             });
 
-            var wrap_box = new Gtk.EventBox ();
-            wrap_box.add_events (Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
-            wrap_box.enter_notify_event.connect ((e) => {
-                e.window.set_cursor (new Gdk.Cursor.from_name (Gdk.Display.get_default (), "hand2"));
-
-                return true;
-            });
-            wrap_box.button_press_event.connect ((e) => {
-                if (e.button == Gdk.BUTTON_PRIMARY) {
-                    show_volumes (device.id);
-                    return true;
-                }
-
-                return false;
-            });
-            wrap_box.add (volumes_box);
+            vol_revealer = new Gtk.Revealer ();
+            vol_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
 
             add (head_box);
-            add (wrap_box);
+            add (volumes_box);
+            add (vol_revealer);
+        }
+
+        public void show_ex_volume (Structs.MonitorVolume v) {
+            var extended_volume_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 8);
+
+            var l_grid = new Gtk.Grid () {
+                row_spacing = 6,
+                column_spacing = 6
+            };
+            var l_top = 0;
+            add_str (l_grid, _("Device:"), v.device, l_top++);
+
+            if (v.label != "") {
+                add_str (l_grid, _("Label:"), v.label, l_top++);
+            }
+
+            if (v.uuid != "") {
+                add_str (l_grid, "UUID:", v.uuid, l_top);
+            }
+
+            var r_grid = new Gtk.Grid () {
+                row_spacing = 6,
+                column_spacing = 6
+            };
+            var r_top = 0;
+            add_str (r_grid, _("Filesystem:"), v.type != "" ? v.type : _("Unallocated Space"), r_top++);
+
+            var cust_size = "";
+            if (v.mount_point != null) {
+                add_str (r_grid, _("Mount point:"), v.mount_point, r_top++);
+
+                cust_size = v.pretty_free + " / ";
+            }
+            cust_size += v.pretty_size;
+
+            add_str (r_grid, v.mount_point != null ? _("Size (free / total):") : _("Size:"), cust_size, r_top++);
+
+            extended_volume_box.add (l_grid);
+            extended_volume_box.add (r_grid);
+
+            extended_volume_box.show_all ();
+
+            ex_device = v.device;
+
+            vol_revealer.add (extended_volume_box);
+            vol_revealer.reveal_child = true;
+        }
+
+        public bool clear_revealer (string v_device) {
+            if (vol_revealer.reveal_child) {
+                vol_revealer.reveal_child = false;
+            }
+
+            vol_revealer.@foreach ((w) => {
+                w.destroy ();
+            });
+
+            bool need_show = v_device != ex_device;
+            ex_device = "";
+
+            return need_show;
         }
 
         public void add_volume (Widgets.VolumeBox v) {

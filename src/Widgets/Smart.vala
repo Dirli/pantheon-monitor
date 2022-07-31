@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Dirli <litandrej85@gmail.com>
+ * Copyright (c) 2021-2022 Dirli <litandrej85@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,8 @@ namespace Monitor {
 
         public Smart () {
             Object (orientation: Gtk.Orientation.VERTICAL,
-                    margin: 10,
+                    margin_start: 10,
+                    margin_end: 10,
                     spacing: 8);
         }
 

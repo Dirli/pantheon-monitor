@@ -117,7 +117,9 @@ namespace Monitor {
                             current_volume.mount_point = block_fs.mount_points[0];
                             Posix.statvfs buf;
                             Posix.statvfs_exec (block_fs.mount_points[0], out buf);
-                            current_volume.free = (uint64) buf.f_bfree * (uint64) buf.f_bsize;
+                            var f = (uint64) buf.f_bfree * (uint64) buf.f_bsize;
+                            current_volume.free = f;
+                            current_volume.pretty_free = size_to_display (f);
                         // } else {
                         //     current_volume.mount_point = "";
                         }
