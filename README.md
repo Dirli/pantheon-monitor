@@ -1,20 +1,17 @@
 # Pantheon-monitor
 Manage processes, monitor of system resources and drives.
 
-<p align="left">
+<!-- <p align="left">
     <a href="https://paypal.me/Dirli85">
         <img src="https://img.shields.io/badge/Donate-PayPal-green.svg">
     </a>
-</p>
+</p> -->
 
 ----
 
-<img src="data/screenshot1.png" title="Process monitor" width="600"> </img>
-
-#### Indicator
-![Screenshot](data/screenshot4.png)
-
+<img src="data/screenshot1.png" title="Process monitor" width="420"> </img>
 <img src="data/screenshot2.png" title="Resource monitor" width="420"> </img>
+
 <img src="data/screenshot3.png" title="Disks monitor" width="420"> </img>
 
 Special thanks Alexey Varfolomeev (@varlesh) who designed icons.
