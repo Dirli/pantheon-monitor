@@ -52,4 +52,8 @@ namespace Monitor.Sensors.Utils {
 
         return GLib.strcmp (mon1.label, mon2.label);
     }
+
+    private int compare_sensors (string s1, string s2) {
+        return GLib.strcmp (s1, s2);
+    }
 }

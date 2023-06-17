@@ -77,22 +77,29 @@ namespace Monitor {
         }
 
         private string find_hwm_sensors (string hwm_path) {
-            string name, sens_string = "";
+            string name = "";
+
+            var sens_arr = new Gee.ArrayList<string> ();
 
             try {
                 GLib.Regex regex = new GLib.Regex ("^temp[0-9]_input");
                 GLib.Dir dir = GLib.Dir.open (hwm_path, 0);
                 while ((name = dir.read_name ()) != null) {
                     if (regex.match (name)) {
-                        if (sens_string != "") {
-                            sens_string += ",";
-                        }
-
-                        sens_string += name.split ("_")[0];
+                        sens_arr.add (name.split ("_")[0]);
                     }
                 }
             } catch (GLib.Error e) {
                 warning (e.message);
+            }
+
+            string sens_string = "";
+            if (sens_arr.size > 1) {
+                sens_arr.sort (Utils.compare_sensors);
+
+                sens_string = string.joinv (",", sens_arr.to_array ());
+            } else if (sens_arr.size == 1) {
+                sens_string = sens_arr[0];
             }
 
             return sens_string;
