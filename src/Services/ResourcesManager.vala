@@ -116,7 +116,7 @@ namespace Monitor {
             cpu_last.last_used = (float) used;
             cpu_last.last_total = (float) cpu.total;
 
-            return (int) Math.round (pre_percentage * 100);
+            return pre_percentage < 1.0 ? (int) Math.round (pre_percentage * 100) : 100;
         }
 
         public int[] update_cpus () {
