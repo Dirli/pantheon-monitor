@@ -189,43 +189,51 @@ namespace Monitor {
                     return false;
                 }
 
-                int temp_val, temp_max = 0;
-                string temp_cur;
-                string sens_str = sens_hash[default_monitor];
-
-                foreach (string sensor in sens_str.split(",")) {
-                    temp_cur = Utils.get_content (@"$(default_monitor)/$(sensor)_input");
-                    temp_val = int.parse (temp_cur) / 1000;
-                    if (temp_val > temp_max) {
-                        temp_max = temp_val;
-                    }
-                }
-
-                fetch_sensor ("", @"$(temp_max)");
+                update_default_async.begin ();
             } else {
                 if (sens_hash.size == 0) {
                     return false;
                 }
 
-                foreach (var entry in sens_hash.entries) {
-                    if (entry.key == Constants.NVIDIA_GPU) {
-                        try {
-                            string ls_stdout;
-                            GLib.Process.spawn_command_line_sync ("nvidia-settings -q [gpu:0]/gpucoretemp -t", out ls_stdout, null, null);
-
-                            fetch_sensor (Constants.NVIDIA_GPU, @"$(int.parse (ls_stdout) * 1000)");
-                        } catch (SpawnError e) {
-                            warning (e.message);
-                        }
-                    } else {
-                        foreach (string sensor in entry.value.split(",")) {
-                            fetch_sensor (@"$(entry.key):$(sensor)", Utils.get_content (@"$(entry.key)/$(sensor)_input"));
-                        }
-                    }
-                }
+                upadate_all_async.begin ();
             }
 
             return true;
+        }
+
+        private async void update_default_async () {
+            int temp_val, temp_max = 0;
+            string temp_cur;
+            string sens_str = sens_hash[default_monitor];
+
+            foreach (string sensor in sens_str.split(",")) {
+                temp_cur = Utils.get_content (@"$(default_monitor)/$(sensor)_input");
+                temp_val = int.parse (temp_cur) / 1000;
+                if (temp_val > temp_max) {
+                    temp_max = temp_val;
+                }
+            }
+
+            fetch_sensor ("", @"$(temp_max)");
+        }
+
+        private async void upadate_all_async () {
+            foreach (var entry in sens_hash.entries) {
+                if (entry.key == Constants.NVIDIA_GPU) {
+                    try {
+                        string ls_stdout;
+                        GLib.Process.spawn_command_line_sync ("nvidia-settings -q [gpu:0]/gpucoretemp -t", out ls_stdout, null, null);
+
+                        fetch_sensor (Constants.NVIDIA_GPU, @"$(int.parse (ls_stdout) * 1000)");
+                    } catch (SpawnError e) {
+                        warning (e.message);
+                    }
+                } else {
+                    foreach (string sensor in entry.value.split(",")) {
+                        fetch_sensor (@"$(entry.key):$(sensor)", Utils.get_content (@"$(entry.key)/$(sensor)_input"));
+                    }
+                }
+            }
         }
     }
 }
