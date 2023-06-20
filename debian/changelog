@@ -1,3 +1,29 @@
+pantheon-monitor (1.1.0-1) testing; urgency=medium
+
+  * added sensors indicator
+  * added control of the sensors indicator
+  * added checking for the presence of an application in the indicator
+  * added choice of processor load view type
+  * added sorting sensors
+  * added asynchronous sensor update, I think its better
+  * Preferences: added a check for the presence of hwmon to display the switch
+  * SMART: subtab instead of dialog
+  * volume info output changed
+  * collect disk read write statistics directly (not libgtop), added nvme support
+  * monitor renders fonts correctly in light theme
+  * optimized the resource indicator settings
+  * replaced custom memory bar with Gtk.ProgressBar
+  * abandoned manual drawing of device volumes, use Gtk.ProgressBar
+  * updated disk(I/O) monitor view
+  * updated cpu activity view
+  * fixed: empty drive id (for lvm?)
+  * fixed: the layout of sensors popover
+  * fixed: network size selection
+  * fixed: legend position
+  * fixed: maximum percentage of cpu usage
+
+ -- dirli <litandrej85@gmail.com>  Mon, 19 Jun 2023 21:45:02 +0300
+
 pantheon-monitor (1.0.0-1) bullseye; urgency=medium
 
   * The first significant release

@@ -11,7 +11,6 @@ Manage processes, monitor of system resources and drives.
 
 <img src="data/screenshot1.png" title="Process monitor" width="420"> </img>
 <img src="data/screenshot2.png" title="Resource monitor" width="420"> </img>
-
 <img src="data/screenshot3.png" title="Disks monitor" width="420"> </img>
 
 Special thanks Alexey Varfolomeev (@varlesh) who designed icons.
