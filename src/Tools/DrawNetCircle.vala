@@ -21,10 +21,9 @@ namespace Monitor {
     public class Tools.DrawNetCircle : Tools.DrawCircle {
         public uint64 net_speed { get; set; default = 0;}
 
-        public DrawNetCircle (string net_name, Gdk.RGBA current_color) {
+        public DrawNetCircle (string net_name) {
             layout_name = create_pango_layout (net_name);
             layout_name.set_font_description (description_name);
-            t_color = current_color;
         }
 
         public override string get_signature () {
@@ -53,8 +52,8 @@ namespace Monitor {
 
                 util.get_point_circuference (radius - line_width * 2.75f, arc_progress, (float) center_x, (float) center_y, out x, out y);
 
-                if (t_color != null) {
-                    cr.set_source_rgba (t_color.red, t_color.green, t_color.blue, 1);
+                if (f_color != null) {
+                    cr.set_source_rgba (f_color.red, f_color.green, f_color.blue, 1);
                 } else {
                     cr.set_source_rgba (util.get_rgb_gtk (205), util.get_rgb_gtk (208), util.get_rgb_gtk (213), 1);
                 }

@@ -19,10 +19,11 @@
 namespace Monitor {
     public class Widgets.Cpu : Gtk.Grid {
         private Gtk.Label freq_val;
-
-        public Gdk.RGBA f_color {
-            get;
-            construct set;
+        
+        public Gdk.RGBA foreground_color {
+            set {
+                draw_cpu.f_color = value;
+            }
         }
 
         private Tools.DrawCpu draw_cpu;
@@ -31,7 +32,7 @@ namespace Monitor {
             construct set;
         }
 
-        public Cpu (Gdk.RGBA current_color, int cores) {
+        public Cpu (int cores) {
             Object (hexpand: true,
                     halign: Gtk.Align.CENTER,
                     valign: Gtk.Align.CENTER,
@@ -41,7 +42,6 @@ namespace Monitor {
                     margin_bottom: 12,
                     row_spacing: 8,
                     column_spacing: 8,
-                    f_color: current_color,
                     cores: cores);
         }
 
@@ -69,7 +69,6 @@ namespace Monitor {
             view_btns.append (new Gtk.Label (_("graph")));
 
             draw_cpu = new Tools.DrawCpu (cores);
-            draw_cpu.t_color = f_color;
 
             attach (cpu_label, 0, 0);
             attach (view_btns, 1, 0);

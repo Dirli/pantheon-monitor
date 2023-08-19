@@ -20,12 +20,13 @@ namespace Monitor {
     public class Widgets.DiskIO : Gtk.Grid {
         private Tools.DrawDiskIO draw_diskio;
 
-        public Gdk.RGBA f_color {
-            get;
-            construct set;
+        public Gdk.RGBA foreground_color {
+            set {
+                draw_diskio.f_color = value;
+            }
         }
 
-        public DiskIO (Gdk.RGBA current_color) {
+        public DiskIO () {
             Object (orientation: Gtk.Orientation.VERTICAL,
                     row_spacing: 8,
                     column_spacing: 8,
@@ -34,7 +35,6 @@ namespace Monitor {
                     margin_end: 12,
                     margin_top: 12,
                     margin_bottom: 12,
-                    f_color: current_color,
                     halign: Gtk.Align.FILL);
         }
 
@@ -44,7 +44,6 @@ namespace Monitor {
             diskio_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
 
             draw_diskio = new Tools.DrawDiskIO ();
-            draw_diskio.t_color = f_color;
 
             var view_btns = new Granite.Widgets.ModeButton ();
             view_btns.homogeneous = false;

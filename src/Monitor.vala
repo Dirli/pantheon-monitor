@@ -23,7 +23,7 @@ namespace Monitor {
         construct {
             application_id = "io.elementary.monitor";
         }
-
+        
         public override void activate () {
             if (get_windows () == null) {
                 window = new MainWindow (this);

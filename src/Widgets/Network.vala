@@ -26,12 +26,14 @@ namespace Monitor {
         private Gtk.Label net_d_val;
         private Gtk.Label net_u_val;
 
-        public Gdk.RGBA f_color {
-            get;
-            construct set;
+        public Gdk.RGBA foreground_color {
+            set {
+                widget_up.f_color = value;
+                widget_down.f_color = value;
+            }
         }
 
-        public Network (Gdk.RGBA font_color) {
+        public Network () {
             Object (orientation: Gtk.Orientation.HORIZONTAL,
                     halign: Gtk.Align.CENTER,
                     spacing: 12,
@@ -39,15 +41,14 @@ namespace Monitor {
                     margin_start: 12,
                     margin_end: 12,
                     margin_top: 12,
-                    margin_bottom: 12,
-                    f_color: font_color);
+                    margin_bottom: 12);
         }
 
         construct {
-            widget_down = new Tools.DrawNetCircle ("▼ (MB)", f_color);
+            widget_down = new Tools.DrawNetCircle ("▼ (MB)");
             widget_down.halign = Gtk.Align.CENTER;
             widget_down.tooltip_text = _("Download");
-            widget_up = new Tools.DrawNetCircle ("▲ (MB)", f_color);
+            widget_up = new Tools.DrawNetCircle ("▲ (MB)");
             widget_up.halign = Gtk.Align.CENTER;
             widget_up.tooltip_text = _("Upload");
 

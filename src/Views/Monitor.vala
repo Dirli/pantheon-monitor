@@ -30,14 +30,8 @@ namespace Monitor {
         private Gtk.Popover extended_window;
         private Gtk.Label uptime_val;
 
-        public Gdk.RGBA current_color {
-            get;
-            construct set;
-        }
-
-        public Monitor (Gdk.RGBA current_color) {
-            Object (orientation: Gtk.Orientation.VERTICAL,
-                    current_color: current_color);
+        public Monitor () {
+            Object (orientation: Gtk.Orientation.VERTICAL);
         }
 
         construct {
@@ -50,7 +44,7 @@ namespace Monitor {
             resource_manager = new Services.ResourcesManager ();
             extended_window = new Gtk.Popover (null);
 
-            widget_cpu = new Widgets.Cpu (current_color, resource_manager.quantity_cores);
+            widget_cpu = new Widgets.Cpu (resource_manager.quantity_cores);
             var cpu_box = get_wrap_box ();
             cpu_box.add (widget_cpu);
             main_widget.add (cpu_box);
@@ -60,12 +54,12 @@ namespace Monitor {
             ram_box.add (widget_memory);
             main_widget.add (ram_box);
 
-            widget_diskio = new Widgets.DiskIO (current_color);
+            widget_diskio = new Widgets.DiskIO ();
             var diskio_box = get_wrap_box ();
             diskio_box.add (widget_diskio);
             main_widget.add (diskio_box);
 
-            widget_net = new Widgets.Network (current_color);
+            widget_net = new Widgets.Network ();
             widget_net.show_popover.connect ((w) => {
                 var popover_grid = new Widgets.NetworkPopover (resource_manager.update_ifaces ());
 
@@ -104,6 +98,14 @@ namespace Monitor {
             }
 
             widget_diskio.clear_cache ();
+        }
+
+        public void update_color () {
+            var c = get_style_context ().get_color (Gtk.StateFlags.NORMAL);
+
+            widget_cpu.foreground_color = c;
+            widget_net.foreground_color = c;
+            widget_diskio.foreground_color = c;
         }
 
         private bool update () {

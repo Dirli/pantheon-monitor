@@ -65,8 +65,9 @@ namespace Monitor {
             stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
 
             processes_view = new Views.Processes ();
+            var monitor_view = new Views.Monitor ();
             stack.add_named (processes_view, "processes");
-            stack.add_named (new Views.Monitor (current_color ()), "monitor");
+            stack.add_named (monitor_view, "monitor");
             stack.add_named (new Views.Disks (), "disks");
 
             stack.notify["visible-child-name"].connect (on_changed_child);
@@ -77,6 +78,20 @@ namespace Monitor {
             add (view);
 
             show_all ();
+
+            var granite_settings = Granite.Settings.get_default ();
+            var gtk_settings = Gtk.Settings.get_default ();
+
+            gtk_settings.gtk_application_prefer_dark_theme =
+                granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK;
+        
+            monitor_view.update_color ();
+            granite_settings.notify["prefers-color-scheme"].connect (() => {
+                gtk_settings.gtk_application_prefer_dark_theme =
+                    granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK;
+
+                monitor_view.update_color ();
+            });
         }
 
         private void on_changed_child () {
@@ -183,10 +198,6 @@ namespace Monitor {
             m_button.margin_start = m_button.margin_end = 5;
 
             return m_button;
-        }
-
-        private Gdk.RGBA current_color () {
-            return get_style_context ().get_color (Gtk.StateFlags.NORMAL);
         }
 
         public override bool delete_event (Gdk.EventAny event) {

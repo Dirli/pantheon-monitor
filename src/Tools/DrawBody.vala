@@ -24,7 +24,7 @@ namespace Monitor {
         protected int text_size = 0;
         protected int chart_size = 0;
 
-        public Gdk.RGBA? t_color = null;
+        public Gdk.RGBA? f_color = null;
 
         protected Structs.DrawFields fields;
 
@@ -51,8 +51,8 @@ namespace Monitor {
         protected void draw_axes (Cairo.Context ctx, bool add_timeline = false) {
             ctx.save ();
 
-            if (t_color != null) {
-                ctx.set_source_rgba (t_color.red, t_color.green, t_color.blue, 1);
+            if (f_color != null) {
+                ctx.set_source_rgba (f_color.red, f_color.green, f_color.blue, 1);
             } else {
                 ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
             }
@@ -89,8 +89,8 @@ namespace Monitor {
         protected void draw_horizontal_grid (Cairo.Context ctx, int grid_size) {
             ctx.save ();
 
-            if (t_color != null) {
-                ctx.set_source_rgba (t_color.red, t_color.green, t_color.blue, 1);
+            if (f_color != null) {
+                ctx.set_source_rgba (f_color.red, f_color.green, f_color.blue, 1);
             } else {
                 ctx.set_source_rgba (1.0, 0.92, 0.80, 0.5);
             }
@@ -116,8 +116,8 @@ namespace Monitor {
         protected void draw_vertical_grid (Cairo.Context ctx, int grid_size) {
             ctx.save ();
 
-            if (t_color != null) {
-                ctx.set_source_rgba (t_color.red, t_color.green, t_color.blue, 1);
+            if (f_color != null) {
+                ctx.set_source_rgba (f_color.red, f_color.green, f_color.blue, 1);
             } else {
                 ctx.set_source_rgba (1.0, 0.92, 0.80, 0.5);
             }
@@ -144,8 +144,8 @@ namespace Monitor {
             text.set_font_description (description_layout);
 
             ctx.save ();
-            if (t_color != null) {
-                ctx.set_source_rgba (t_color.red, t_color.green, t_color.blue, 1);
+            if (f_color != null) {
+                ctx.set_source_rgba (f_color.red, f_color.green, f_color.blue, 1);
             } else {
                 ctx.set_source_rgba (1.0, 0.92, 0.80, 1.0);
             }

@@ -28,7 +28,7 @@ namespace Monitor {
         private Pango.FontDescription description_porcentage;
         protected Pango.FontDescription description_name;
 
-        public Gdk.RGBA? t_color = null;
+        public Gdk.RGBA? f_color = null;
 
         protected Utils.Circle util;
 
@@ -81,8 +81,8 @@ namespace Monitor {
             draw_numbers (cr, center_x, center_y, radius);
 
             cr.save ();
-            if (t_color != null) {
-                cr.set_source_rgba (t_color.red, t_color.green, t_color.blue, 1);
+            if (f_color != null) {
+                cr.set_source_rgba (f_color.red, f_color.green, f_color.blue, 1);
             } else {
                 cr.set_source_rgba (0.94, 0.95, 0.97, 1);
             }
@@ -145,8 +145,8 @@ namespace Monitor {
             util.get_point_circuference (radius - line_width * 1.5f, 270, (float) center_x, (float) center_y, out x, out y);
 
             cr.move_to (x, y);
-            if (t_color != null) {
-                cr.set_source_rgba (t_color.red, t_color.green, t_color.blue, 1);
+            if (f_color != null) {
+                cr.set_source_rgba (f_color.red, f_color.green, f_color.blue, 1);
             } else {
                 cr.set_source_rgba (util.get_rgb_gtk (205), util.get_rgb_gtk (208), util.get_rgb_gtk (213), 1);
             }
@@ -190,8 +190,8 @@ namespace Monitor {
 
                 util.get_point_circuference (radius - line_width * 2.75f, arc_progress, (float) center_x, (float) center_y, out x, out y);
 
-                if (t_color != null) {
-                    cr.set_source_rgba (t_color.red, t_color.green, t_color.blue, 1);
+                if (f_color != null) {
+                    cr.set_source_rgba (f_color.red, f_color.green, f_color.blue, 1);
                 } else {
                     cr.set_source_rgba (util.get_rgb_gtk (205), util.get_rgb_gtk (208), util.get_rgb_gtk (213), 1);
                 }
