@@ -281,6 +281,7 @@ namespace Monitor {
                                 current_volume.label = block_dev.id_label;
                                 current_volume.type = block_dev.id_type;
                                 current_volume.size = block_dev.size;
+                                current_volume.pretty_size = size_to_display (block_dev.size);
                                 current_volume.uuid = block_dev.id_uuid;
 
                                 var partition = udisks_obj.get_partition ();
@@ -291,7 +292,10 @@ namespace Monitor {
                                 current_volume.mount_point = block_fs.mount_points[0];
                                 Posix.statvfs buf;
                                 Posix.statvfs_exec (block_fs.mount_points[0], out buf);
-                                current_volume.free = (uint64) buf.f_bfree * (uint64) buf.f_bsize;
+
+                                var f_size = (uint64) buf.f_bfree * (uint64) buf.f_bsize;
+                                current_volume.free = f_size;
+                                current_volume.pretty_free = size_to_display (f_size);
 
                                 volumes_list.add (current_volume);
                             // } else {

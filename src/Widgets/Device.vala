@@ -76,16 +76,21 @@ namespace Monitor {
                 add_str (smart_grid, _("Total write:"), @"$(d_smart.total_write != 0 ? Utils.format_bytes (d_smart.total_write, true) : "--")", s_top++);
 
                 if (d_smart.life_left > 0) {
-                    var life_bar = new Gtk.ProgressBar () {
-                        valign = Gtk.Align.CENTER,
+                    var life_bar = new Gtk.LevelBar () {
+                        value = 1.0,
                         hexpand = true,
-                        margin_top = 12
                     };
-                    life_bar.set_fraction (d_smart.life_left / 100.0);
+                    life_bar.add_offset_value (Gtk.LEVEL_BAR_OFFSET_LOW, 0.1);
+                    life_bar.add_offset_value (Gtk.LEVEL_BAR_OFFSET_HIGH, 0.25);
+                    life_bar.add_offset_value (Gtk.LEVEL_BAR_OFFSET_FULL, 1);
+
+                    life_bar.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+
+                    life_bar.set_value (d_smart.life_left / 100.0);
                     life_bar.tooltip_text = @"$(d_smart.life_left)%";
+
                     smart_grid.attach (life_bar, 0, s_top++, 2);
                 }
-
 
                 head_box.add (smart_grid);
             }

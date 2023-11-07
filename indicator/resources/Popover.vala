@@ -115,9 +115,28 @@ namespace Monitor {
             attach (volumes_box, 0, 11, 2, 1);
         }
 
-        public void add_volume (Gtk.Label vol_label, Gtk.ProgressBar vol_bar) {
+        public void add_volume (Structs.MonitorVolume v) {
+            var vol_label = new Gtk.Label (v.label != ""
+                                           ? "%s (%s)".printf (v.label, v.device)
+                                           : v.device);
+            vol_label.halign = Gtk.Align.START;
+
+            var level_bar = new Gtk.LevelBar () {
+                value = 0.0,
+            };
+            level_bar.add_offset_value (Gtk.LEVEL_BAR_OFFSET_LOW, 0.8);
+            level_bar.add_offset_value (Gtk.LEVEL_BAR_OFFSET_HIGH, 0.95);
+            level_bar.add_offset_value (Gtk.LEVEL_BAR_OFFSET_FULL, 1);
+
+            unowned var levelbar_style_context = level_bar.get_style_context ();
+            levelbar_style_context.add_class (Gtk.STYLE_CLASS_FLAT);
+            levelbar_style_context.add_class ("inverted");
+
+            level_bar.tooltip_text = _("Free / Total") + ": %s / %s".printf (v.pretty_free, v.pretty_size);
+            level_bar.set_value (1 - (double) v.free / v.size);
+
             volumes_box.add (vol_label);
-            volumes_box.add (vol_bar);
+            volumes_box.add (level_bar);
         }
 
         public void init_footer () {

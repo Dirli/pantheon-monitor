@@ -17,8 +17,6 @@ namespace Monitor {
             construct set;
         }
 
-        private Gtk.ProgressBar progress_bar;
-
         public VolumeBox (int w, Structs.MonitorVolume v, string did) {
             Object (halign: Gtk.Align.FILL,
                     hexpand: true,
@@ -40,15 +38,27 @@ namespace Monitor {
             volume_head.add (vol_device);
             volume_head.add (vol_size);
 
-            progress_bar = new Gtk.ProgressBar ();
+            var volume_levelbar = new Gtk.LevelBar () {
+                value = 0.0,
+                hexpand = true,
+            };
+            volume_levelbar.add_offset_value (Gtk.LEVEL_BAR_OFFSET_LOW, 0.8);
+            volume_levelbar.add_offset_value (Gtk.LEVEL_BAR_OFFSET_HIGH, 0.95);
+            volume_levelbar.add_offset_value (Gtk.LEVEL_BAR_OFFSET_FULL, 1);
+
+            unowned var levelbar_style_context = volume_levelbar.get_style_context ();
+            levelbar_style_context.add_class (Gtk.STYLE_CLASS_FLAT);
+            levelbar_style_context.add_class ("inverted");
+
+
             if (volume.mount_point != null && volume.free > 0) {
-                progress_bar.set_fraction (1.0 - (float) volume.free / volume.size);
+                volume_levelbar.set_value (1.0 - (float) volume.free / volume.size);
             }
 
             var wrap_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
 
             wrap_box.add (volume_head);
-            wrap_box.add (progress_bar);
+            wrap_box.add (volume_levelbar);
 
             add (wrap_box);
         }
