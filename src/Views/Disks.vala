@@ -20,15 +20,18 @@ namespace Monitor {
     public class Views.Disks : Views.ViewWrapper {
         private Services.DisksManager disks_manager;
 
-        private Widgets.Smart smart_widget;
+        private Gtk.Box devices_box;
 
         public Disks () {
             Object (orientation: Gtk.Orientation.VERTICAL,
-                    spacing: 0);
-        }
+                spacing: 0);
+            }
 
         construct {
-            main_widget = new Gtk.Box (Gtk.Orientation.VERTICAL, 15);
+            devices_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 15);
+
+            main_widget = new Gtk.Overlay ();
+            main_widget.add (devices_box);
 
             disks_manager = new Services.DisksManager ();
 
@@ -39,14 +42,6 @@ namespace Monitor {
             }
 
             init_main_widget ();
-
-            smart_widget = new Widgets.Smart ();
-            smart_widget.show_main_page.connect (() => {
-                widget_stack.set_visible_child_name ("main");
-            });
-            widget_stack.add_named (smart_widget, "smart");
-
-            widget_stack.set_visible_child_name ("main");
         }
 
         private bool add_drive (owned Objects.DiskDrive? drive) {
@@ -55,19 +50,20 @@ namespace Monitor {
                 on_changed_box_size (device_widget, did, w);
             });
             device_widget.show_smart_page.connect (() => {
-                main_widget.@foreach ((w) => {
+                devices_box.@foreach ((w) => {
                     var device = (Widgets.Device) ((Gtk.Container) w).get_children ().nth_data (0);
                     device.clear_revealer ();
                 });
 
+                var smart_widget = new Widgets.Smart ();
                 smart_widget.show_smart (drive);
-                widget_stack.set_visible_child_name ("smart");
+                ((Gtk.Overlay) main_widget).add_overlay (smart_widget);
             });
 
             var wrap_box = get_wrap_box ();
             wrap_box.add (device_widget);
 
-            main_widget.add (wrap_box);
+            devices_box.add (wrap_box);
 
             return true;
         }
@@ -146,7 +142,7 @@ namespace Monitor {
         }
 
         private void on_show_ex_volume (string did, Structs.MonitorVolume v) {
-            main_widget.@foreach ((w) => {
+            devices_box.@foreach ((w) => {
                 var device = (Widgets.Device) ((Gtk.Container) w).get_children ().nth_data (0);
                 var need_show = device.clear_revealer (v.device);
 
@@ -158,15 +154,17 @@ namespace Monitor {
         }
 
         public override void stop_timer () {
-            main_widget.@foreach ((w) => {
+            devices_box.@foreach ((w) => {
                 var device = (Widgets.Device) ((Gtk.Container) w).get_children ().nth_data (0);
                 device.clear_revealer ();
             });
 
-            smart_widget.clear_cache ();
-            widget_stack.set_visible_child_name ("main");
-
+            var w_list = main_widget.get_children ();
+            if (w_list.length () > 1) {
+                w_list.nth_data (1).destroy ();
+            }
         }
+
         public override void start_timer () {}
     }
 }

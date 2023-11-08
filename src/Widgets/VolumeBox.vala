@@ -50,7 +50,6 @@ namespace Monitor {
             levelbar_style_context.add_class (Gtk.STYLE_CLASS_FLAT);
             levelbar_style_context.add_class ("inverted");
 
-
             if (volume.mount_point != null && volume.free > 0) {
                 volume_levelbar.set_value (1.0 - (float) volume.free / volume.size);
             }

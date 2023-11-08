@@ -18,8 +18,6 @@
 
 namespace Monitor {
     public class Widgets.Smart : Gtk.Box {
-        public signal void show_main_page ();
-
         private Gtk.Label label_val;
         private Gtk.Label firmvare_val;
         private Gtk.Label serial_val;
@@ -30,18 +28,23 @@ namespace Monitor {
         private Gtk.TreeView smart_tree_view;
 
         public Smart () {
-            Object (orientation: Gtk.Orientation.VERTICAL,
-                    margin_start: 10,
-                    margin_end: 10,
-                    spacing: 8);
+            Object (
+                orientation: Gtk.Orientation.VERTICAL,
+                spacing: 8,
+                margin_start: 10,
+                margin_end: 10,
+                halign: Gtk.Align.CENTER,
+                valign: Gtk.Align.CENTER,
+                hexpand: true
+            );
         }
 
         construct {
-            var back_btn = new Gtk.Button.with_label (_("Back"));
-            back_btn.get_style_context ().add_class (Granite.STYLE_CLASS_BACK_BUTTON);
-            back_btn.clicked.connect (() => {
-                clear_cache ();
-                show_main_page ();
+            var close_btn = new Gtk.Button.from_icon_name ("close-symbolic", Gtk.IconSize.BUTTON);
+            close_btn.halign = Gtk.Align.END;
+            close_btn.clicked.connect (() => {
+                visible = false;
+                destroy ();
             });
 
             label_val = new Gtk.Label (null);
@@ -88,7 +91,11 @@ namespace Monitor {
 
             smart_tree_view = create_smart_view ();
 
-            add (back_btn);
+            unowned Gtk.StyleContext style_context = get_style_context ();
+            style_context.add_class (Granite.STYLE_CLASS_CARD);
+            style_context.add_class (Granite.STYLE_CLASS_ROUNDED);
+
+            add (close_btn);
             add (label_val);
             add (smart_head);
             add (smart_tree_view);
@@ -107,18 +114,20 @@ namespace Monitor {
                 starts_val.set_label (@"$(smart.power_counts)");
                 writes_val.set_label (@"$(smart.total_write != 0 ? Utils.format_bytes (smart.total_write, true) : "--")");
             }
+
+            show_all ();
         }
 
-        public void clear_cache () {
-            smart_tree_view.set_model (null);
+        //  public void clear_cache () {
+        //      smart_tree_view.set_model (null);
 
-            label_val.set_label ("");
-            firmvare_val.set_label ("");
-            serial_val.set_label ("");
-            hours_val.set_label ("");
-            starts_val.set_label ("");
-            writes_val.set_label ("");
-        }
+        //      label_val.set_label ("");
+        //      firmvare_val.set_label ("");
+        //      serial_val.set_label ("");
+        //      hours_val.set_label ("");
+        //      starts_val.set_label ("");
+        //      writes_val.set_label ("");
+        //  }
 
         private Gtk.TreeView create_smart_view () {
             var tree_view = new Gtk.TreeView ();

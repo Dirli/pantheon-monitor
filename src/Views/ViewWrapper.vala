@@ -22,7 +22,7 @@ namespace Monitor {
         public abstract void stop_timer ();
 
         public Gtk.ScrolledWindow s_window;
-        protected Gtk.Stack widget_stack;
+
         protected Gtk.Container main_widget;
 
         construct {
@@ -34,12 +34,6 @@ namespace Monitor {
                 margin_bottom = 10
             };
 
-            widget_stack = new Gtk.Stack () {
-                transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT
-            };
-
-            s_window.add (widget_stack);
-
             add (s_window);
         }
 
@@ -48,7 +42,8 @@ namespace Monitor {
                 return false;
             }
 
-            widget_stack.add_named (main_widget, "main");
+            s_window.add (main_widget);
+            //  widget_stack.add_named (main_widget, "main");
 
             return true;
         }

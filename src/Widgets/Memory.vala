@@ -73,13 +73,13 @@ namespace Monitor {
 
         public void update_values (Structs.MemoryData memory_data) {
             memory_bar.set_fraction (memory_data.percent_memory / 100.0);
-            memory_bar.tooltip_text = @"$(memory_data.percent_memory)%";
+            memory_bar.set_tooltip_text (@"$(memory_data.percent_memory)%");
             memory_val.label = "%s / %s".printf (Utils.format_bytes (memory_data.used_memory, true),
                                                  Utils.format_bytes (memory_total.memory, true));
 
             if (swap_on) {
                 swap_bar.set_fraction (memory_data.percent_swap / 100.0);
-                swap_bar.tooltip_text = @"$(memory_data.percent_swap)%";
+                swap_bar.set_tooltip_text (@"$(memory_data.percent_swap)%");
                 swap_val.label = "%s / %s".printf (Utils.format_bytes (memory_data.used_swap, true),
                                                    Utils.format_bytes (memory_total.swap, true));
             }
