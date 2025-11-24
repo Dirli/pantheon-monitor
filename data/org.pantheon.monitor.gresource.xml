@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-    <gresource prefix="/io/elementary/monitor/style">
+    <gresource prefix="/org/pantheon/monitor/style">
       <file alias="application.css" compressed="true">application.css</file>
     </gresource>
 </gresources>

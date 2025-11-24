@@ -1,5 +1,5 @@
 <schemalist>
-    <schema id="io.elementary.monitor.resources" path="/io/elementary/monitor/resources/">
+    <schema id="org.pantheon.monitor.resources" path="/org/pantheon/monitor/resources/">
         <key name="indicator" type="b">
             <default>true</default>
             <summary>Use indicator</summary>

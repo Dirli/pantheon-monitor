@@ -1,4 +1,4 @@
-usr/bin/io.elementary.monitor
-usr/share/applications/io.elementary.monitor.desktop
+usr/bin/org.pantheon.monitor
+usr/share/applications/org.pantheon.monitor.desktop
 usr/share/icons
 usr/share/locale

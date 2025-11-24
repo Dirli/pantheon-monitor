@@ -8,7 +8,7 @@ foreach i : icon_sizes
     )
 endforeach
 
-install_data ('io.elementary.monitor.desktop',
+install_data ('org.pantheon.monitor.desktop',
     install_dir: join_paths (data_dir, 'applications')
 )
 

@@ -35,10 +35,10 @@ namespace Monitor {
 
             extended = false;
 
-            Gtk.IconTheme.get_default().add_resource_path("/io/elementary/monitor/resources/icons");
+            Gtk.IconTheme.get_default().add_resource_path("/org/pantheon/monitor/resources/icons");
 
             var provider = new Gtk.CssProvider ();
-            provider.load_from_resource ("/io/elementary/monitor/style/application.css");
+            provider.load_from_resource ("/org/pantheon/monitor/style/application.css");
             Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             settings = new GLib.Settings (Constants.PROJECT_NAME + ".resources");
@@ -127,7 +127,7 @@ namespace Monitor {
                         try {
                             app_info.launch (null, null);
                         } catch (Error e) {
-                            warning ("Unable to launch io.elementary.monitor.desktop: %s", e.message);
+                            warning ("Unable to launch org.pantheon.monitor.desktop: %s", e.message);
                         }
                     });
                     popover_wid.hide_indicator.connect (() => {

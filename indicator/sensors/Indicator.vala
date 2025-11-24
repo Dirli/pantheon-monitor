@@ -45,7 +45,7 @@ namespace Monitor {
 
             hw_monitor = new HWMonitor ();
 
-            Gtk.IconTheme.get_default ().add_resource_path ("/io/elementary/monitor/sensors/icons");
+            Gtk.IconTheme.get_default ().add_resource_path ("/org/pantheon/monitor/sensors/icons");
 
             settings = new GLib.Settings (Constants.PROJECT_NAME + ".sensors");
             visible = settings.get_boolean ("indicator");

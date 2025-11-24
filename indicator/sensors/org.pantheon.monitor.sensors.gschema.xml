@@ -1,5 +1,5 @@
 <schemalist>
-    <schema id="io.elementary.monitor.sensors" path="/io/elementary/monitor/sensors/">
+    <schema id="org.pantheon.monitor.sensors" path="/org/pantheon/monitor/sensors/">
         <key name="indicator" type="b">
             <default>true</default>
             <summary>Use indicator</summary>

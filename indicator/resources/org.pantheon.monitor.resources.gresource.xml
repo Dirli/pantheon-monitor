@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-    <gresource prefix="/io/elementary/monitor/resources/icons">
+    <gresource prefix="/org/pantheon/monitor/resources/icons">
         <file alias="proc-symbolic.svg" compressed="true" preprocess="xml-stripblanks">svg/proc-symbolic.svg</file>
         <file alias="netspeed-active-symbolic.svg" compressed="true" preprocess="xml-stripblanks">svg/netspeed-active-symbolic.svg</file>
         <file alias="netspeed-nonactive-symbolic.svg" compressed="true" preprocess="xml-stripblanks">svg/netspeed-nonactive-symbolic.svg</file>

@@ -1,5 +1,5 @@
 project (
-  'io.elementary.monitor',
+  'org.pantheon.monitor',
   ['vala', 'c'],
   version: '1.1.0'
 )

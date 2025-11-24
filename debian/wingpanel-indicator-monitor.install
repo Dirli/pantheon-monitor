@@ -1,2 +1,2 @@
 usr/lib/*/wingpanel/libresources.so
-usr/share/glib-2.0/schemas/io.elementary.monitor.resources.gschema
+usr/share/glib-2.0/schemas/org.pantheon.monitor.resources.gschema

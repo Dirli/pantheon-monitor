@@ -54,7 +54,7 @@ namespace Monitor {
             set_default_size (700, 850);
 
             var provider = new Gtk.CssProvider ();
-            provider.load_from_resource ("/io/elementary/monitor/style/application.css");
+            provider.load_from_resource ("/org/pantheon/monitor/style/application.css");
             Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             var view = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);

@@ -21,7 +21,7 @@ namespace Monitor {
         private MainWindow window = null;
 
         construct {
-            application_id = "io.elementary.monitor";
+            application_id = "org.pantheon.monitor";
         }
         
         public override void activate () {

@@ -1,11 +1,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the io.elementary.monitor package.
+# This file is distributed under the same license as the org.pantheon.monitor package.
 #
 # Translators:
 # Dirli <litandrej85@gmail.com>, 2021
 msgid ""
 msgstr ""
-"Project-Id-Version: io.elementary.monitor\n"
+"Project-Id-Version: org.pantheon.monitor\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-05 00:50+0300\n"
 "PO-Revision-Date: 2021-11-05 00:52+0300\n"
@@ -84,89 +84,89 @@ msgstr "Скрыть индикатор"
 msgid "Start monitor"
 msgstr "Запустить Монитор"
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:5
-#: indicator/sensors/io.elementary.monitor.sensors.gschema.xml:5
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:5
+#: indicator/sensors/org.pantheon.monitor.sensors.gschema.xml:5
 #, fuzzy
 #| msgid "Hide indicator"
 msgid "Use indicator"
 msgstr "Скрыть индикатор"
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:6
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:6
 msgid "Mark to use app indicator and minimized to system tray."
 msgstr ""
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:11
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:11
 #, fuzzy
 #| msgid "Show titles:"
 msgid "Show titles"
 msgstr "Показывать заголовки:"
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:12
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:12
 msgid "Show titles to system tray."
 msgstr ""
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:17
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:17
 msgid "Show cpu"
 msgstr ""
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:18
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:18
 msgid "Show cpu state to system tray."
 msgstr ""
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:23
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:23
 #, fuzzy
 #| msgid "Show RAM:"
 msgid "Show RAM"
 msgstr "Показывать память:"
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:24
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:24
 msgid "Show memory state to system tray."
 msgstr ""
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:29
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:29
 #, fuzzy
 #| msgid "Show Network:"
 msgid "Show Network"
 msgstr "Показывать сеть:"
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:30
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:30
 msgid "Show network state to system tray."
 msgstr ""
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:35
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:35
 #, fuzzy
 #| msgid "Show compact Network:"
 msgid "Show compact network data"
 msgstr "Показывать сеть компактно:"
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:36
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:36
 #, fuzzy
 #| msgid "Show compact Network:"
 msgid "Show compact network data to system tray."
 msgstr "Показывать сеть компактно:"
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:41
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:41
 msgid "Network data font size to compact mode"
 msgstr ""
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:42
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:42
 msgid "Network data font size to compact mode."
 msgstr ""
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:47
-#: indicator/sensors/io.elementary.monitor.sensors.gschema.xml:11
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:47
+#: indicator/sensors/org.pantheon.monitor.sensors.gschema.xml:11
 msgid "Update interval"
 msgstr ""
 
-#: indicator/resources/io.elementary.monitor.resources.gschema.xml:48
+#: indicator/resources/org.pantheon.monitor.resources.gschema.xml:48
 msgid "Time in seconds to update state."
 msgstr ""
 
-#: indicator/sensors/io.elementary.monitor.sensors.gschema.xml:6
+#: indicator/sensors/org.pantheon.monitor.sensors.gschema.xml:6
 msgid "Mark to use sensors indicator."
 msgstr ""
 
-#: indicator/sensors/io.elementary.monitor.sensors.gschema.xml:12
+#: indicator/sensors/org.pantheon.monitor.sensors.gschema.xml:12
 msgid "Time in seconds to update sensors."
 msgstr ""
 
