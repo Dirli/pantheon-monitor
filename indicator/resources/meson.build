@@ -29,7 +29,7 @@ shared_library (
   ],
   vala_args: vala_args,
   install: true,
-  install_dir: wingpanel_dep.get_pkgconfig_variable ('indicatorsdir'),
+  install_dir: wingpanel_dep.get_variable ('indicatorsdir'),
 )
 
 install_data (meson.project_name () + '.resources.gschema.xml',

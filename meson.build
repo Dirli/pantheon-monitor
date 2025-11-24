@@ -1,7 +1,8 @@
 project (
   'org.pantheon.monitor',
   ['vala', 'c'],
-  version: '1.1.0'
+  version: '1.2.0',
+  meson_version: '>= 0.58.0'
 )
 
 gnome = import ('gnome')
@@ -31,7 +32,7 @@ c_args = [
   '-DWNCK_I_KNOW_THIS_IS_UNSTABLE'
 ]
 
-vala_args = ['--vapidir=' + meson.source_root () + '/vapi/']
+vala_args = ['--vapidir=' + meson.project_source_root () + '/vapi/']
 
 conf_data = configuration_data ()
 conf_data.set_quoted('PROJECT_NAME', meson.project_name ())
